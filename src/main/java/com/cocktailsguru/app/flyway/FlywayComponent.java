@@ -5,16 +5,18 @@ import org.flywaydb.core.Flyway;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+import javax.sql.DataSource;
+
 @Component
 @Slf4j
 public class FlywayComponent {
 
     @Bean
-    public Flyway createFlyway() {
+    public Flyway createFlyway(DataSource dataSource) {
         Flyway flyway = new Flyway();
 
         // Point it to the database
-        flyway.setDataSource("jdbc:mysql://localhost:3306/cocktail_dev", "root", null);
+        flyway.setDataSource(dataSource);
 
         // Start the migration
         int migrationCount = flyway.migrate();

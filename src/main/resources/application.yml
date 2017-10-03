@@ -1,17 +1,21 @@
 spring:
+  profiles.active : develop
+
+
   datasource:
-    url: jdbc:mysql://localhost:3306/cocktail_dev?useSSL=false
-    username: root
-    password:
     testWhileIdle: true
-    validationQuery: SELECT l
+    timeBetweenEvictionRunsMillis: 60000
+    validationQuery: SELECT 1
 
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-      dialect: org.hibernate.dialect.MySQL5Dialectlogging:
+      dialect: org.hibernatedialect.MySQL5Dialect
+
+
+logging:
   level:
     ROOT: INFO
   file: server.log
