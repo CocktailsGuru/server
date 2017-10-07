@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 public class FlywayComponent {
 
     @Bean
-    public Flyway createFlyway(DataSource dataSource) {
+    public Flyway flyway(DataSource dataSource) {
         Flyway flyway = new Flyway();
 
         // Point it to the database
