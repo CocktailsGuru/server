@@ -14,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @RunWith(HierarchicalContextRunner.class)
@@ -55,6 +56,28 @@ public class HealthServiceImplTest {
     }
 
     public class GivenDeadDb {
+        public class WhenCallingCheckHealth {
+            @Test
+            public void dbShouldBeDead() {
+                HealthStatus status = healthService.checkHealth();
+                assertFalse(status.isDbAlive());
+            }
+
+            @Test
+            public void springShouldBeAlive() {
+                HealthStatus status = healthService.checkHealth();
+                assertTrue(status.isSpringAlive());
+            }
+        }
+    }
+
+
+    public class GivenDbException {
+        @Before
+        public void setUp() {
+            doThrow(new IllegalArgumentException()).when(personRepository).findOne(1);
+        }
+
         public class WhenCallingCheckHealth {
             @Test
             public void dbShouldBeDead() {
