@@ -273,3 +273,4 @@ Temporary Items
 # Add additional ignored files/directories below                                   #
 ####################################################################################
 
+src/main/resources/db/migration/V4__Insert_cocktail_data.sql
