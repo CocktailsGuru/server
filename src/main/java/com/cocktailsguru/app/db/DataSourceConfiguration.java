@@ -21,7 +21,7 @@ public class DataSourceConfiguration {
                 null,
                 "jdbc:mysql://localhost:3306/cocktail_dev?useSSL=false",
                 "root",
-                ""
+                "root"
         );
     }
 
