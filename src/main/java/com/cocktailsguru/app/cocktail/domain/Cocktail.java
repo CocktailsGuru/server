@@ -14,4 +14,24 @@ public class Cocktail {
     @Column(nullable = false)
     private String name;
 
+    @Column(name = "volumeTotal")
+    private Integer totalVolume;
+
+    @Column(name = "volumeAlko")
+    private Integer alcoVolume;
+
+    @Column(name = "volumeAlkoNon")
+    private Integer nonAlcoVolume;
+
+    private String instructions;
+
+    private String garnish;
+
+    private String description;
+
+    @Column(name = "imgFileName")
+    private String imageName;
+
+
+
 }
