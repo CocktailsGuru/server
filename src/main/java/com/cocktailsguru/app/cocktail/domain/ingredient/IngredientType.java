@@ -1,23 +1,18 @@
 package com.cocktailsguru.app.cocktail.domain.ingredient;
 
-import lombok.Getter;
+import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity(name = "coctail_ingred_category")
-@Getter
-public enum IngredientType {
-    JUICE(1, "Juice"),
-    SYRUP(2, "Syrup"),
-    BERRY_SYRUP(3, "Berry Syrup"),
-    PUREE(4, "Puree"),
-    SQUASH(5, "Squash");
+@Data
+public class IngredientType {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
-
-    IngredientType(Integer id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 }

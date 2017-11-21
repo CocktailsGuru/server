@@ -23,7 +23,8 @@ abstract class BaseIngredient {
 
     private Integer numShowed;
 
-    @Enumerated(EnumType.ORDINAL)
+    @OneToOne
+    @JoinColumn(name = "categoryFK")
     private IngredientType ingredientType;
 
 
