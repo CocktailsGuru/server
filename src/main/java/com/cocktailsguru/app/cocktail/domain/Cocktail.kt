@@ -28,7 +28,17 @@ data class Cocktail(
         @JoinColumn(name = "methodFK")
         var method: CocktailMethod,
         @OneToMany(fetch = FetchType.LAZY, mappedBy = "cocktail")
-        val alcoIngredList: List<AlcoIngredientCocktail>,
+        var alcoIngredList: List<AlcoIngredientCocktail>,
         @OneToMany(fetch = FetchType.LAZY, mappedBy = "cocktail")
-        val nonAlcoIngredList: List<NonAlcoIngredientCocktail>
-)
+        var nonAlcoIngredList: List<NonAlcoIngredientCocktail>,
+        @ManyToMany(cascade = arrayOf(CascadeType.ALL))
+        @JoinTable(
+                name = "coctail_similar",
+                joinColumns = arrayOf(JoinColumn(name = "cocktail_one", referencedColumnName = "id")),
+                inverseJoinColumns = arrayOf(JoinColumn(name = "cocktail_two", referencedColumnName = "id")))
+        var similarCocktailList: List<Cocktail>
+) {
+    override fun toString(): String {
+        return "Cocktail(id=$id, name='$name', totalVolume=$totalVolume, alcoVolume=$alcoVolume, nonAlcoVolume=$nonAlcoVolume, instructions='$instructions', garnish='$garnish', description='$description', imageName='$imageName', glass=$glass, method=$method, alcoIngredList=$alcoIngredList, nonAlcoIngredList=$nonAlcoIngredList, similarCocktailList=${similarCocktailList.map { it -> it.id }})"
+    }
+}
