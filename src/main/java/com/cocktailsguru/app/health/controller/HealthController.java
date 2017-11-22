@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HealthController {
+    public static final String HEALTH_PATH = "/health";
 
     private HealthService healthService;
     private final ModelMapper modelMapper;
