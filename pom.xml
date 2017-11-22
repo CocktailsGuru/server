@@ -32,7 +32,7 @@
         <juint.verions>4.12</juint.verions>
         <hierarchical-runner.verions>4.12.1</hierarchical-runner.verions>
 
-
+        <slsp.core.version>1.2.7</slsp.core.version>
         <docker.image.prefix>cocktailsguru</docker.image.prefix>
         <kotlin.version>1.1.60</kotlin.version>
     </properties>
@@ -91,10 +91,21 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>${spring-boot-starter-web.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>sk.slsp.backend</groupId>
+            <artifactId>cross-utils</artifactId>
+            <scope>test</scope>
+            <type>test-jar</type>
+            <version>${slsp.core.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -114,6 +125,12 @@
             <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-test-junit</artifactId>
+        <version>${kotlin.version}</version>
+        <scope>test</scope>
+    </dependency>
     </dependencies>
 
     <build>
