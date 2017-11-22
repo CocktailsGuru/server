@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableAutoConfiguration
 @EnableConfigurationProperties
 public class IntegrationTestApp {
-    public static void main(String[] args) {
-        SpringApplication.run(IntegrationTestApp.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(IntegrationTestApp.class, args);
+	}
 }
