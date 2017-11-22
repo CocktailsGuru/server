@@ -9,6 +9,6 @@ import javax.persistence.Id
 data class CocktailGlass(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private val id: Long,
-        private val name: String
+        val id: Long,
+        val name: String
 )
