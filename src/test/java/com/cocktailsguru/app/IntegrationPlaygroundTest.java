@@ -8,6 +8,7 @@ import com.cocktailsguru.app.cocktail.repository.ingredient.AlcoIngredientReposi
 import com.cocktailsguru.app.cocktail.repository.ingredient.IngredientTypeRepository;
 import com.cocktailsguru.app.cocktail.repository.ingredient.NonAlcoIngredientRepository;
 import com.cocktailsguru.app.health.controller.HealthController;
+import com.cocktailsguru.app.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -52,6 +53,9 @@ public class IntegrationPlaygroundTest {
 	@Autowired
 	private CocktailRepository cocktailRepository;
 	
+	@Autowired
+	private UserRepository userRepository;
+	
 	
 	@Before
 	public void setUp() throws Exception {
@@ -94,5 +98,11 @@ public class IntegrationPlaygroundTest {
 	public void dsadsa() throws Exception {
 		Cocktail one = cocktailRepository.findOne(1L);
 		log.info(cocktailRepository.findOne(1l).toString());
+	}
+	
+	
+	@Test
+	public void aa() throws Exception {
+		log.info(userRepository.findAll().toString());
 	}
 }
