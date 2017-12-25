@@ -1,5 +1,6 @@
 package com.cocktailsguru.app;
 
+import com.cocktailsguru.app.cocktail.controller.CocktailController;
 import com.cocktailsguru.app.cocktail.domain.Cocktail;
 import com.cocktailsguru.app.cocktail.domain.ingredient.IngredientType;
 import com.cocktailsguru.app.cocktail.domain.ingredient.NonAlcoIngredient;
@@ -24,6 +25,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
@@ -34,75 +36,81 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 @Slf4j
 @Transactional
 public class IntegrationPlaygroundTest {
-	
-	private MockMvc mockMvc;
-	
-	@Autowired
-	protected WebApplicationContext wac;
-	
-	@Autowired
-	private IngredientTypeRepository ingredientTypeRepository;
-	
-	
-	@Autowired
-	private NonAlcoIngredientRepository nonAlcoIngredientRepo;
-	
-	@Autowired
-	private AlcoIngredientRepository alcoIngredientRepo;
-	
-	@Autowired
-	private CocktailRepository cocktailRepository;
-	
-	@Autowired
-	private UserRepository userRepository;
-	
-	
-	@Before
-	public void setUp() throws Exception {
-		mockMvc = MockMvcBuilders.webAppContextSetup(wac)
-			.build();
-	}
-	
-	
-	@Test
-	@Ignore
-	public void createIntegrationDepTask() throws Exception {
-		MvcResult result = mockMvc.perform(
-			get(HealthController.HEALTH_PATH)
-				.contentType(APPLICATION_JSON_VALUE))
-			.andExpect(status().isOk())
-			.andReturn();
-		log.info(result.getResponse().getContentAsString());
-	}
-	
-	
-	@Test
-	public void name() throws Exception {
-		IngredientType one = ingredientTypeRepository.findOne(1);
-		log.info(one.toString());
-	}
-	
-	
-	@Test
-	public void namee() throws Exception {
-		NonAlcoIngredient one = nonAlcoIngredientRepo.findOne(1001L);
-		log.info(one.toString());
-		
-		
-		log.info(alcoIngredientRepo.findOne(1L).toString());
-		
-	}
-	
-	
-	@Test
-	public void dsadsa() throws Exception {
-		Cocktail one = cocktailRepository.findOne(1L);
-		log.info(cocktailRepository.findOne(1l).toString());
-	}
-	
-	
-	@Test
-	public void aa() throws Exception {
-		log.info(userRepository.findAll().toString());
-	}
+
+    private MockMvc mockMvc;
+
+    @Autowired
+    private WebApplicationContext wac;
+
+    @Autowired
+    private IngredientTypeRepository ingredientTypeRepository;
+
+    @Autowired
+    private NonAlcoIngredientRepository nonAlcoIngredientRepo;
+
+    @Autowired
+    private AlcoIngredientRepository alcoIngredientRepo;
+
+    @Autowired
+    private CocktailRepository cocktailRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+
+    @Before
+    public void setUp() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac)
+                .build();
+    }
+
+
+    @Test
+    public void shouldGetHealthResponse() throws Exception {
+        MvcResult result = mockMvc.perform(
+                get(HealthController.HEALTH_PATH)
+                        .contentType(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andReturn();
+        log.info(result.getResponse().getContentAsString());
+    }
+
+
+    @Test
+    public void shouldFindFirstIngredientTypeWithoutException() {
+        IngredientType one = ingredientTypeRepository.findOne(1);
+        assertNotNull(one);
+    }
+
+
+    @Test
+    public void shouldFindIngredientsWithoutException() {
+        assertNotNull(nonAlcoIngredientRepo.findOne(1001L));
+        assertNotNull(alcoIngredientRepo.findOne(1L));
+
+    }
+
+
+    @Test
+    public void shouldFindFirstCocktailWithouException() {
+        assertNotNull(cocktailRepository.findOne(1L));
+    }
+
+
+    @Test
+    public void userRepositoryShouldRunWithoutException() {
+        assertNotNull(userRepository.findAll());
+    }
+
+
+    @Test
+    public void shouldGetCocktailDetail() throws Exception {
+        MvcResult result = mockMvc.perform(
+                get(CocktailController.COCKTAIL_DETAIL_PATH)
+                        .param("id", "1")
+                        .contentType(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andReturn();
+        log.info(result.getResponse().getContentAsString());
+    }
 }
