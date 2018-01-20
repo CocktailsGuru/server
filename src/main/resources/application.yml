@@ -1,7 +1,6 @@
 spring:
-  profiles.active : develop
-
-
+  application:
+    name: CocktailGuruServer
   datasource:
     testWhileIdle: true
     timeBetweenEvictionRunsMillis: 60000
@@ -14,9 +13,3 @@ spring:
       naming:
         strategy: org.hibernate.cfg.EJB3NamingStrategy
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-
-
-logging:
-  level:
-    ROOT: INFO
-  file: server.log
