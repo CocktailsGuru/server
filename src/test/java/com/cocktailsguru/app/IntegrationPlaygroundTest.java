@@ -1,18 +1,19 @@
 package com.cocktailsguru.app;
 
 import com.cocktailsguru.app.cocktail.controller.CocktailController;
-import com.cocktailsguru.app.cocktail.domain.Cocktail;
 import com.cocktailsguru.app.cocktail.domain.ingredient.IngredientType;
-import com.cocktailsguru.app.cocktail.domain.ingredient.NonAlcoIngredient;
+import com.cocktailsguru.app.cocktail.dto.list.CocktailListResponseDto;
 import com.cocktailsguru.app.cocktail.repository.CocktailRepository;
 import com.cocktailsguru.app.cocktail.repository.ingredient.AlcoIngredientRepository;
 import com.cocktailsguru.app.cocktail.repository.ingredient.IngredientTypeRepository;
 import com.cocktailsguru.app.cocktail.repository.ingredient.NonAlcoIngredientRepository;
+import com.cocktailsguru.app.common.dto.PagingDto;
 import com.cocktailsguru.app.health.controller.HealthController;
 import com.cocktailsguru.app.user.repository.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
@@ -112,5 +115,26 @@ public class IntegrationPlaygroundTest {
                 .andExpect(status().isOk())
                 .andReturn();
         log.info(result.getResponse().getContentAsString());
+    }
+
+    @Test
+    public void shouldReturnRequestedCocktailListSize() throws Exception {
+        PagingDto requestDto = new PagingDto(0, 10);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectWriter ow = objectMapper.writer().withDefaultPrettyPrinter();
+        String requestJson = ow.writeValueAsString(requestDto);
+
+
+        MvcResult result = mockMvc.perform(
+                post(CocktailController.COCKTAIL_LIST_PATH)
+                        .content(requestJson)
+                        .contentType(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk())
+                .andReturn();
+        String responseJson = result.getResponse().getContentAsString();
+        CocktailListResponseDto responseDto = objectMapper.readValue(responseJson, CocktailListResponseDto.class);
+        assertEquals(requestDto.getPageSize(), responseDto.getCocktailList().size());
+        assertEquals(requestDto, responseDto.getPagingInfo());
     }
 }
