@@ -36,9 +36,26 @@ data class Cocktail(
                 name = "coctail_similar",
                 joinColumns = arrayOf(JoinColumn(name = "cocktail_one", referencedColumnName = "id")),
                 inverseJoinColumns = arrayOf(JoinColumn(name = "cocktail_two", referencedColumnName = "id")))
-        var similarCocktailList: List<Cocktail>
+        var similarCocktailList: List<Cocktail>,
+        var numRating1: Int,
+        var numRating2: Int,
+        var numRating3: Int,
+        var numRating4: Int,
+        var numRating5: Int,
+        @Transient
+        var calculatedRating: Double
 ) {
     override fun toString(): String {
         return "Cocktail(id=$id, name='$name', totalVolume=$totalVolume, alcoVolume=$alcoVolume, nonAlcoVolume=$nonAlcoVolume, instructions='$instructions', garnish='$garnish', description='$description', imageName='$imageName', glass=$glass, method=$method, alcoIngredList=$alcoIngredList, nonAlcoIngredList=$nonAlcoIngredList, similarCocktailList=${similarCocktailList.map { it -> it.id }})"
+    }
+
+    @PostLoad
+    private fun postLoad() {
+        val countOfRatings = numRating1 + numRating2 + numRating3 + numRating4 + numRating5
+        calculatedRating = if (countOfRatings > 0) {
+            (1.0 * numRating1 + 2.0 * numRating2 + 3.0 * numRating3 + 4.0 * numRating4 + 5.0 * numRating5) / countOfRatings
+        } else {
+            0.0
+        }
     }
 }
