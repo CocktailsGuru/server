@@ -21,6 +21,7 @@ public class CocktailDetailDto {
     private List<Long> alcoIngredIdList;
     private List<Long> nonAlcoIngredIdList;
     private List<Long> similarCocktailIdList;
+    private int numOfFavorite;
 
     public CocktailDetailDto() {
     }
