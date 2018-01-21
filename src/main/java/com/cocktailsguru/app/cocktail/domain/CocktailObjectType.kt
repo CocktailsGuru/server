@@ -1,5 +1,8 @@
 package com.cocktailsguru.app.cocktail.domain
 
+/**
+ * See `coctail_object_type` table
+ */
 enum class CocktailObjectType {
     NONE,
     COCKTAIL,
