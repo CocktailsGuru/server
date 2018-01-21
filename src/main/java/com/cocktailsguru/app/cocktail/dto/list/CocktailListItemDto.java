@@ -13,4 +13,5 @@ public class CocktailListItemDto {
     private String image;
     private String calculatedRating;
     private int alcoVolume;
+    private int numOfFavorite;
 }
