@@ -13,3 +13,13 @@ spring:
       naming:
         strategy: org.hibernate.cfg.EJB3NamingStrategy
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+
+#logging:
+#  file:  /home/spring/logs/${spring.application.name}.log
+#  config: logback-spring.xml
+#  path: /home/spring/logs/
+#logback:
+#  access:
+#    config: logback-access.xml
+#    enabled: true
