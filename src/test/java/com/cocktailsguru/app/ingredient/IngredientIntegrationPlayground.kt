@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
@@ -119,5 +120,32 @@ open class IngredientIntegrationPlayground {
     fun shouldFindAlcoIngredient() {
         val alcoIngredient = ingredientService.findAlcoIngredient(1)
         assertNotNull(alcoIngredient)
+    }
+
+
+    @Test
+    fun shouldWebFindAlcoIngredientDetail() {
+        val result = mockMvc.perform(
+                get(IngredientController.ALCO_INGREDIENT_DETAIL_PATH)
+                        .param("id", "1")
+                        .contentType(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk)
+                .andReturn()
+        val contentAsString = result.response.contentAsString
+        assertNotNull(contentAsString)
+        log.info(contentAsString)
+    }
+
+    @Test
+    fun shouldWebFindNonAlcoIngredientDetail() {
+        val result = mockMvc.perform(
+                get(IngredientController.NON_ALCO_INGREDIENT_DETAIL_PATH)
+                        .param("id", "1")
+                        .contentType(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk)
+                .andReturn()
+        val contentAsString = result.response.contentAsString
+        assertNotNull(contentAsString)
+        log.info(contentAsString)
     }
 }
