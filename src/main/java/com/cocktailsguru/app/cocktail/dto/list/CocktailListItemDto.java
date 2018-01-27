@@ -11,7 +11,7 @@ public class CocktailListItemDto {
     private BigInteger id;
     private String name;
     private String image;
-    private String calculatedRating;
+    private double calculatedRating;
     private int alcoVolume;
     private int numOfFavorite;
 }
