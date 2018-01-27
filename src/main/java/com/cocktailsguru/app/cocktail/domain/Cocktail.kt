@@ -16,6 +16,7 @@ data class Cocktail(
         var alcoVolume: Int,
         @Column(name = "volumeAlkoNon")
         var nonAlcoVolume: Int,
+        var alcoholVolume: Double,
         var instructions: String,
         var garnish: String,
         var description: String,
@@ -42,6 +43,9 @@ data class Cocktail(
         var numRating3: Int,
         var numRating4: Int,
         var numRating5: Int,
+        var numPictures: Int,
+        var numComments: Int,
+        var numShowed: Int,
         @Transient
         var calculatedRating: Double,
         @Transient
