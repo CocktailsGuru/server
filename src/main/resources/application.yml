@@ -15,6 +15,11 @@ spring:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
 
+endpoints:
+  enabled: false
+  health:
+    enabled: true
+
 #logging:
 #  file:  /home/spring/logs/${spring.application.name}.log
 #  config: logback-spring.xml

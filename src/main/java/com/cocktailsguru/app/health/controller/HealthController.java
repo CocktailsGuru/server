@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HealthController {
-    public static final String HEALTH_PATH = "/health";
+    public static final String HEALTH_PATH = "/healthCustom";
 
     private HealthService healthService;
     private final ModelMapper modelMapper;
@@ -21,7 +21,7 @@ public class HealthController {
         this.modelMapper = modelMapper;
     }
 
-    @RequestMapping("/health")
+    @RequestMapping(HEALTH_PATH)
     public HealthResponseDto checkHealthStatus() {
         HealthStatus status = healthService.checkHealth();
         return modelMapper.map(status, HealthResponseDto.class);
