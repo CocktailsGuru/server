@@ -9,6 +9,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class CocktailListResponseDto {
-    private List<CocktailListItemDto> cocktailList;
+    private List<CocktailListItemDto> list;
     private PagingDto pagingInfo;
 }

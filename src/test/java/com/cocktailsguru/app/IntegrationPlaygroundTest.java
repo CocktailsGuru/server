@@ -3,15 +3,15 @@ package com.cocktailsguru.app;
 import com.cocktailsguru.app.cocktail.controller.CocktailController;
 import com.cocktailsguru.app.cocktail.domain.Cocktail;
 import com.cocktailsguru.app.cocktail.domain.CocktailObjectType;
-import com.cocktailsguru.app.ingredient.domain.IngredientType;
 import com.cocktailsguru.app.cocktail.dto.list.CocktailListResponseDto;
 import com.cocktailsguru.app.cocktail.repository.CocktailRepository;
-import com.cocktailsguru.app.ingredient.repository.AlcoIngredientRepository;
-import com.cocktailsguru.app.ingredient.repository.IngredientTypeRepository;
-import com.cocktailsguru.app.ingredient.repository.NonAlcoIngredientRepository;
 import com.cocktailsguru.app.cocktail.service.CocktailService;
 import com.cocktailsguru.app.common.dto.PagingDto;
 import com.cocktailsguru.app.health.controller.HealthController;
+import com.cocktailsguru.app.ingredient.domain.IngredientType;
+import com.cocktailsguru.app.ingredient.repository.AlcoIngredientRepository;
+import com.cocktailsguru.app.ingredient.repository.IngredientTypeRepository;
+import com.cocktailsguru.app.ingredient.repository.NonAlcoIngredientRepository;
 import com.cocktailsguru.app.user.domain.UserFavorite;
 import com.cocktailsguru.app.user.repository.UserRepository;
 import com.cocktailsguru.app.user.service.UserFavoriteService;
@@ -146,7 +146,7 @@ public class IntegrationPlaygroundTest {
                 .andReturn();
         String responseJson = result.getResponse().getContentAsString();
         CocktailListResponseDto responseDto = objectMapper.readValue(responseJson, CocktailListResponseDto.class);
-        assertEquals(requestDto.getPageSize(), responseDto.getCocktailList().size());
+        assertEquals(requestDto.getPageSize(), responseDto.getList().size());
         assertEquals(requestDto, responseDto.getPagingInfo());
     }
 

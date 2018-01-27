@@ -2,10 +2,9 @@ package com.cocktailsguru.app.ingredient
 
 import com.cocktailsguru.app.IntegrationTestApp
 import com.cocktailsguru.app.common.domain.PagingInfo
+import com.cocktailsguru.app.common.dto.ListResponseDto
 import com.cocktailsguru.app.common.dto.PagingDto
 import com.cocktailsguru.app.ingredient.controller.IngredientController
-import com.cocktailsguru.app.ingredient.dto.list.AlcoIngredientListResponseDto
-import com.cocktailsguru.app.ingredient.dto.list.NonAlcoIngredientListResponseDto
 import com.cocktailsguru.app.ingredient.service.IngredientService
 import com.cocktailsguru.app.utils.loggerFor
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -81,8 +80,8 @@ open class IngredientIntegrationPlayground {
                 .andExpect(status().isOk)
                 .andReturn()
         val responseJson = result.response.contentAsString
-        val responseDto = objectMapper.readValue(responseJson, AlcoIngredientListResponseDto::class.java)
-        assertEquals(requestDto.pageSize.toLong(), responseDto.alcoIngredientList.size.toLong())
+        val responseDto = objectMapper.readValue(responseJson, ListResponseDto::class.java)
+        assertEquals(requestDto.pageSize.toLong(), responseDto.list.size.toLong())
         assertEquals(requestDto, responseDto.pagingInfo)
     }
 
@@ -103,8 +102,8 @@ open class IngredientIntegrationPlayground {
                 .andExpect(status().isOk)
                 .andReturn()
         val responseJson = result.response.contentAsString
-        val responseDto = objectMapper.readValue(responseJson, NonAlcoIngredientListResponseDto::class.java)
-        assertEquals(requestDto.pageSize.toLong(), responseDto.nonAlcoIngredientList.size.toLong())
+        val responseDto = objectMapper.readValue(responseJson, ListResponseDto::class.java)
+        assertEquals(requestDto.pageSize.toLong(), responseDto.list.size.toLong())
         assertEquals(requestDto, responseDto.pagingInfo)
     }
 }

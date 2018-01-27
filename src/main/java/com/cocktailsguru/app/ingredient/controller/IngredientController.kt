@@ -1,11 +1,10 @@
 package com.cocktailsguru.app.ingredient.controller
 
 import com.cocktailsguru.app.common.domain.PagingInfo
+import com.cocktailsguru.app.common.dto.ListResponseDto
 import com.cocktailsguru.app.common.dto.PagingDto
 import com.cocktailsguru.app.ingredient.dto.list.AlcoIngredientListItemDto
-import com.cocktailsguru.app.ingredient.dto.list.AlcoIngredientListResponseDto
 import com.cocktailsguru.app.ingredient.dto.list.NonAlcoIngredientListItemDto
-import com.cocktailsguru.app.ingredient.dto.list.NonAlcoIngredientListResponseDto
 import com.cocktailsguru.app.ingredient.service.IngredientService
 import com.cocktailsguru.app.utils.loggerFor
 import org.modelmapper.ModelMapper
@@ -28,7 +27,7 @@ class IngredientController @Autowired constructor(
     }
 
     @RequestMapping(value = [(NON_ALCO_INGREDIENT_LIST_PATH)], produces = ["application/json"], method = [RequestMethod.POST])
-    fun getNonAlcoIngredientList(@RequestBody nonAlcoIngredientListRequestDto: PagingDto): NonAlcoIngredientListResponseDto {
+    fun getNonAlcoIngredientList(@RequestBody nonAlcoIngredientListRequestDto: PagingDto): ListResponseDto<NonAlcoIngredientListItemDto> {
         logger.info("Request non alco ingredient list - {}", nonAlcoIngredientListRequestDto.toString())
         val pagingRequest = PagingInfo(nonAlcoIngredientListRequestDto)
 
@@ -43,12 +42,12 @@ class IngredientController @Autowired constructor(
         }
 
         val pagingDto = modelMapper.map(nonAlcoIngredientList.pagingInfo, PagingDto::class.java);
-        return NonAlcoIngredientListResponseDto(nonAlcoIngredientListItemDtoList, pagingDto)
+        return ListResponseDto(nonAlcoIngredientListItemDtoList, pagingDto)
     }
 
 
     @RequestMapping(value = [(ALCO_INGREDIENT_LIST_PATH)], produces = ["application/json"], method = [RequestMethod.POST])
-    fun getAlcoIngredientList(@RequestBody alcoIngredientListRequestDto: PagingDto): AlcoIngredientListResponseDto {
+    fun getAlcoIngredientList(@RequestBody alcoIngredientListRequestDto: PagingDto): ListResponseDto<AlcoIngredientListItemDto> {
         logger.info("Request alco ingredient list - {}", alcoIngredientListRequestDto.toString())
         val pagingRequest = PagingInfo(alcoIngredientListRequestDto)
 
@@ -64,6 +63,6 @@ class IngredientController @Autowired constructor(
         }
 
         val pagingDto = modelMapper.map(alcoIngredientList.pagingInfo, PagingDto::class.java);
-        return AlcoIngredientListResponseDto(alcoIngredientListItemDtoList, pagingDto)
+        return ListResponseDto(alcoIngredientListItemDtoList, pagingDto)
     }
 }
