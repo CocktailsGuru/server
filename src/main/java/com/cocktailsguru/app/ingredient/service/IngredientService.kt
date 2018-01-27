@@ -9,4 +9,8 @@ interface IngredientService {
     fun getNonAlcoIngredientList(listRequest: PagingInfo): IngredientList<NonAlcoIngredient>
 
     fun getAlcoIngredientList(listRequest: PagingInfo): IngredientList<AlcoIngredient>
+
+    fun findAlcoIngredient(id: Long): AlcoIngredient?
+
+    fun findNonAlcoIngredient(id: Long): NonAlcoIngredient?
 }

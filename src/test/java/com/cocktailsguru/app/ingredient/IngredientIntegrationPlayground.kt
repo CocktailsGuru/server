@@ -8,7 +8,7 @@ import com.cocktailsguru.app.ingredient.controller.IngredientController
 import com.cocktailsguru.app.ingredient.service.IngredientService
 import com.cocktailsguru.app.utils.loggerFor
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -105,5 +105,19 @@ open class IngredientIntegrationPlayground {
         val responseDto = objectMapper.readValue(responseJson, ListResponseDto::class.java)
         assertEquals(requestDto.pageSize.toLong(), responseDto.list.size.toLong())
         assertEquals(requestDto, responseDto.pagingInfo)
+    }
+
+
+    @Test
+    fun shouldFindNonAlcoIngredient() {
+        val foundIngredient = ingredientService.findNonAlcoIngredient(1168)
+        assertNotNull(foundIngredient)
+    }
+
+
+    @Test
+    fun shouldFindAlcoIngredient() {
+        val alcoIngredient = ingredientService.findAlcoIngredient(1)
+        assertNotNull(alcoIngredient)
     }
 }

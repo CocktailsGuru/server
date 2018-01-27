@@ -26,4 +26,9 @@ class IngredientServiceImpl @Autowired constructor(
         val nonAlcoIngredientList = nonAlcoIngredientRepository.findAll(PageRequest(listRequest.pageNumber, listRequest.pageSize)).content
         return IngredientList(nonAlcoIngredientList, listRequest)
     }
+
+    override fun findAlcoIngredient(id: Long): AlcoIngredient? = alcoIngredientRepository.findOne(id)
+
+    override fun findNonAlcoIngredient(id: Long): NonAlcoIngredient? = nonAlcoIngredientRepository.findOne(id)
+
 }
