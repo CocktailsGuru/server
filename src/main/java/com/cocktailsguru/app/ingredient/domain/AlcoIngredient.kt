@@ -11,4 +11,4 @@ data class AlcoIngredient(
         override var imageName: String,
         override var numShowed: Int,
         override var ingredientType: IngredientType,
-        var voltage: Int) : BaseIngredient(id, name, nameGrouped, description, imageName, numShowed, ingredientType)
+        var voltage: Double) : BaseIngredient(id, name, nameGrouped, description, imageName, numShowed, ingredientType)
