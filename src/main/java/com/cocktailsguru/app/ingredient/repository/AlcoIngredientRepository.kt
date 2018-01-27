@@ -1,6 +1,6 @@
-package com.cocktailsguru.app.cocktail.repository.ingredient
+package com.cocktailsguru.app.ingredient.repository
 
-import com.cocktailsguru.app.cocktail.domain.ingredient.AlcoIngredient
+import com.cocktailsguru.app.ingredient.domain.AlcoIngredient
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 

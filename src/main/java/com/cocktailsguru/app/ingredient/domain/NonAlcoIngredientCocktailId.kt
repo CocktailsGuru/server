@@ -1,4 +1,4 @@
-package com.cocktailsguru.app.cocktail.domain.ingredient
+package com.cocktailsguru.app.ingredient.domain
 
 import java.io.Serializable
 import javax.persistence.Column

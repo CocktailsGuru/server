@@ -1,4 +1,4 @@
-package com.cocktailsguru.app.cocktail.domain.ingredient
+package com.cocktailsguru.app.ingredient.domain
 
 import com.cocktailsguru.app.cocktail.domain.Cocktail
 import javax.persistence.*

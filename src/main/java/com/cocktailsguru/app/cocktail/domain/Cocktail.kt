@@ -1,7 +1,7 @@
 package com.cocktailsguru.app.cocktail.domain
 
-import com.cocktailsguru.app.cocktail.domain.ingredient.AlcoIngredientCocktail
-import com.cocktailsguru.app.cocktail.domain.ingredient.NonAlcoIngredientCocktail
+import com.cocktailsguru.app.ingredient.domain.AlcoIngredientCocktail
+import com.cocktailsguru.app.ingredient.domain.NonAlcoIngredientCocktail
 import javax.persistence.*
 
 @Entity(name = "coctail")
