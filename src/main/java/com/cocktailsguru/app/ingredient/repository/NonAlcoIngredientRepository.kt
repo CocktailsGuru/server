@@ -1,8 +1,8 @@
 package com.cocktailsguru.app.ingredient.repository
 
 import com.cocktailsguru.app.ingredient.domain.NonAlcoIngredient
-import org.springframework.data.repository.CrudRepository
+import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface NonAlcoIngredientRepository : CrudRepository<NonAlcoIngredient, Long>
+interface NonAlcoIngredientRepository : PagingAndSortingRepository<NonAlcoIngredient, Long>
