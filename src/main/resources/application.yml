@@ -20,6 +20,15 @@ endpoints:
   health:
     enabled: true
 
+management:
+  security:
+    enabled: true
+
+
+security:
+  basic:
+    enabled: true
+
 #logging:
 #  file:  /home/spring/logs/${spring.application.name}.log
 #  config: logback-spring.xml

@@ -4,3 +4,5 @@ spring:
   cloud:
     config:
       enabled: false
+  config:
+    name: cocktail-security, application
