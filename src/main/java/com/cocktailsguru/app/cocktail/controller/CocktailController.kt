@@ -1,11 +1,15 @@
 package com.cocktailsguru.app.cocktail.controller
 
+import com.cocktailsguru.app.cocktail.domain.Cocktail
 import com.cocktailsguru.app.cocktail.dto.CocktailDetailDto
 import com.cocktailsguru.app.cocktail.dto.list.CocktailListResponseDto
 import com.cocktailsguru.app.cocktail.service.CocktailService
 import com.cocktailsguru.app.common.domain.PagingInfo
 import com.cocktailsguru.app.common.dto.PagingDto
+import com.cocktailsguru.app.ingredient.domain.AlcoIngredientCocktail
+import com.cocktailsguru.app.ingredient.domain.NonAlcoIngredientCocktail
 import com.cocktailsguru.app.utils.loggerFor
+import org.modelmapper.Converter
 import org.modelmapper.ModelMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
@@ -25,6 +29,18 @@ class CocktailController @Autowired constructor(private val cocktailService: Coc
         logger.info("Request cocktail detail id {}", id)
         val cocktailDetail = cocktailService.getCocktailDetail(id)
         return if (cocktailDetail != null) {
+            modelMapper.addConverter(Converter<AlcoIngredientCocktail, Long> { mappingContext ->
+                mappingContext.source?.ingredient?.id
+            })
+
+            modelMapper.addConverter(Converter<NonAlcoIngredientCocktail, Long> { mappingContext ->
+                mappingContext.source?.ingredient?.id
+            })
+
+            modelMapper.addConverter(Converter<Cocktail, Long> { mappingContext ->
+                mappingContext.source?.id
+            })
+
             modelMapper.map(cocktailDetail, CocktailDetailDto::class.java)
         } else {
             null

@@ -17,9 +17,9 @@ public class CocktailDetailDto {
     private String imageName;
     private CocktailGlassDto glass;
     private CocktailMethodDto method;
-    private List<Long> alcoIngredIdList;
-    private List<Long> nonAlcoIngredIdList;
-    private List<Long> similarCocktailIdList;
+    private List<Long> alcoIngredList;
+    private List<Long> nonAlcoIngredList;
+    private List<Long> similarCocktailList;
     private int numOfFavorite;
     private double calculatedRating;
     private int numRating1;

@@ -3,6 +3,7 @@ package com.cocktailsguru.app;
 import com.cocktailsguru.app.cocktail.controller.CocktailController;
 import com.cocktailsguru.app.cocktail.domain.Cocktail;
 import com.cocktailsguru.app.cocktail.domain.CocktailObjectType;
+import com.cocktailsguru.app.cocktail.dto.CocktailDetailDto;
 import com.cocktailsguru.app.cocktail.dto.list.CocktailListResponseDto;
 import com.cocktailsguru.app.cocktail.repository.CocktailRepository;
 import com.cocktailsguru.app.cocktail.service.CocktailService;
@@ -72,6 +73,9 @@ public class IntegrationPlaygroundTest {
     @Autowired
     private CocktailService cocktailService;
 
+    private ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
+
 
     @Before
     public void setUp() {
@@ -126,16 +130,21 @@ public class IntegrationPlaygroundTest {
                         .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk())
                 .andReturn();
-        log.info(result.getResponse().getContentAsString());
+        String responseJson = result.getResponse().getContentAsString();
+        CocktailDetailDto responseDto = objectMapper.readValue(responseJson, CocktailDetailDto.class);
+        assertNotNull(responseDto);
+        assertFalse(responseDto.getAlcoIngredList().isEmpty());
+        assertFalse(responseDto.getNonAlcoIngredList().isEmpty());
+        assertFalse(responseDto.getSimilarCocktailList().isEmpty());
+
+        log.info(responseJson);
     }
 
     @Test
     public void shouldReturnRequestedCocktailListSize() throws Exception {
         PagingDto requestDto = new PagingDto(4, 12);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        ObjectWriter ow = objectMapper.writer().withDefaultPrettyPrinter();
-        String requestJson = ow.writeValueAsString(requestDto);
+        String requestJson = objectWriter.writeValueAsString(requestDto);
 
 
         MvcResult result = mockMvc.perform(
