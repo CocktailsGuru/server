@@ -274,3 +274,5 @@ Temporary Items
 ####################################################################################
 
 src/main/resources/db/migration/V4__Insert_cocktail_data.sql
+application-local.yml
+application-test.yml
