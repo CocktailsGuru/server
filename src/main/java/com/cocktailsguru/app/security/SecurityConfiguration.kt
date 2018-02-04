@@ -29,6 +29,7 @@ open class SecurityConfiguration @Autowired constructor(
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
         http.authorizeRequests().antMatchers("/v2/api-docs").hasAnyRole("MODERATOR")
+        http.authorizeRequests().antMatchers("/health").hasAnyRole("MODERATOR")
 
         http.authorizeRequests().anyRequest().permitAll()
     }
