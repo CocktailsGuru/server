@@ -2,7 +2,6 @@ package com.cocktailsguru.app;
 
 import com.cocktailsguru.app.cocktail.controller.CocktailController;
 import com.cocktailsguru.app.cocktail.domain.Cocktail;
-import com.cocktailsguru.app.cocktail.domain.CocktailObjectType;
 import com.cocktailsguru.app.cocktail.dto.CocktailDetailDto;
 import com.cocktailsguru.app.cocktail.dto.list.CocktailListResponseDto;
 import com.cocktailsguru.app.cocktail.repository.CocktailRepository;
@@ -13,9 +12,6 @@ import com.cocktailsguru.app.ingredient.domain.IngredientType;
 import com.cocktailsguru.app.ingredient.repository.AlcoIngredientRepository;
 import com.cocktailsguru.app.ingredient.repository.IngredientTypeRepository;
 import com.cocktailsguru.app.ingredient.repository.NonAlcoIngredientRepository;
-import com.cocktailsguru.app.user.domain.UserFavorite;
-import com.cocktailsguru.app.user.repository.UserRepository;
-import com.cocktailsguru.app.user.service.UserFavoriteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import lombok.extern.slf4j.Slf4j;
@@ -31,8 +27,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
-
-import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -63,12 +57,6 @@ public class IntegrationPlaygroundTest {
 
     @Autowired
     private CocktailRepository cocktailRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserFavoriteService userFavoriteService;
 
     @Autowired
     private CocktailService cocktailService;
@@ -117,12 +105,6 @@ public class IntegrationPlaygroundTest {
 
 
     @Test
-    public void userRepositoryShouldRunWithoutException() {
-        assertNotNull(userRepository.findAll());
-    }
-
-
-    @Test
     public void shouldGetCocktailDetail() throws Exception {
         MvcResult result = mockMvc.perform(
                 get(CocktailController.COCKTAIL_DETAIL_PATH)
@@ -157,13 +139,6 @@ public class IntegrationPlaygroundTest {
         CocktailListResponseDto responseDto = objectMapper.readValue(responseJson, CocktailListResponseDto.class);
         assertEquals(requestDto.getPageSize(), responseDto.getList().size());
         assertEquals(requestDto, responseDto.getPagingInfo());
-    }
-
-
-    @Test
-    public void shouldReturnNotNullListOfFavorite() {
-        List<UserFavorite> favoriteObjects = userFavoriteService.getFavoriteObjects(CocktailObjectType.COCKTAIL, 54L);
-        assertFalse(favoriteObjects.isEmpty());
     }
 
 
