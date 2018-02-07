@@ -78,7 +78,7 @@ open class UserIntegrationPlayground {
                 UserRegistrationType.GOOGLE,
                 "anyImaage",
                 "nwm",
-                "anyLanguage"
+                null
         )
 
         val user = userService.registerUser(userRegistrationRequest)

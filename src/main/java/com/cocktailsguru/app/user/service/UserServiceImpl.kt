@@ -50,7 +50,7 @@ class UserServiceImpl @Autowired constructor(
                 0,
                 0,
                 LocalDateTime.now(Clock.systemUTC()),
-                registrationRequest.language
+                registrationRequest.language!!
         )
 
         return fbUserRepository.save(fbUser)
