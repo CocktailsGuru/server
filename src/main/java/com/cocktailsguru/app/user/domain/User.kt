@@ -4,34 +4,33 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "coctail_user")
-data class User(
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "registrationType")
+abstract class User(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long,
+        open val id: Long,
         @Column(name = "userID")
-        val externalUserId: String,
+        open val externalUserId: String,
         @Column(name = "userName")
-        var name: String,
+        open var name: String,
         @Enumerated(EnumType.ORDINAL)
         @Column(name = "userGender")
-        val gender: Gender,
+        open val gender: Gender,
         @Column(name = "userImage")
-        var image: String,
-        @Column(name = "userAge")
-        var age: Int,
+        open var image: String,
         @Column(name = "userCountryCode")
-        var countryCode: String,
-        var numSessions: Int,
-        var numPictures: Int,
-        var numPicturesFav: Int,
-        var numComments: Int,
-        var numFollowers: Int,
-        var numFollowing: Int,
-        var numCocktailsFav: Int,
+        open var countryCode: String,
+        open var numPictures: Int,
+        open var numPicturesFav: Int,
+        open var numComments: Int,
+        open var numFollowers: Int,
+        open var numFollowing: Int,
+        open var numCocktailsFav: Int,
         @Column(name = "numCocktailsRat")
-        var numCocktailsRated: Int,
-        var numShown: Int,
+        open var numCocktailsRated: Int,
+        open var numShown: Int,
         //TODO rename
-        var lastDate: String
+        open var lastDate: String
 )
 
