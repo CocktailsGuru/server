@@ -1,11 +1,11 @@
 package com.cocktailsguru.app.user.service
 
-import com.cocktailsguru.app.common.domain.CocktailDateTimeFormatter
 import com.cocktailsguru.app.user.domain.*
 import com.cocktailsguru.app.user.repository.FbUserRepository
 import com.cocktailsguru.app.user.repository.GoogleUserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.Clock
 import java.time.LocalDateTime
 
 @Service
@@ -49,7 +49,7 @@ class UserServiceImpl @Autowired constructor(
                 0,
                 0,
                 0,
-                LocalDateTime.now().format(CocktailDateTimeFormatter.FORMATTER),
+                LocalDateTime.now(Clock.systemUTC()),
                 registrationRequest.language
         )
 
@@ -72,7 +72,7 @@ class UserServiceImpl @Autowired constructor(
                 0,
                 0,
                 0,
-                LocalDateTime.now().format(CocktailDateTimeFormatter.FORMATTER)
+                LocalDateTime.now(Clock.systemUTC())
         )
 
         return googleUserRepository.save(googleUser)

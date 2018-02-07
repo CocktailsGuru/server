@@ -8,6 +8,5 @@ data class UserRegistrationRequest(
         val registrationType: UserRegistrationType,
         var image: String,
         var countryCode: String,
-        var lastDate: String,
         val language: String
 )

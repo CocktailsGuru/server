@@ -1,5 +1,6 @@
 package com.cocktailsguru.app.user.domain
 
+import java.time.LocalDateTime
 import javax.persistence.DiscriminatorValue
 import javax.persistence.Entity
 
@@ -20,5 +21,5 @@ data class GoogleUser(
         override var numCocktailsFav: Int,
         override var numCocktailsRated: Int,
         override var numShown: Int,
-        override var lastDate: String
+        override var lastDate: LocalDateTime
 ) : User(id, externalUserId, name, gender, image, countryCode, numPictures, numPicturesFav, numComments, numFollowers, numFollowing, numCocktailsFav, numCocktailsRated, numShown, lastDate)

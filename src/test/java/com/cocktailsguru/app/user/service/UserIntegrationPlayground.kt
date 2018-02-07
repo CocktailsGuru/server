@@ -54,7 +54,6 @@ open class UserIntegrationPlayground {
                 UserRegistrationType.FB,
                 "anyImaage",
                 "nwm",
-                "2018-02-05 20:32:08",
                 "anyLanguage"
         )
 
@@ -79,7 +78,6 @@ open class UserIntegrationPlayground {
                 UserRegistrationType.GOOGLE,
                 "anyImaage",
                 "nwm",
-                "2018-02-05 20:32:08",
                 "anyLanguage"
         )
 

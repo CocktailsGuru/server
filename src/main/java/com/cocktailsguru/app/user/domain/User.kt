@@ -1,5 +1,6 @@
 package com.cocktailsguru.app.user.domain
 
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
@@ -30,7 +31,6 @@ abstract class User(
         @Column(name = "numCocktailsRat")
         open var numCocktailsRated: Int,
         open var numShown: Int,
-        //TODO rename
-        open var lastDate: String
+        open var lastDate: LocalDateTime
 )
 
