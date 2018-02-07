@@ -1,12 +1,12 @@
 package com.cocktailsguru.app.user.service
 
-import com.cocktailsguru.app.user.domain.FbUser
-import com.cocktailsguru.app.user.domain.GoogleUser
-import com.cocktailsguru.app.user.domain.User
+import com.cocktailsguru.app.common.domain.CocktailDateTimeFormatter
+import com.cocktailsguru.app.user.domain.*
 import com.cocktailsguru.app.user.repository.FbUserRepository
 import com.cocktailsguru.app.user.repository.GoogleUserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class UserServiceImpl @Autowired constructor(
@@ -25,4 +25,57 @@ class UserServiceImpl @Autowired constructor(
     override fun findUserById(id: Long): User? {
         return findFbUserById(id) ?: findGoogleUserById(id)
     }
+
+    override fun registerUser(registrationRequest: UserRegistrationRequest): User {
+        return when (registrationRequest.registrationType) {
+            UserRegistrationType.FB -> registerFbUser(registrationRequest)
+            UserRegistrationType.GOOGLE -> registerGoogleUser(registrationRequest)
+        }
+    }
+
+    private fun registerFbUser(registrationRequest: UserRegistrationRequest): FbUser {
+        val fbUser = FbUser(
+                0,
+                registrationRequest.externalUserId,
+                registrationRequest.name,
+                registrationRequest.gender,
+                registrationRequest.image,
+                registrationRequest.countryCode,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                LocalDateTime.now().format(CocktailDateTimeFormatter.FORMATTER),
+                registrationRequest.language
+        )
+
+        return fbUserRepository.save(fbUser)
+    }
+
+    private fun registerGoogleUser(registrationRequest: UserRegistrationRequest): GoogleUser {
+        val googleUser = GoogleUser(
+                0,
+                registrationRequest.externalUserId,
+                registrationRequest.name,
+                registrationRequest.gender,
+                registrationRequest.image,
+                registrationRequest.countryCode,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                LocalDateTime.now().format(CocktailDateTimeFormatter.FORMATTER)
+        )
+
+        return googleUserRepository.save(googleUser)
+    }
+
 }

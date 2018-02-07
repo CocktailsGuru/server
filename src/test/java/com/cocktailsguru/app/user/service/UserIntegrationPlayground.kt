@@ -2,8 +2,7 @@ package com.cocktailsguru.app.user.service
 
 import com.cocktailsguru.app.IntegrationTestApp
 import com.cocktailsguru.app.cocktail.domain.CocktailObjectType
-import com.cocktailsguru.app.user.domain.FbUser
-import com.cocktailsguru.app.user.domain.GoogleUser
+import com.cocktailsguru.app.user.domain.*
 import com.cocktailsguru.app.utils.loggerFor
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -11,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.transaction.annotation.Transactional
-import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = [(IntegrationTestApp::class)])
@@ -47,5 +43,55 @@ open class UserIntegrationPlayground {
     fun shouldReturnNotNullListOfFavorite() {
         val favoriteObjects = userFavoriteService.getFavoriteObjects(CocktailObjectType.COCKTAIL, 54L)
         assertFalse(favoriteObjects.isEmpty())
+    }
+
+    @Test
+    fun shouldRegisterFbUser() {
+        val userRegistrationRequest = UserRegistrationRequest(
+                "123456789",
+                "anyName",
+                Gender.MALE,
+                UserRegistrationType.FB,
+                "anyImaage",
+                "nwm",
+                "2018-02-05 20:32:08",
+                "anyLanguage"
+        )
+
+        val user = userService.registerUser(userRegistrationRequest)
+
+        assertNotNull(user)
+        assertTrue { user is FbUser }
+        assertNotEquals(0L, user.id)
+
+        val foundUser = userService.findUserById(user.id)
+
+        assertNotNull(foundUser)
+        assertEquals(user, foundUser)
+    }
+
+    @Test
+    fun shouldRegisterGoogleUser() {
+        val userRegistrationRequest = UserRegistrationRequest(
+                "123456789",
+                "anyName",
+                Gender.MALE,
+                UserRegistrationType.GOOGLE,
+                "anyImaage",
+                "nwm",
+                "2018-02-05 20:32:08",
+                "anyLanguage"
+        )
+
+        val user = userService.registerUser(userRegistrationRequest)
+
+        assertNotNull(user)
+        assertTrue { user is GoogleUser }
+        assertNotEquals(0L, user.id)
+
+        val foundUser = userService.findUserById(user.id)
+
+        assertNotNull(foundUser)
+        assertEquals(user, foundUser)
     }
 }
