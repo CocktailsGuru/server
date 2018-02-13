@@ -1,5 +1,8 @@
 package com.cocktailsguru.app.security
 
+import com.cocktailsguru.app.cocktail.controller.CocktailController
+import com.cocktailsguru.app.ingredient.controller.IngredientController
+import com.cocktailsguru.app.user.controller.UserController
 import com.cocktailsguru.app.utils.loggerFor
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.security.SecurityProperties
@@ -28,8 +31,21 @@ open class SecurityConfiguration @Autowired constructor(
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-        http.authorizeRequests().antMatchers("/v2/api-docs").hasAnyRole("MODERATOR")
-        http.authorizeRequests().antMatchers("/health").hasAnyRole("MODERATOR")
+        http.authorizeRequests().antMatchers("/v2/api-docs").hasAnyRole(Roles.MODERATOR.name)
+        http.authorizeRequests().antMatchers("/health").hasAnyRole(Roles.MODERATOR.name)
+
+
+        val endpointsList = listOf(
+                CocktailController.COCKTAIL_DETAIL_PATH,
+                CocktailController.COCKTAIL_LIST_PATH,
+                IngredientController.NON_ALCO_INGREDIENT_DETAIL_PATH,
+                IngredientController.ALCO_INGREDIENT_DETAIL_PATH,
+                IngredientController.NON_ALCO_INGREDIENT_LIST_PATH,
+                IngredientController.ALCO_INGREDIENT_LIST_PATH,
+                UserController.REGISTER_USER_PATH
+        )
+
+        endpointsList.forEach { http.authorizeRequests().antMatchers(it).hasAnyRole(Roles.MOBILE.name) }
 
         http.authorizeRequests().anyRequest().permitAll()
     }
