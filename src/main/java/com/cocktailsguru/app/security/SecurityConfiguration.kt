@@ -47,7 +47,7 @@ open class SecurityConfiguration @Autowired constructor(
                 CocktailsWebMvcConfiguration.IMAGES_PATH
         )
 
-        endpointsList.forEach { http.authorizeRequests().antMatchers(it).hasAnyRole(Roles.MOBILE.name) }
+        endpointsList.forEach { http.authorizeRequests().antMatchers(it).hasAnyRole(Roles.MOBILE.name, Roles.MODERATOR.name) }
 
         http.authorizeRequests().anyRequest().permitAll()
     }
