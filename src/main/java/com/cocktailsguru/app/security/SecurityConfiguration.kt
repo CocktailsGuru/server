@@ -2,6 +2,7 @@ package com.cocktailsguru.app.security
 
 import com.cocktailsguru.app.cocktail.controller.CocktailController
 import com.cocktailsguru.app.ingredient.controller.IngredientController
+import com.cocktailsguru.app.staticfiles.CocktailsWebMvcConfiguration
 import com.cocktailsguru.app.user.controller.UserController
 import com.cocktailsguru.app.utils.loggerFor
 import org.springframework.beans.factory.annotation.Autowired
@@ -42,7 +43,8 @@ open class SecurityConfiguration @Autowired constructor(
                 IngredientController.ALCO_INGREDIENT_DETAIL_PATH,
                 IngredientController.NON_ALCO_INGREDIENT_LIST_PATH,
                 IngredientController.ALCO_INGREDIENT_LIST_PATH,
-                UserController.REGISTER_USER_PATH
+                UserController.REGISTER_USER_PATH,
+                CocktailsWebMvcConfiguration.IMAGES_PATH
         )
 
         endpointsList.forEach { http.authorizeRequests().antMatchers(it).hasAnyRole(Roles.MOBILE.name) }
