@@ -49,7 +49,7 @@ open class SecurityConfiguration @Autowired constructor(
 
         endpointsList.forEach { http.authorizeRequests().antMatchers(it).hasAnyRole(Roles.MOBILE.name, Roles.MODERATOR.name) }
 
-        http.authorizeRequests().anyRequest().permitAll()
+        http.authorizeRequests().anyRequest().denyAll()
     }
 
     override fun configure(auth: AuthenticationManagerBuilder) {
