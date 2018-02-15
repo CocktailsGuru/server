@@ -6,6 +6,7 @@ import com.cocktailsguru.app.cocktail.dto.CocktailDetailDto;
 import com.cocktailsguru.app.cocktail.dto.list.CocktailListResponseDto;
 import com.cocktailsguru.app.cocktail.repository.CocktailRepository;
 import com.cocktailsguru.app.cocktail.service.CocktailService;
+import com.cocktailsguru.app.comment.domain.Comment;
 import com.cocktailsguru.app.common.dto.PagingDto;
 import com.cocktailsguru.app.health.controller.HealthController;
 import com.cocktailsguru.app.ingredient.domain.IngredientType;
@@ -20,6 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.access.method.P;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -147,7 +149,14 @@ public class IntegrationPlaygroundTest {
         assertNull(cocktailService.getCocktailDetail(999999L));
 
         Cocktail margarita = cocktailService.getCocktailDetail(54);
+
         assertNotNull(margarita);
         assertNotEquals(0, margarita.getNumOfFavorite());
+
+
+        Cocktail something = cocktailService.getCocktailDetail(16003);
+        for(Comment comment : something.getCommentList()) {
+            log.info(comment.toString());
+        }
     }
 }

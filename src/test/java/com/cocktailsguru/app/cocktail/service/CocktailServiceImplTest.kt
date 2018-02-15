@@ -3,6 +3,7 @@ package com.cocktailsguru.app.cocktail.service
 import com.cocktailsguru.app.cocktail.domain.Cocktail
 import com.cocktailsguru.app.cocktail.domain.CocktailObjectType
 import com.cocktailsguru.app.cocktail.repository.CocktailRepository
+import com.cocktailsguru.app.comment.service.CommentService
 import com.cocktailsguru.app.common.domain.PagingInfo
 import com.cocktailsguru.app.user.service.UserFavoriteService
 import com.nhaarman.mockito_kotlin.*
@@ -23,9 +24,11 @@ class CocktailServiceImplTest {
 
     private val anyUserFavoriteService = mock<UserFavoriteService>()
 
+    private val anyCommentService = mock<CommentService>()
+
     private val anyCocktail = mock<Cocktail>()
 
-    private val cocktailService: CocktailService = CocktailServiceImpl(anyCocktailRepository, anyUserFavoriteService)
+    private val cocktailService: CocktailService = CocktailServiceImpl(anyCocktailRepository, anyUserFavoriteService, anyCommentService)
 
 
     @Test
