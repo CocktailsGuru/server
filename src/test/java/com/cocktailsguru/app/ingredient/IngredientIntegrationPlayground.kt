@@ -5,8 +5,10 @@ import com.cocktailsguru.app.common.domain.PagingInfo
 import com.cocktailsguru.app.common.dto.ListResponseDto
 import com.cocktailsguru.app.common.dto.PagingDto
 import com.cocktailsguru.app.ingredient.controller.IngredientController
+import com.cocktailsguru.app.ingredient.domain.IngredientType
+import com.cocktailsguru.app.ingredient.repository.IngredientCategoryTypeRepository
+import com.cocktailsguru.app.ingredient.repository.IngredientRepository
 import com.cocktailsguru.app.ingredient.service.IngredientService
-import com.cocktailsguru.app.utils.loggerFor
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -31,13 +33,16 @@ import kotlin.test.assertNotNull
 @SpringBootTest(classes = [(IntegrationTestApp::class)])
 @Transactional
 open class IngredientIntegrationPlayground {
-
-    private val log = loggerFor(javaClass)
-
     private lateinit var mockMvc: MockMvc
 
     @Autowired
     lateinit var ingredientService: IngredientService
+
+    @Autowired
+    lateinit var ingredientCategoryTypeRepository: IngredientCategoryTypeRepository
+
+    @Autowired
+    lateinit var ingredientRepository: IngredientRepository
 
     @Autowired
     lateinit var wac: WebApplicationContext
@@ -48,25 +53,15 @@ open class IngredientIntegrationPlayground {
     }
 
     @Test
-    fun shouldReturnAnyAlcoIngredientList() {
-        val alcoIngredientList = ingredientService.getAlcoIngredientList(PagingInfo(0, 10))
+    fun shouldReturnAnyIngredientList() {
+        val ingredientList = ingredientService.getIngredientList(PagingInfo(0, 10))
 
-        assertNotNull(alcoIngredientList)
-        assertFalse(alcoIngredientList.list.isEmpty())
+        assertNotNull(ingredientList)
+        assertFalse(ingredientList.list.isEmpty())
     }
 
-
     @Test
-    fun shouldReturnAnyNonAlcoIngredientList() {
-        val nonAlcoIngredientList = ingredientService.getNonAlcoIngredientList(PagingInfo(0, 10))
-
-        assertNotNull(nonAlcoIngredientList)
-        assertFalse(nonAlcoIngredientList.list.isEmpty())
-    }
-
-
-    @Test
-    fun shouldReturnRequestedAlcoIngredientListSize() {
+    fun shouldReturnRequestedIngredientListSize() {
         val requestDto = PagingDto(0, 12)
 
         val objectMapper = jacksonObjectMapper()
@@ -75,7 +70,7 @@ open class IngredientIntegrationPlayground {
 
 
         val result = mockMvc.perform(
-                post(IngredientController.ALCO_INGREDIENT_LIST_PATH)
+                post(IngredientController.INGREDIENT_LIST_PATH)
                         .content(requestJson)
                         .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
@@ -85,67 +80,41 @@ open class IngredientIntegrationPlayground {
         assertEquals(requestDto.pageSize.toLong(), responseDto.list.size.toLong())
         assertEquals(requestDto, responseDto.pagingInfo)
     }
-
-
-    @Test
-    fun shouldReturnRequestedNonAlcoIngredientListSize() {
-        val requestDto = PagingDto(0, 12)
-
-        val objectMapper = jacksonObjectMapper()
-        val ow = objectMapper.writer().withDefaultPrettyPrinter()
-        val requestJson = ow.writeValueAsString(requestDto)
-
-
-        val result = mockMvc.perform(
-                post(IngredientController.NON_ALCO_INGREDIENT_LIST_PATH)
-                        .content(requestJson)
-                        .contentType(APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk)
-                .andReturn()
-        val responseJson = result.response.contentAsString
-        val responseDto = objectMapper.readValue(responseJson, ListResponseDto::class.java)
-        assertEquals(requestDto.pageSize.toLong(), responseDto.list.size.toLong())
-        assertEquals(requestDto, responseDto.pagingInfo)
-    }
-
 
     @Test
     fun shouldFindNonAlcoIngredient() {
-        val foundIngredient = ingredientService.findNonAlcoIngredient(1168)
+        val foundIngredient = ingredientService.findIngredient(1168)
         assertNotNull(foundIngredient)
+        assertEquals(IngredientType.NON_ALCO, foundIngredient!!.ingredientType)
     }
-
 
     @Test
     fun shouldFindAlcoIngredient() {
-        val alcoIngredient = ingredientService.findAlcoIngredient(1)
+        val alcoIngredient = ingredientService.findIngredient(1)
         assertNotNull(alcoIngredient)
+        assertEquals(IngredientType.ALCO, alcoIngredient!!.ingredientType)
     }
 
+    @Test
+    fun shouldFindFirstIngredientTypeWithoutException() {
+        val one = ingredientCategoryTypeRepository.findOne(1)
+        assertNotNull(one)
+    }
 
     @Test
-    fun shouldWebFindAlcoIngredientDetail() {
+    fun shouldWebFindIngredientDetail() {
         val result = mockMvc.perform(
-                get(IngredientController.ALCO_INGREDIENT_DETAIL_PATH)
+                get(IngredientController.INGREDIENT_DETAIL_PATH)
                         .param("id", "1")
                         .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
                 .andReturn()
         val contentAsString = result.response.contentAsString
         assertNotNull(contentAsString)
-        log.info(contentAsString)
     }
 
     @Test
-    fun shouldWebFindNonAlcoIngredientDetail() {
-        val result = mockMvc.perform(
-                get(IngredientController.NON_ALCO_INGREDIENT_DETAIL_PATH)
-                        .param("id", "1")
-                        .contentType(APPLICATION_JSON_VALUE))
-                .andExpect(status().isOk)
-                .andReturn()
-        val contentAsString = result.response.contentAsString
-        assertNotNull(contentAsString)
-        log.info(contentAsString)
+    fun shouldFindIngredientWithoutException() {
+        assertNotNull(ingredientRepository.findOne(1L))
     }
 }
