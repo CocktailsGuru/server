@@ -1,34 +1,25 @@
 package com.cocktailsguru.app.ingredient.service
 
 import com.cocktailsguru.app.common.domain.PagingInfo
-import com.cocktailsguru.app.ingredient.domain.AlcoIngredient
+import com.cocktailsguru.app.ingredient.domain.Ingredient
 import com.cocktailsguru.app.ingredient.domain.IngredientList
-import com.cocktailsguru.app.ingredient.domain.NonAlcoIngredient
-import com.cocktailsguru.app.ingredient.repository.AlcoIngredientRepository
-import com.cocktailsguru.app.ingredient.repository.NonAlcoIngredientRepository
+import com.cocktailsguru.app.ingredient.repository.IngredientRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 
 @Service
 class IngredientServiceImpl @Autowired constructor(
-        private val alcoIngredientRepository: AlcoIngredientRepository,
-        private val nonAlcoIngredientRepository: NonAlcoIngredientRepository
+        private val ingredientRepository: IngredientRepository
 ) : IngredientService {
 
-    override fun getAlcoIngredientList(listRequest: PagingInfo): IngredientList<AlcoIngredient> {
-        val alcoIngredientList = alcoIngredientRepository.findAll(PageRequest(listRequest.pageNumber, listRequest.pageSize)).content
 
-        return IngredientList(alcoIngredientList, listRequest)
+    override fun getIngredientList(listRequest: PagingInfo): IngredientList {
+        val ingredientList = ingredientRepository.findAll(PageRequest(listRequest.pageNumber, listRequest.pageSize)).content
+        return IngredientList(ingredientList, listRequest)
     }
 
-    override fun getNonAlcoIngredientList(listRequest: PagingInfo): IngredientList<NonAlcoIngredient> {
-        val nonAlcoIngredientList = nonAlcoIngredientRepository.findAll(PageRequest(listRequest.pageNumber, listRequest.pageSize)).content
-        return IngredientList(nonAlcoIngredientList, listRequest)
+    override fun findIngredient(id: Long): Ingredient? {
+        return ingredientRepository.findOne(id)
     }
-
-    override fun findAlcoIngredient(id: Long): AlcoIngredient? = alcoIngredientRepository.findOne(id)
-
-    override fun findNonAlcoIngredient(id: Long): NonAlcoIngredient? = nonAlcoIngredientRepository.findOne(id)
-
 }
