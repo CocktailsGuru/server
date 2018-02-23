@@ -25,7 +25,7 @@ open class SecurityConfiguration @Autowired constructor(
         private val securityProperties: ServerSecurityProperties
 ) : WebSecurityConfigurerAdapter() {
 
-    val logger = loggerFor(javaClass)
+    private val logger = loggerFor(javaClass)
 
     override fun configure(http: HttpSecurity) {
         http.headers().and().csrf().disable().httpBasic().and().exceptionHandling()
@@ -39,10 +39,8 @@ open class SecurityConfiguration @Autowired constructor(
         val endpointsList = listOf(
                 CocktailController.COCKTAIL_DETAIL_PATH,
                 CocktailController.COCKTAIL_LIST_PATH,
-                IngredientController.NON_ALCO_INGREDIENT_DETAIL_PATH,
-                IngredientController.ALCO_INGREDIENT_DETAIL_PATH,
-                IngredientController.NON_ALCO_INGREDIENT_LIST_PATH,
-                IngredientController.ALCO_INGREDIENT_LIST_PATH,
+                IngredientController.INGREDIENT_DETAIL_PATH,
+                IngredientController.INGREDIENT_LIST_PATH,
                 UserController.REGISTER_USER_PATH,
                 CocktailsWebMvcConfiguration.IMAGES_PATH
         )
