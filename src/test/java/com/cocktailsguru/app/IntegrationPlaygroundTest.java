@@ -8,10 +8,6 @@ import com.cocktailsguru.app.cocktail.repository.CocktailRepository;
 import com.cocktailsguru.app.cocktail.service.CocktailService;
 import com.cocktailsguru.app.common.dto.PagingDto;
 import com.cocktailsguru.app.health.controller.HealthController;
-import com.cocktailsguru.app.ingredient.domain.IngredientType;
-import com.cocktailsguru.app.ingredient.repository.AlcoIngredientRepository;
-import com.cocktailsguru.app.ingredient.repository.IngredientTypeRepository;
-import com.cocktailsguru.app.ingredient.repository.NonAlcoIngredientRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import lombok.extern.slf4j.Slf4j;
@@ -47,15 +43,6 @@ public class IntegrationPlaygroundTest {
     private WebApplicationContext wac;
 
     @Autowired
-    private IngredientTypeRepository ingredientTypeRepository;
-
-    @Autowired
-    private NonAlcoIngredientRepository nonAlcoIngredientRepo;
-
-    @Autowired
-    private AlcoIngredientRepository alcoIngredientRepo;
-
-    @Autowired
     private CocktailRepository cocktailRepository;
 
     @Autowired
@@ -84,21 +71,6 @@ public class IntegrationPlaygroundTest {
 
 
     @Test
-    public void shouldFindFirstIngredientTypeWithoutException() {
-        IngredientType one = ingredientTypeRepository.findOne(1);
-        assertNotNull(one);
-    }
-
-
-    @Test
-    public void shouldFindIngredientsWithoutException() {
-        assertNotNull(nonAlcoIngredientRepo.findOne(1001L));
-        assertNotNull(alcoIngredientRepo.findOne(1L));
-
-    }
-
-
-    @Test
     public void shouldFindFirstCocktailWithouException() {
         assertNotNull(cocktailRepository.findOne(1L));
     }
@@ -115,8 +87,7 @@ public class IntegrationPlaygroundTest {
         String responseJson = result.getResponse().getContentAsString();
         CocktailDetailDto responseDto = objectMapper.readValue(responseJson, CocktailDetailDto.class);
         assertNotNull(responseDto);
-        assertFalse(responseDto.getAlcoIngredList().isEmpty());
-        assertFalse(responseDto.getNonAlcoIngredList().isEmpty());
+        assertFalse(responseDto.getIngredientList().isEmpty());
         assertFalse(responseDto.getSimilarCocktailList().isEmpty());
 
         log.info(responseJson);

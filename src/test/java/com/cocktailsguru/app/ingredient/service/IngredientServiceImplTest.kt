@@ -1,10 +1,8 @@
 package com.cocktailsguru.app.ingredient.service
 
 import com.cocktailsguru.app.common.domain.PagingInfo
-import com.cocktailsguru.app.ingredient.domain.AlcoIngredient
-import com.cocktailsguru.app.ingredient.domain.NonAlcoIngredient
-import com.cocktailsguru.app.ingredient.repository.AlcoIngredientRepository
-import com.cocktailsguru.app.ingredient.repository.NonAlcoIngredientRepository
+import com.cocktailsguru.app.ingredient.domain.Ingredient
+import com.cocktailsguru.app.ingredient.repository.IngredientRepository
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,71 +16,15 @@ import kotlin.test.assertTrue
 @RunWith(MockitoJUnitRunner::class)
 class IngredientServiceImplTest {
 
-    private val anyNonAlcoIngredientRepository = mock<NonAlcoIngredientRepository>()
+    private val anyIngredientRepository = mock<IngredientRepository>()
 
-    private val anyAlcoIngredientRepository = mock<AlcoIngredientRepository>()
-
-    private val ingredientService = IngredientServiceImpl(anyAlcoIngredientRepository, anyNonAlcoIngredientRepository)
-
-    @Test
-    fun givenIngredientsInRepositoryWhenRequestingAlcoIngredientListShouldReturnNonEmptyList() {
-        val anyRequest = mock<PagingInfo>()
-        val anyAlcoIngredient = mock<AlcoIngredient>()
-        val anyPageResponse = mock<Page<AlcoIngredient>>()
-        val anyPageSize = 10
-        val anyPageNumber = 20
-        whenever(anyRequest.pageSize).thenReturn(anyPageSize)
-        whenever(anyRequest.pageNumber).thenReturn(anyPageNumber)
-        whenever(anyPageResponse.content).thenReturn(listOf(anyAlcoIngredient))
-        val pagingCaptor = argumentCaptor<PageRequest>()
-
-        whenever(anyAlcoIngredientRepository.findAll(any<Pageable>())).thenReturn(anyPageResponse)
-
-        val alcoIngredientList = ingredientService.getAlcoIngredientList(anyRequest)
-
-        verify(anyAlcoIngredientRepository).findAll(pagingCaptor.capture())
-        verifyZeroInteractions(anyNonAlcoIngredientRepository)
-
-        assertEquals(pagingCaptor.firstValue.pageNumber, anyRequest.pageNumber)
-        assertEquals(pagingCaptor.firstValue.pageSize, anyRequest.pageSize)
-
-        assertEquals(anyRequest, alcoIngredientList.pagingInfo)
-        assertEquals(1, alcoIngredientList.list.size)
-        assertEquals(anyAlcoIngredient, alcoIngredientList.list[0])
-    }
-
-    @Test
-    fun givenIngredientsInRepositoryWhenRequestingNonAlcoIngredientListShouldReturnNonEmptyList() {
-        val anyRequest = mock<PagingInfo>()
-        val anyNonAlcoIngredient = mock<NonAlcoIngredient>()
-        val anyPageResponse = mock<Page<NonAlcoIngredient>>()
-        val anyPageSize = 10
-        val anyPageNumber = 20
-        whenever(anyRequest.pageSize).thenReturn(anyPageSize)
-        whenever(anyRequest.pageNumber).thenReturn(anyPageNumber)
-        whenever(anyPageResponse.content).thenReturn(listOf(anyNonAlcoIngredient))
-        val pagingCaptor = argumentCaptor<PageRequest>()
-
-        whenever(anyNonAlcoIngredientRepository.findAll(any<Pageable>())).thenReturn(anyPageResponse)
-
-        val nonAlcoIngredientList = ingredientService.getNonAlcoIngredientList(anyRequest)
-
-        verify(anyNonAlcoIngredientRepository).findAll(pagingCaptor.capture())
-        verifyZeroInteractions(anyAlcoIngredientRepository)
-
-        assertEquals(pagingCaptor.firstValue.pageNumber, anyRequest.pageNumber)
-        assertEquals(pagingCaptor.firstValue.pageSize, anyRequest.pageSize)
-
-        assertEquals(anyRequest, nonAlcoIngredientList.pagingInfo)
-        assertEquals(1, nonAlcoIngredientList.list.size)
-        assertEquals(anyNonAlcoIngredient, nonAlcoIngredientList.list[0])
-    }
+    private val ingredientService = IngredientServiceImpl(anyIngredientRepository)
 
 
     @Test
-    fun givenNoDataInRepositoryWhenRequestingAlcoIngredientListShouldReturnEmptyList() {
+    fun givenNoIngredientsInRepositoryWhenRequestingIngredientListShouldReturnEmptyList() {
         val anyRequest = mock<PagingInfo>()
-        val anyPageResponse = mock<Page<AlcoIngredient>>()
+        val anyPageResponse = mock<Page<Ingredient>>()
         val anyPageSize = 10
         val anyPageNumber = 20
         whenever(anyRequest.pageSize).thenReturn(anyPageSize)
@@ -90,43 +32,43 @@ class IngredientServiceImplTest {
         whenever(anyPageResponse.content).thenReturn(listOf())
         val pagingCaptor = argumentCaptor<PageRequest>()
 
-        whenever(anyAlcoIngredientRepository.findAll(any<Pageable>())).thenReturn(anyPageResponse)
+        whenever(anyIngredientRepository.findAll(any<Pageable>())).thenReturn(anyPageResponse)
 
-        val alcoIngredientList = ingredientService.getAlcoIngredientList(anyRequest)
+        val ingredientList = ingredientService.getIngredientList(anyRequest)
 
-        verify(anyAlcoIngredientRepository).findAll(pagingCaptor.capture())
-        verifyZeroInteractions(anyNonAlcoIngredientRepository)
+        verify(anyIngredientRepository).findAll(pagingCaptor.capture())
 
         assertEquals(pagingCaptor.firstValue.pageNumber, anyRequest.pageNumber)
         assertEquals(pagingCaptor.firstValue.pageSize, anyRequest.pageSize)
 
-        assertEquals(anyRequest, alcoIngredientList.pagingInfo)
-        assertTrue(alcoIngredientList.list.isEmpty())
+        assertEquals(anyRequest, ingredientList.pagingInfo)
+        assertTrue(ingredientList.list.isEmpty())
     }
 
 
     @Test
-    fun givenNoDataInRepositoryWhenRequestingNonAlcoIngredientListShouldReturnEmptyList() {
+    fun givenIngredientsInRepositoryWhenRequestinIngredientListShouldReturnNonEmptyList() {
         val anyRequest = mock<PagingInfo>()
-        val anyPageResponse = mock<Page<NonAlcoIngredient>>()
+        val anyIngredient = mock<Ingredient>()
+        val anyPageResponse = mock<Page<Ingredient>>()
         val anyPageSize = 10
         val anyPageNumber = 20
         whenever(anyRequest.pageSize).thenReturn(anyPageSize)
         whenever(anyRequest.pageNumber).thenReturn(anyPageNumber)
-        whenever(anyPageResponse.content).thenReturn(listOf())
+        whenever(anyPageResponse.content).thenReturn(listOf(anyIngredient))
         val pagingCaptor = argumentCaptor<PageRequest>()
 
-        whenever(anyNonAlcoIngredientRepository.findAll(any<Pageable>())).thenReturn(anyPageResponse)
+        whenever(anyIngredientRepository.findAll(any<Pageable>())).thenReturn(anyPageResponse)
 
-        val nonAlcoIngredientList = ingredientService.getNonAlcoIngredientList(anyRequest)
+        val ingredientList = ingredientService.getIngredientList(anyRequest)
 
-        verify(anyNonAlcoIngredientRepository).findAll(pagingCaptor.capture())
-        verifyZeroInteractions(anyAlcoIngredientRepository)
+        verify(anyIngredientRepository).findAll(pagingCaptor.capture())
 
         assertEquals(pagingCaptor.firstValue.pageNumber, anyRequest.pageNumber)
         assertEquals(pagingCaptor.firstValue.pageSize, anyRequest.pageSize)
 
-        assertEquals(anyRequest, nonAlcoIngredientList.pagingInfo)
-        assertTrue(nonAlcoIngredientList.list.isEmpty())
+        assertEquals(anyRequest, ingredientList.pagingInfo)
+        assertEquals(1, ingredientList.list.size)
+        assertEquals(anyIngredient, ingredientList.list[0])
     }
 }
