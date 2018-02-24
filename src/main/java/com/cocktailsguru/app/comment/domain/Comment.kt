@@ -18,8 +18,8 @@ data class Comment(
         val objectForeignKey: Long,
         val objectName: String,
         @OneToOne(optional = false, fetch = FetchType.LAZY)
-        @JoinColumn(name = "userFK")
-        val user: User,
+        @JoinColumn(name = "userId")
+        val authorUser: User,
         val content: String,
         var numLikes: Int,
         @Column(name = "numLikesDis")
