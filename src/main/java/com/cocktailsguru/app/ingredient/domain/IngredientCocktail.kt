@@ -4,10 +4,10 @@ import com.cocktailsguru.app.cocktail.domain.Cocktail
 import javax.persistence.*
 
 @Entity
-@Table(name = "coctail_non_alco_ingredients")
-data class NonAlcoIngredientCocktail(
+@Table(name = "coctail_ingredients")
+data class IngredientCocktail(
         @EmbeddedId
-        val id: NonAlcoIngredientCocktailId,
+        val id: IngredientCocktailId,
 
         @ManyToOne
         @MapsId("cocktailId")
@@ -16,12 +16,12 @@ data class NonAlcoIngredientCocktail(
 
         @ManyToOne
         @MapsId("ingredientId")
-        @JoinColumn(name = "ingred_non_alco_id")
-        val ingredient: NonAlcoIngredient,
+        @JoinColumn(name = "ingredient_id")
+        val ingredient: Ingredient,
 
         val volume: Int
 ) {
     override fun toString(): String {
-        return String.format("NonAlcoIngredientCocktail(cocktailId %s, ingredientId %s, volume %s)", cocktail.id, ingredient.id, volume)
+        return String.format("IngredientCocktail(cocktailId %s, ingredientId %s, volume %s)", cocktail.id, ingredient.id, volume)
     }
 }

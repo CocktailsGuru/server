@@ -1,8 +1,7 @@
 package com.cocktailsguru.app.cocktail.domain
 
 import com.cocktailsguru.app.comment.domain.Comment
-import com.cocktailsguru.app.ingredient.domain.AlcoIngredientCocktail
-import com.cocktailsguru.app.ingredient.domain.NonAlcoIngredientCocktail
+import com.cocktailsguru.app.ingredient.domain.IngredientCocktail
 import javax.persistence.*
 
 @Entity(name = "coctail")
@@ -30,9 +29,7 @@ data class Cocktail(
         @JoinColumn(name = "methodFK")
         var method: CocktailMethod,
         @OneToMany(fetch = FetchType.LAZY, mappedBy = "cocktail")
-        var alcoIngredList: List<AlcoIngredientCocktail>,
-        @OneToMany(fetch = FetchType.LAZY, mappedBy = "cocktail")
-        var nonAlcoIngredList: List<NonAlcoIngredientCocktail>,
+        var ingredientList: List<IngredientCocktail>,
         @ManyToMany(cascade = arrayOf(CascadeType.ALL))
         @JoinTable(
                 name = "coctail_similar",
@@ -55,7 +52,7 @@ data class Cocktail(
         var commentList: List<Comment>
 ) {
     override fun toString(): String {
-        return "Cocktail(id=$id, name='$name', totalVolume=$totalVolume, alcoVolume=$alcoVolume, nonAlcoVolume=$nonAlcoVolume, instructions='$instructions', garnish='$garnish', description='$description', imageName='$imageName', glass=$glass, method=$method, alcoIngredList=$alcoIngredList, nonAlcoIngredList=$nonAlcoIngredList, similarCocktailList=${similarCocktailList.map { it -> it.id }})"
+        return "Cocktail(id=$id, name='$name', totalVolume=$totalVolume, alcoVolume=$alcoVolume, nonAlcoVolume=$nonAlcoVolume, instructions='$instructions', garnish='$garnish', description='$description', imageName='$imageName', glass=$glass, method=$method, ingredientList=$ingredientList, similarCocktailList=${similarCocktailList.map { it -> it.id }})"
     }
 
     @PostLoad

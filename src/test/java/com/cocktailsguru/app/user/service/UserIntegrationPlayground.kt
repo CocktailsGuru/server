@@ -57,7 +57,7 @@ open class UserIntegrationPlayground {
     fun shouldFindUserById() {
         assertNull(userService.findUserById(1))
 
-        val googleUser = userService.findUserById(7168)
+        val googleUser = userService.findUserById(7651)
         assertNotNull(googleUser)
         assertTrue { googleUser is GoogleUser }
 
