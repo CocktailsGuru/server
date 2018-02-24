@@ -4,6 +4,7 @@ import com.cocktailsguru.app.IntegrationTestApp
 import com.cocktailsguru.app.cocktail.domain.CocktailObjectType
 import com.cocktailsguru.app.user.controller.UserController
 import com.cocktailsguru.app.user.domain.*
+import com.cocktailsguru.app.user.domain.registration.UserRegistrationResultType
 import com.cocktailsguru.app.user.dto.registration.RegisterUserRequestDto
 import com.cocktailsguru.app.user.dto.registration.RegisterUserResponseDto
 import com.cocktailsguru.app.utils.loggerFor
@@ -73,7 +74,7 @@ open class UserIntegrationPlayground {
     }
 
     @Test
-    fun shouldRegisterFbUser() {
+    fun shouldRegisterExistingFbUser() {
         val userRegistrationRequest = UserRegistrationRequest(
                 "123456789",
                 "anyName",
@@ -84,20 +85,21 @@ open class UserIntegrationPlayground {
                 "anyLanguage"
         )
 
-        val user = userService.registerUser(userRegistrationRequest)
+        val registrationResult = userService.registerUser(userRegistrationRequest)
 
-        assertNotNull(user)
-        assertTrue { user is FbUser }
-        assertNotEquals(0L, user.id)
+        assertNotNull(registrationResult)
+        assertTrue { registrationResult.user is FbUser }
+        assertNotEquals(0L, registrationResult.user.id)
 
-        val foundUser = userService.findUserById(user.id)
+        val foundUser = userService.findUserById(registrationResult.user.id)
 
         assertNotNull(foundUser)
-        assertEquals(user, foundUser)
+        assertEquals(registrationResult.user, foundUser)
+        assertEquals(registrationResult.registrationResultType, UserRegistrationResultType.EXISTING_USER)
     }
 
     @Test
-    fun shouldRegisterGoogleUser() {
+    fun shouldRegisterNewGoogleUser() {
         val userRegistrationRequest = UserRegistrationRequest(
                 "123456789",
                 "anyName",
@@ -108,16 +110,17 @@ open class UserIntegrationPlayground {
                 null
         )
 
-        val user = userService.registerUser(userRegistrationRequest)
+        val registrationResult = userService.registerUser(userRegistrationRequest)
 
-        assertNotNull(user)
-        assertTrue { user is GoogleUser }
-        assertNotEquals(0L, user.id)
+        assertNotNull(registrationResult)
+        assertTrue { registrationResult.user is GoogleUser }
+        assertNotEquals(0L, registrationResult.user.id)
 
-        val foundUser = userService.findUserById(user.id)
+        val foundUser = userService.findUserById(registrationResult.user.id)
 
         assertNotNull(foundUser)
-        assertEquals(user, foundUser)
+        assertEquals(registrationResult.user, foundUser)
+        assertEquals(registrationResult.registrationResultType, UserRegistrationResultType.NEW_REGISTRATION)
     }
 
 

@@ -9,4 +9,6 @@ import javax.transaction.Transactional
 @NoRepositoryBean
 @Repository
 @Transactional
-interface UserRepository<T : User> : CrudRepository<T, Long>
+interface UserRepository<T : User> : CrudRepository<T, Long> {
+    fun findFirstByExternalUserId(externalUserId: String): T?
+}

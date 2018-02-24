@@ -1,6 +1,8 @@
 package com.cocktailsguru.app.user.service
 
 import com.cocktailsguru.app.user.domain.*
+import com.cocktailsguru.app.user.domain.registration.UserRegistrationResult
+import com.cocktailsguru.app.user.domain.registration.UserRegistrationResultType
 import com.cocktailsguru.app.user.repository.FbUserRepository
 import com.cocktailsguru.app.user.repository.GoogleUserRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,11 +28,24 @@ class UserServiceImpl @Autowired constructor(
         return findFbUserById(id) ?: findGoogleUserById(id)
     }
 
-    override fun registerUser(registrationRequest: UserRegistrationRequest): User {
-        return when (registrationRequest.registrationType) {
-            UserRegistrationType.FB -> registerFbUser(registrationRequest)
-            UserRegistrationType.GOOGLE -> registerGoogleUser(registrationRequest)
+    override fun registerUser(registrationRequest: UserRegistrationRequest): UserRegistrationResult {
+        val repository = when (registrationRequest.registrationType) {
+            UserRegistrationType.FB -> fbUserRepository
+            UserRegistrationType.GOOGLE -> googleUserRepository
         }
+
+        val existingUser = repository.findFirstByExternalUserId(registrationRequest.externalUserId)
+
+        return if (existingUser != null) {
+            UserRegistrationResult(existingUser, UserRegistrationResultType.EXISTING_USER)
+        } else
+            UserRegistrationResult(
+                    when (registrationRequest.registrationType) {
+                        UserRegistrationType.FB -> registerFbUser(registrationRequest)
+                        UserRegistrationType.GOOGLE -> registerGoogleUser(registrationRequest)
+                    },
+                    UserRegistrationResultType.NEW_REGISTRATION
+            )
     }
 
     private fun registerFbUser(registrationRequest: UserRegistrationRequest): FbUser {

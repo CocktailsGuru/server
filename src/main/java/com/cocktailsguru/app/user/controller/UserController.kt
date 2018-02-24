@@ -18,7 +18,7 @@ class UserController @Autowired constructor(
         private val userService: UserService
 ) {
 
-    val logger = loggerFor(javaClass)
+    private val logger = loggerFor(javaClass)
 
     companion object {
         const val REGISTER_USER_PATH = "/registerUser"
@@ -42,8 +42,8 @@ class UserController @Autowired constructor(
             checkNotNull(registrationRequest.language)
         }
 
-        val user = userService.registerUser(registrationRequest)
-        return RegisterUserResponseDto(user.id)
+        val registrationResult = userService.registerUser(registrationRequest)
+        return RegisterUserResponseDto(registrationResult.user.id, registrationResult.registrationResultType)
     }
 
 }
