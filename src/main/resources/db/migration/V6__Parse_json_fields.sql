@@ -58,6 +58,7 @@ CALL ingredientsParse(0, 4999);
 CALL ingredientsParse(5000, 9999);
 CALL ingredientsParse(10000, 14999);
 CALL ingredientsParse(15000, 19999);
+CALL ingredientsParse(20000, 24999);
 
 
 ALTER TABLE coctail DROP coctail.ingredients;
@@ -110,5 +111,6 @@ END //
 DELIMITER ;
 
 CALL similarCocktailParse(0,50000);
+CALL similarCocktailParse(50001,100000);
 
 ALTER TABLE coctail DROP coctail.simillarDrinks;
