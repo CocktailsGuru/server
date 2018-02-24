@@ -24,7 +24,9 @@ class CocktailServiceImpl @Autowired constructor(
 
     override fun getCocktailDetail(id: Long): Cocktail? {
         val cocktail = cocktailRepository.findOne(id)
-        cocktail?.let { updateNumOfFavorite(it) }
+        cocktail?.let {
+            updateNumOfFavorite(it)
+        }
         return cocktail
     }
 

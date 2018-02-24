@@ -2,12 +2,10 @@ package com.cocktailsguru.app.staticfiles
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
-import org.springframework.web.servlet.config.annotation.EnableWebMvc
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @Configuration
-@EnableWebMvc
 open class CocktailsWebMvcConfiguration : WebMvcConfigurerAdapter() {
 
     companion object {

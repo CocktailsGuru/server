@@ -47,7 +47,6 @@ data class Cocktail(
         var calculatedRating: Double,
         @Transient
         var numOfFavorite: Int
-
 ) {
     override fun toString(): String {
         return "Cocktail(id=$id, name='$name', totalVolume=$totalVolume, alcoVolume=$alcoVolume, nonAlcoVolume=$nonAlcoVolume, instructions='$instructions', garnish='$garnish', description='$description', imageName='$imageName', glass=$glass, method=$method, ingredientList=$ingredientList, similarCocktailList=${similarCocktailList.map { it -> it.id }})"
