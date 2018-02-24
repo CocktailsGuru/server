@@ -43,7 +43,7 @@ open class SecurityConfiguration @Autowired constructor(
                 IngredientController.INGREDIENT_DETAIL_PATH,
                 IngredientController.INGREDIENT_LIST_PATH,
                 UserController.REGISTER_USER_PATH,
-                CocktailsWebMvcConfiguration.IMAGES_PATH,
+                CocktailsWebMvcConfiguration.ASSETS_PATH,
                 CommentController.COMMENT_LIST_PATH
         )
 

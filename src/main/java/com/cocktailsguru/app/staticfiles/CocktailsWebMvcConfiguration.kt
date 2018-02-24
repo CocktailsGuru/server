@@ -9,14 +9,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 open class CocktailsWebMvcConfiguration : WebMvcConfigurerAdapter() {
 
     companion object {
-        const val IMAGES_PATH = "/images/**"
+        const val ASSETS_PATH = "/assets/**"
     }
 
-    @Value("\${cocktails.resource.images}")
-    private lateinit var imagesResourceLocation: String
+    @Value("\${cocktails.resource.assets}")
+    private lateinit var assetsResourceLocation: String
 
     final override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
-        registry.addResourceHandler(IMAGES_PATH)
-                .addResourceLocations(imagesResourceLocation)
+        registry.addResourceHandler(ASSETS_PATH)
+                .addResourceLocations(assetsResourceLocation)
     }
 }
