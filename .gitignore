@@ -273,7 +273,7 @@ Temporary Items
 # Add additional ignored files/directories below                                   #
 ####################################################################################
 
-src/main/resources/db/migration/V1__*.sql
+db/V1__*.sql
 application-local.yml
 application-test.yml
 cocktail-security.yml
