@@ -1,6 +1,5 @@
 package com.cocktailsguru.app.cocktail.domain
 
-import com.cocktailsguru.app.comment.domain.Comment
 import com.cocktailsguru.app.ingredient.domain.IngredientCocktail
 import javax.persistence.*
 
@@ -47,9 +46,7 @@ data class Cocktail(
         @Transient
         var calculatedRating: Double,
         @Transient
-        var numOfFavorite: Int,
-        @Transient
-        var commentList: List<Comment>
+        var numOfFavorite: Int
 ) {
     override fun toString(): String {
         return "Cocktail(id=$id, name='$name', totalVolume=$totalVolume, alcoVolume=$alcoVolume, nonAlcoVolume=$nonAlcoVolume, instructions='$instructions', garnish='$garnish', description='$description', imageName='$imageName', glass=$glass, method=$method, ingredientList=$ingredientList, similarCocktailList=${similarCocktailList.map { it -> it.id }})"

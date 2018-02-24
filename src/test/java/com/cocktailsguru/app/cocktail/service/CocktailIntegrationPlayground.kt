@@ -108,11 +108,5 @@ open class CocktailIntegrationPlayground {
 
         assertNotNull(margarita)
         assertNotEquals(0, margarita!!.numOfFavorite.toLong())
-
-
-        val something = cocktailService.getCocktailDetail(16003)
-        for (comment in something!!.commentList) {
-            logger.info(comment.toString())
-        }
     }
 }
