@@ -1,6 +1,7 @@
 package com.cocktailsguru.app.security
 
 import com.cocktailsguru.app.cocktail.controller.CocktailController
+import com.cocktailsguru.app.comment.controller.CommentController
 import com.cocktailsguru.app.ingredient.controller.IngredientController
 import com.cocktailsguru.app.staticfiles.CocktailsWebMvcConfiguration
 import com.cocktailsguru.app.user.controller.UserController
@@ -42,7 +43,8 @@ open class SecurityConfiguration @Autowired constructor(
                 IngredientController.INGREDIENT_DETAIL_PATH,
                 IngredientController.INGREDIENT_LIST_PATH,
                 UserController.REGISTER_USER_PATH,
-                CocktailsWebMvcConfiguration.IMAGES_PATH
+                CocktailsWebMvcConfiguration.IMAGES_PATH,
+                CommentController.COMMENT_LIST_PATH
         )
 
         endpointsList.forEach { http.authorizeRequests().antMatchers(it).hasAnyRole(Roles.MOBILE.name, Roles.MODERATOR.name) }
