@@ -6,7 +6,7 @@
 
     <groupId>com.cocktailsguru.app</groupId>
     <artifactId>server</artifactId>
-    <version>0.0.16-SNAPSHOT</version>
+    <version>0.0.17-SNAPSHOT</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
