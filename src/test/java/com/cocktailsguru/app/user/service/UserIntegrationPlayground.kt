@@ -139,7 +139,7 @@ open class UserIntegrationPlayground {
         val requestJson = objectWriter.writeValueAsString(requestDto)
 
         val result = mockMvc.perform(
-                post(UserController.REGISTER_USER_PATH)
+                post("/" + UserController.USER_BASE_PATH + "/" + UserController.REGISTER_USER_PATH)
                         .content(requestJson)
                         .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
@@ -167,7 +167,7 @@ open class UserIntegrationPlayground {
         val requestJson = objectWriter.writeValueAsString(requestDto)
 
         val result = mockMvc.perform(
-                post(UserController.REGISTER_USER_PATH)
+                post("/" + UserController.USER_BASE_PATH + "/" + UserController.REGISTER_USER_PATH)
                         .content(requestJson)
                         .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
