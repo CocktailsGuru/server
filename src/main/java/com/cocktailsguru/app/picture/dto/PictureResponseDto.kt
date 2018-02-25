@@ -1,12 +1,13 @@
 package com.cocktailsguru.app.picture.dto
 
 import com.cocktailsguru.app.picture.domain.Picture
+import com.cocktailsguru.app.user.dto.UserInfoResponseDto
 import java.time.LocalDateTime
 
 data class PictureResponseDto(
         val id: Long,
         val objectForeignKey: Long,
-        val authorUserId: Long,
+        val authorUser: UserInfoResponseDto,
         val fileName: String,
         val objectName: String,
         val description: String,
@@ -21,7 +22,7 @@ data class PictureResponseDto(
     constructor(picture: Picture) : this(
             picture.id,
             picture.objectForeignKey,
-            picture.authorUser.id,
+            UserInfoResponseDto(picture.authorUser),
             picture.fileName,
             picture.objectName,
             picture.description,
