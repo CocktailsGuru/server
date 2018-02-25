@@ -1,5 +1,6 @@
 package com.cocktailsguru.app.cocktail.controller
 
+import com.cocktailsguru.app.cocktail.controller.CocktailController.Companion.COCKTAIL_BASE_PATH
 import com.cocktailsguru.app.cocktail.domain.Cocktail
 import com.cocktailsguru.app.cocktail.dto.CocktailDetailDto
 import com.cocktailsguru.app.cocktail.dto.list.CocktailListResponseDto
@@ -11,20 +12,24 @@ import com.cocktailsguru.app.utils.loggerFor
 import org.modelmapper.Converter
 import org.modelmapper.ModelMapper
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.*
 
 @RestController
-class CocktailController @Autowired constructor(private val cocktailService: CocktailService, private val modelMapper: ModelMapper) {
+@Secured(value = ["ROLE_MOBILE"])
+@RequestMapping(COCKTAIL_BASE_PATH)
+open class CocktailController @Autowired constructor(private val cocktailService: CocktailService, private val modelMapper: ModelMapper) {
 
-    val logger = loggerFor(javaClass)
+    private val logger = loggerFor(javaClass)
 
     companion object {
-        const val COCKTAIL_DETAIL_PATH = "/cocktailDetail"
-        const val COCKTAIL_LIST_PATH = "/cocktailList"
+        const val COCKTAIL_BASE_PATH = "cocktail"
+        const val COCKTAIL_DETAIL_PATH = "detail"
+        const val COCKTAIL_LIST_PATH = "list"
     }
 
     @RequestMapping(value = [COCKTAIL_DETAIL_PATH], produces = ["application/json"], method = [(RequestMethod.GET)])
-    fun getCocktailDetail(@RequestParam("id") id: Long): CocktailDetailDto? {
+    open fun getCocktailDetail(@RequestParam("id") id: Long): CocktailDetailDto? {
         logger.info("Request cocktail detail id {}", id)
         val cocktailDetail = cocktailService.getCocktailDetail(id)
         return if (cocktailDetail != null) {
@@ -43,7 +48,7 @@ class CocktailController @Autowired constructor(private val cocktailService: Coc
     }
 
     @RequestMapping(value = [COCKTAIL_LIST_PATH], produces = ["application/json"], method = [RequestMethod.POST])
-    fun getCocktailList(@RequestBody cocktailListRequestDto: PagingDto): CocktailListResponseDto {
+    open fun getCocktailList(@RequestBody cocktailListRequestDto: PagingDto): CocktailListResponseDto {
         logger.info("Request cocktail list - {}", cocktailListRequestDto.toString())
         val pagingRequest = PagingInfo(cocktailListRequestDto.pageNumber, cocktailListRequestDto.pageSize)
         val cocktailList = cocktailService.getCocktailList(pagingRequest)

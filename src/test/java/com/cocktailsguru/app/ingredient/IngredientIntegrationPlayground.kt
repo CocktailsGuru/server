@@ -70,7 +70,7 @@ open class IngredientIntegrationPlayground {
 
 
         val result = mockMvc.perform(
-                post(IngredientController.INGREDIENT_LIST_PATH)
+                post("/" + IngredientController.INGREDIENT_BASE_PATH + "/" + IngredientController.INGREDIENT_LIST_PATH)
                         .content(requestJson)
                         .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
@@ -104,7 +104,7 @@ open class IngredientIntegrationPlayground {
     @Test
     fun shouldWebFindIngredientDetail() {
         val result = mockMvc.perform(
-                get(IngredientController.INGREDIENT_DETAIL_PATH)
+                get("/" + IngredientController.INGREDIENT_BASE_PATH + "/" + IngredientController.INGREDIENT_DETAIL_PATH)
                         .param("id", "1")
                         .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)

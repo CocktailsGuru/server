@@ -65,7 +65,7 @@ open class CocktailIntegrationPlayground {
     @Throws(Exception::class)
     fun shouldGetCocktailDetail() {
         val result = mockMvc.perform(
-                get(CocktailController.COCKTAIL_DETAIL_PATH)
+                get("/" + CocktailController.COCKTAIL_BASE_PATH + "/" + CocktailController.COCKTAIL_DETAIL_PATH)
                         .param("id", "1")
                         .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
@@ -88,7 +88,7 @@ open class CocktailIntegrationPlayground {
 
 
         val result = mockMvc.perform(
-                post(CocktailController.COCKTAIL_LIST_PATH)
+                post("/" + CocktailController.COCKTAIL_BASE_PATH + "/" + CocktailController.COCKTAIL_LIST_PATH)
                         .content(requestJson)
                         .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
