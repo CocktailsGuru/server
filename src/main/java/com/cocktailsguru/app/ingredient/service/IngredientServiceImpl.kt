@@ -1,5 +1,7 @@
 package com.cocktailsguru.app.ingredient.service
 
+import com.cocktailsguru.app.cocktail.domain.CocktailObjectType
+import com.cocktailsguru.app.comment.domain.CommentList
 import com.cocktailsguru.app.comment.service.CommentService
 import com.cocktailsguru.app.common.domain.ObjectDetailRequest
 import com.cocktailsguru.app.common.domain.PagingInfo
@@ -15,6 +17,11 @@ class IngredientServiceImpl @Autowired constructor(
         private val ingredientRepository: IngredientRepository,
         private val commentService: CommentService
 ) : IngredientService {
+
+
+    override fun getCommentList(id: Long, commentRequest: PagingInfo): CommentList {
+        return commentService.getCommentListForObject(CocktailObjectType.INGREDIENT, id, commentRequest)
+    }
 
     override fun findIngredient(id: Long): Ingredient? {
         return ingredientRepository.findOne(id)

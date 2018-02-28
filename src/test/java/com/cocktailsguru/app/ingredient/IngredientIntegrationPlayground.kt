@@ -1,6 +1,7 @@
 package com.cocktailsguru.app.ingredient
 
 import com.cocktailsguru.app.IntegrationTestApp
+import com.cocktailsguru.app.comment.dto.CommentListResponseDto
 import com.cocktailsguru.app.common.domain.PagingInfo
 import com.cocktailsguru.app.ingredient.controller.IngredientController
 import com.cocktailsguru.app.ingredient.domain.IngredientType
@@ -159,5 +160,47 @@ open class IngredientIntegrationPlayground {
     @Test
     fun shouldFindIngredientWithoutException() {
         assertNotNull(ingredientRepository.findOne(1L))
+    }
+
+
+    @Test
+    fun shouldReturnCommentListForIngredient() {
+        val requestedPageNumber = 0
+        val requestedPageSize = 10
+
+        val result = mockMvc.perform(
+                get("/" + IngredientController.INGREDIENT_BASE_PATH + "/" + IngredientController.COMMENT_LIST_PATH)
+                        .param("id", "3")
+                        .param("pageNumber", requestedPageNumber.toString())
+                        .param("pageSize", requestedPageSize.toString())
+                        .contentType(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk)
+                .andReturn()
+        val responseJson = result.response.contentAsString
+        val responseDto = objectMapper.readValue(responseJson, CommentListResponseDto::class.java)
+        assertFalse { responseDto.list.isEmpty() }
+        assertEquals(requestedPageSize, responseDto.pagingInfo.pageSize)
+        assertEquals(requestedPageNumber, responseDto.pagingInfo.pageNumber)
+    }
+
+
+    @Test
+    fun whenRequestingEmptyCommentListShouldReturnEmptyList() {
+        val requestedPageNumber = 0
+        val requestedPageSize = 0
+
+        val result = mockMvc.perform(
+                get("/" + IngredientController.INGREDIENT_BASE_PATH + "/" + IngredientController.COMMENT_LIST_PATH)
+                        .param("id", "3")
+                        .param("pageNumber", requestedPageNumber.toString())
+                        .param("pageSize", requestedPageSize.toString())
+                        .contentType(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk)
+                .andReturn()
+        val responseJson = result.response.contentAsString
+        val responseDto = objectMapper.readValue(responseJson, CommentListResponseDto::class.java)
+        assertTrue { responseDto.list.isEmpty() }
+        assertEquals(requestedPageSize, responseDto.pagingInfo.pageSize)
+        assertEquals(requestedPageNumber, responseDto.pagingInfo.pageNumber)
     }
 }

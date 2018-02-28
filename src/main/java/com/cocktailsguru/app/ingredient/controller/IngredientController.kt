@@ -30,6 +30,7 @@ open class IngredientController @Autowired constructor(
         const val INGREDIENT_BASE_PATH = "ingredient"
         const val INGREDIENT_LIST_PATH = "list"
         const val INGREDIENT_DETAIL_PATH = "detail"
+        const val COMMENT_LIST_PATH = "comments"
     }
 
     @RequestMapping(value = [(INGREDIENT_LIST_PATH)], produces = ["application/json"], method = [RequestMethod.GET])
@@ -43,6 +44,17 @@ open class IngredientController @Autowired constructor(
                 ingredientList.objectList.map { IngredientListItemDto(it) },
                 PagingDto(ingredientList.pagingInfo)
         )
+    }
+
+    @RequestMapping(value = [COMMENT_LIST_PATH], produces = ["application/json"], method = [RequestMethod.GET])
+    open fun getCommentList(
+            @RequestParam("id") id: Long,
+            @RequestParam("pageNumber") pageNumber: Int,
+            @RequestParam("pageSize") pageSize: Int
+    ): CommentListResponseDto {
+        logger.info("Requested comment list for ingredient {} pageNumber {} page size {}", id, pageNumber, pageSize)
+        val commentList = ingredientService.getCommentList(id, PagingInfo(pageNumber, pageSize))
+        return CommentListResponseDto(commentList)
     }
 
     @RequestMapping(value = [(INGREDIENT_DETAIL_PATH)], produces = ["application/json"], method = [(RequestMethod.GET)])
