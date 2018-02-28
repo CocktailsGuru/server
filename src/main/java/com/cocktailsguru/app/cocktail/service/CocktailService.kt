@@ -4,6 +4,7 @@ import com.cocktailsguru.app.cocktail.domain.Cocktail
 import com.cocktailsguru.app.cocktail.domain.CocktailList
 import com.cocktailsguru.app.cocktail.domain.detail.CocktailDetail
 import com.cocktailsguru.app.cocktail.domain.detail.CocktailDetailRequest
+import com.cocktailsguru.app.comment.domain.CommentList
 import com.cocktailsguru.app.common.domain.PagingInfo
 
 interface CocktailService {
@@ -12,4 +13,6 @@ interface CocktailService {
     fun findCocktail(id: Long): Cocktail?
 
     fun getCocktailList(listRequest: PagingInfo): CocktailList
+
+    fun getCommentList(id: Long, commentRequest: PagingInfo): CommentList
 }

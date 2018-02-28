@@ -31,6 +31,7 @@ open class CocktailController @Autowired constructor(
         const val COCKTAIL_BASE_PATH = "cocktail"
         const val COCKTAIL_DETAIL_PATH = "detail"
         const val COCKTAIL_LIST_PATH = "list"
+        const val COMMENT_LIST_PATH = "comments"
     }
 
     @RequestMapping(value = [COCKTAIL_DETAIL_PATH], produces = ["application/json"], method = [(RequestMethod.GET)])
@@ -61,5 +62,17 @@ open class CocktailController @Autowired constructor(
         val pagingRequest = PagingInfo(pageNumber, pageSize)
         val cocktailList = cocktailService.getCocktailList(pagingRequest)
         return CocktailListResponseDto(cocktailList)
+    }
+
+
+    @RequestMapping(value = [COMMENT_LIST_PATH], produces = ["application/json"], method = [RequestMethod.GET])
+    open fun getCommentList(
+            @RequestParam("id") id: Long,
+            @RequestParam("pageNumber") pageNumber: Int,
+            @RequestParam("pageSize") pageSize: Int
+    ): CommentListResponseDto {
+        logger.info("Requested comment list for cocktail {} pageNumber {} page size {}", id, pageNumber, pageSize)
+        val commentList = cocktailService.getCommentList(id, PagingInfo(pageNumber, pageSize))
+        return CommentListResponseDto(commentList)
     }
 }

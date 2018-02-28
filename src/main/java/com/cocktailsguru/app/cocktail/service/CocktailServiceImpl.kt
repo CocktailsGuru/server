@@ -6,6 +6,7 @@ import com.cocktailsguru.app.cocktail.domain.CocktailObjectType
 import com.cocktailsguru.app.cocktail.domain.detail.CocktailDetail
 import com.cocktailsguru.app.cocktail.domain.detail.CocktailDetailRequest
 import com.cocktailsguru.app.cocktail.repository.CocktailRepository
+import com.cocktailsguru.app.comment.domain.CommentList
 import com.cocktailsguru.app.comment.service.CommentService
 import com.cocktailsguru.app.common.domain.PagingInfo
 import com.cocktailsguru.app.picture.service.PictureService
@@ -20,6 +21,11 @@ class CocktailServiceImpl @Autowired constructor(
         private val commentService: CommentService,
         private val pictureService: PictureService
 ) : CocktailService {
+
+
+    override fun getCommentList(id: Long, commentRequest: PagingInfo): CommentList {
+        return commentService.getCommentListForObject(CocktailObjectType.COCKTAIL, id, commentRequest)
+    }
 
     override fun findCocktail(id: Long): Cocktail? {
         val cocktail = cocktailRepository.findOne(id)
