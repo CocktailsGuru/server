@@ -2,10 +2,10 @@ package com.cocktailsguru.app.ingredient
 
 import com.cocktailsguru.app.IntegrationTestApp
 import com.cocktailsguru.app.common.domain.PagingInfo
-import com.cocktailsguru.app.common.dto.ListResponseDto
-import com.cocktailsguru.app.common.dto.PagingDto
 import com.cocktailsguru.app.ingredient.controller.IngredientController
 import com.cocktailsguru.app.ingredient.domain.IngredientType
+import com.cocktailsguru.app.ingredient.dto.detail.IngredientDetailResponseDto
+import com.cocktailsguru.app.ingredient.dto.list.IngredientListResponseDto
 import com.cocktailsguru.app.ingredient.repository.IngredientCategoryTypeRepository
 import com.cocktailsguru.app.ingredient.repository.IngredientRepository
 import com.cocktailsguru.app.ingredient.service.IngredientService
@@ -19,7 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.transaction.annotation.Transactional
@@ -27,6 +26,7 @@ import org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE
 import org.springframework.web.context.WebApplicationContext
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 
 @RunWith(SpringRunner::class)
@@ -47,9 +47,12 @@ open class IngredientIntegrationPlayground {
     @Autowired
     lateinit var wac: WebApplicationContext
 
+    private val objectMapper = jacksonObjectMapper()
+
     @Before
     fun setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).build()
+        objectMapper.findAndRegisterModules()
     }
 
     @Test
@@ -57,28 +60,45 @@ open class IngredientIntegrationPlayground {
         val ingredientList = ingredientService.getIngredientList(PagingInfo(0, 10))
 
         assertNotNull(ingredientList)
-        assertFalse(ingredientList.list.isEmpty())
+        assertFalse(ingredientList.objectList.isEmpty())
     }
 
     @Test
     fun shouldReturnRequestedIngredientListSize() {
-        val requestDto = PagingDto(0, 12)
-
-        val objectMapper = jacksonObjectMapper()
-        val ow = objectMapper.writer().withDefaultPrettyPrinter()
-        val requestJson = ow.writeValueAsString(requestDto)
-
+        val requestedPageNumber = 0
+        val requestedPageSize = 12
 
         val result = mockMvc.perform(
-                post("/" + IngredientController.INGREDIENT_BASE_PATH + "/" + IngredientController.INGREDIENT_LIST_PATH)
-                        .content(requestJson)
+                get("/" + IngredientController.INGREDIENT_BASE_PATH + "/" + IngredientController.INGREDIENT_LIST_PATH)
+                        .param("pageNumber", requestedPageNumber.toString())
+                        .param("pageSize", requestedPageSize.toString())
                         .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
                 .andReturn()
         val responseJson = result.response.contentAsString
-        val responseDto = objectMapper.readValue(responseJson, ListResponseDto::class.java)
-        assertEquals(requestDto.pageSize.toLong(), responseDto.list.size.toLong())
-        assertEquals(requestDto, responseDto.pagingInfo)
+        val responseDto = objectMapper.readValue(responseJson, IngredientListResponseDto::class.java)
+        assertEquals(requestedPageSize, responseDto.list.size)
+        assertEquals(requestedPageSize, responseDto.pagingInfo.pageSize)
+        assertEquals(requestedPageNumber, responseDto.pagingInfo.pageNumber)
+    }
+
+    @Test
+    fun whenRequestingEmptyIngredientListShouldReturnEmptyList() {
+        val requestedPageNumber = 0
+        val requestedPageSize = 0
+
+        val result = mockMvc.perform(
+                get("/" + IngredientController.INGREDIENT_BASE_PATH + "/" + IngredientController.INGREDIENT_LIST_PATH)
+                        .param("pageNumber", requestedPageNumber.toString())
+                        .param("pageSize", requestedPageSize.toString())
+                        .contentType(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk)
+                .andReturn()
+        val responseJson = result.response.contentAsString
+        val responseDto = objectMapper.readValue(responseJson, IngredientListResponseDto::class.java)
+        assertTrue { responseDto.list.isEmpty() }
+        assertEquals(requestedPageSize, responseDto.pagingInfo.pageSize)
+        assertEquals(requestedPageNumber, responseDto.pagingInfo.pageNumber)
     }
 
     @Test
@@ -102,7 +122,7 @@ open class IngredientIntegrationPlayground {
     }
 
     @Test
-    fun shouldWebFindIngredientDetail() {
+    fun shouldWebFindIngredientDetailWithoutRequestedComments() {
         val result = mockMvc.perform(
                 get("/" + IngredientController.INGREDIENT_BASE_PATH + "/" + IngredientController.INGREDIENT_DETAIL_PATH)
                         .param("id", "1")
@@ -111,6 +131,29 @@ open class IngredientIntegrationPlayground {
                 .andReturn()
         val contentAsString = result.response.contentAsString
         assertNotNull(contentAsString)
+        val responseDto = objectMapper.readValue(contentAsString, IngredientDetailResponseDto::class.java)
+        assertTrue { responseDto.commentsDtoList.list.isEmpty() }
+        assertEquals(0, responseDto.commentsDtoList.pagingInfo.pageSize)
+        assertEquals(0, responseDto.commentsDtoList.pagingInfo.pageNumber)
+    }
+
+    @Test
+    fun shouldWebFindIngredientDetailWithRequestedComments() {
+        val requestedCommentsSize = 10
+        val result = mockMvc.perform(
+                get("/" + IngredientController.INGREDIENT_BASE_PATH + "/" + IngredientController.INGREDIENT_DETAIL_PATH)
+                        .param("id", "3")
+                        .param("commentsSize", requestedCommentsSize.toString())
+                        .contentType(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk)
+                .andReturn()
+        val contentAsString = result.response.contentAsString
+        assertNotNull(contentAsString)
+        val responseDto = objectMapper.readValue(contentAsString, IngredientDetailResponseDto::class.java)
+        assertFalse { responseDto.commentsDtoList.list.isEmpty() }
+        assertEquals(requestedCommentsSize, responseDto.commentsDtoList.list.size)
+        assertEquals(requestedCommentsSize, responseDto.commentsDtoList.pagingInfo.pageSize)
+        assertEquals(0, responseDto.commentsDtoList.pagingInfo.pageNumber)
     }
 
     @Test

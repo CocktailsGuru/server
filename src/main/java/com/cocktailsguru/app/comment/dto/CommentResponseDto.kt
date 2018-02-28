@@ -7,17 +7,19 @@ import java.time.LocalDateTime
 data class CommentResponseDto(
         val id: Long,
         val objectForeignKey: Long,
+        val objectName: String,
         val authorUser: UserInfoResponseDto,
         val content: String,
         val numLikes: Int,
         val numDislikes: Int,
-        val isVisible: Boolean,
+        val visible: Boolean,
         val updateTime: LocalDateTime,
         val createdTime: LocalDateTime
 ) {
     constructor(comment: Comment) : this(
             comment.id,
             comment.objectForeignKey,
+            comment.objectName,
             UserInfoResponseDto(comment.authorUser),
             comment.content,
             comment.numLikes,

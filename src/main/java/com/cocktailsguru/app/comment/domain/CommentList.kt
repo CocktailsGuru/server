@@ -1,9 +1,9 @@
-package com.cocktailsguru.app.ingredient.domain
+package com.cocktailsguru.app.comment.domain
 
 import com.cocktailsguru.app.common.domain.ObjectList
 import com.cocktailsguru.app.common.domain.PagingInfo
 
-data class IngredientList(
-        override val objectList: List<Ingredient>,
+data class CommentList(
+        override val objectList: List<Comment>,
         override val pagingInfo: PagingInfo
-) : ObjectList<Ingredient>
+) : ObjectList<Comment>

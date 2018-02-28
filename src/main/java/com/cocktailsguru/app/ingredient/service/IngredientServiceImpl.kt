@@ -1,25 +1,43 @@
 package com.cocktailsguru.app.ingredient.service
 
+import com.cocktailsguru.app.comment.service.CommentService
+import com.cocktailsguru.app.common.domain.ObjectDetailRequest
 import com.cocktailsguru.app.common.domain.PagingInfo
 import com.cocktailsguru.app.ingredient.domain.Ingredient
+import com.cocktailsguru.app.ingredient.domain.IngredientDetail
 import com.cocktailsguru.app.ingredient.domain.IngredientList
 import com.cocktailsguru.app.ingredient.repository.IngredientRepository
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 
 @Service
 class IngredientServiceImpl @Autowired constructor(
-        private val ingredientRepository: IngredientRepository
+        private val ingredientRepository: IngredientRepository,
+        private val commentService: CommentService
 ) : IngredientService {
-
-
-    override fun getIngredientList(listRequest: PagingInfo): IngredientList {
-        val ingredientList = ingredientRepository.findAll(PageRequest(listRequest.pageNumber, listRequest.pageSize)).content
-        return IngredientList(ingredientList, listRequest)
-    }
 
     override fun findIngredient(id: Long): Ingredient? {
         return ingredientRepository.findOne(id)
+    }
+
+
+    override fun getIngredientList(listRequest: PagingInfo): IngredientList {
+        return if (listRequest.pageSize == 0) {
+            IngredientList(listOf(), listRequest)
+        } else {
+            val ingredientList = ingredientRepository.findAll(listRequest.toPageRequest()).content
+            IngredientList(ingredientList, listRequest)
+        }
+    }
+
+
+    override fun findIngredientDetail(detailRequest: ObjectDetailRequest): IngredientDetail? {
+        val ingredient = findIngredient(detailRequest.id)
+                ?: return null
+
+        return IngredientDetail(
+                ingredient,
+                commentService.getCommentList(ingredient, PagingInfo(0, detailRequest.commentsSize))
+        )
     }
 }

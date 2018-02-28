@@ -2,12 +2,11 @@ package com.cocktailsguru.app.cocktail.service
 
 import com.cocktailsguru.app.IntegrationTestApp
 import com.cocktailsguru.app.cocktail.controller.CocktailController
-import com.cocktailsguru.app.cocktail.dto.CocktailDetailDto
+import com.cocktailsguru.app.cocktail.dto.detail.CocktailDetailResponseDto
 import com.cocktailsguru.app.cocktail.dto.list.CocktailListResponseDto
 import com.cocktailsguru.app.cocktail.repository.CocktailRepository
-import com.cocktailsguru.app.common.dto.PagingDto
 import com.cocktailsguru.app.utils.loggerFor
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -17,16 +16,12 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE
 import org.springframework.web.context.WebApplicationContext
-import kotlin.test.assertFalse
-import kotlin.test.assertNotEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
+import kotlin.test.*
 
 
 @RunWith(SpringRunner::class)
@@ -43,8 +38,7 @@ open class CocktailIntegrationPlayground {
     @Autowired
     private lateinit var cocktailService: CocktailService
 
-    private val objectMapper = ObjectMapper()
-    private val objectWriter = objectMapper.writer().withDefaultPrettyPrinter()
+    private val objectMapper = jacksonObjectMapper()
 
     @Autowired
     lateinit var wac: WebApplicationContext
@@ -52,59 +46,99 @@ open class CocktailIntegrationPlayground {
     @Before
     fun setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).build()
+        objectMapper.findAndRegisterModules()
     }
 
 
     @Test
-    fun shouldFindFirstCocktailWithouException() {
+    fun shouldFindFirstCocktailWithoutException() {
         assertNotNull(cocktailRepository.findOne(1L))
     }
 
 
     @Test
-    @Throws(Exception::class)
-    fun shouldGetCocktailDetail() {
+    fun shouldGetCocktailDetailWithoutPicturesOrComments() {
         val result = mockMvc.perform(
                 get("/" + CocktailController.COCKTAIL_BASE_PATH + "/" + CocktailController.COCKTAIL_DETAIL_PATH)
-                        .param("id", "1")
+                        .param("id", "54")
                         .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
                 .andReturn()
         val responseJson = result.response.contentAsString
-        val responseDto = objectMapper.readValue(responseJson, CocktailDetailDto::class.java)
+        val responseDto = objectMapper.readValue(responseJson, CocktailDetailResponseDto::class.java)
         assertNotNull(responseDto)
-        assertFalse(responseDto.ingredientList.isEmpty())
-        assertFalse(responseDto.similarCocktailList.isEmpty())
-
-        logger.info(responseJson)
+        assertTrue(responseDto.pictureDtoList.list.isEmpty())
+        assertTrue(responseDto.commentsDtoList.list.isEmpty())
+        assertFalse(responseDto.objectDetail.ingredientList.isEmpty())
+        assertFalse(responseDto.objectDetail.similarCocktailList.isEmpty())
     }
 
     @Test
-    @Throws(Exception::class)
-    fun shouldReturnRequestedCocktailListSize() {
-        val requestDto = PagingDto(4, 12)
+    fun shouldGetCocktailDetailWithPicturesAndComments() {
+        val result = mockMvc.perform(
+                get("/" + CocktailController.COCKTAIL_BASE_PATH + "/" + CocktailController.COCKTAIL_DETAIL_PATH)
+                        .param("id", "16000")
+                        .param("commentsSize", "5")
+                        .param("picturesSize", "5")
+                        .contentType(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk)
+                .andReturn()
+        val responseJson = result.response.contentAsString
+        val responseDto = objectMapper.readValue(responseJson, CocktailDetailResponseDto::class.java)
+        assertNotNull(responseDto)
+        assertFalse(responseDto.pictureDtoList.list.isEmpty())
+        assertFalse(responseDto.commentsDtoList.list.isEmpty())
+        assertFalse(responseDto.objectDetail.ingredientList.isEmpty())
+        assertFalse(responseDto.objectDetail.similarCocktailList.isEmpty())
+    }
 
-        val requestJson = objectWriter.writeValueAsString(requestDto)
+    @Test
+    fun shouldReturnRequestedCocktailListSize() {
+        val requestedPageNumber = 4
+        val requestedPageSize = 12
 
 
         val result = mockMvc.perform(
-                post("/" + CocktailController.COCKTAIL_BASE_PATH + "/" + CocktailController.COCKTAIL_LIST_PATH)
-                        .content(requestJson)
+                get("/" + CocktailController.COCKTAIL_BASE_PATH + "/" + CocktailController.COCKTAIL_LIST_PATH)
+                        .param("pageNumber", requestedPageNumber.toString())
+                        .param("pageSize", requestedPageSize.toString())
                         .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
                 .andReturn()
         val responseJson = result.response.contentAsString
         val responseDto = objectMapper.readValue(responseJson, CocktailListResponseDto::class.java)
-        assertEquals(requestDto.pageSize.toLong(), responseDto.list.size.toLong())
-        assertEquals(requestDto, responseDto.pagingInfo)
+        assertEquals(requestedPageSize, responseDto.list.size)
+        assertEquals(requestedPageNumber, responseDto.pagingInfo.pageNumber)
+        assertEquals(requestedPageSize, responseDto.pagingInfo.pageSize)
+    }
+
+
+    @Test
+    fun whenRequestingEmptyCocktailListShouldReturnEmptyList() {
+        val requestedPageNumber = 0
+        val requestedPageSize = 0
+
+
+        val result = mockMvc.perform(
+                get("/" + CocktailController.COCKTAIL_BASE_PATH + "/" + CocktailController.COCKTAIL_LIST_PATH)
+                        .param("pageNumber", requestedPageNumber.toString())
+                        .param("pageSize", requestedPageSize.toString())
+                        .contentType(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk)
+                .andReturn()
+        val responseJson = result.response.contentAsString
+        val responseDto = objectMapper.readValue(responseJson, CocktailListResponseDto::class.java)
+        assertEquals(requestedPageSize, responseDto.list.size)
+        assertEquals(requestedPageNumber, responseDto.pagingInfo.pageNumber)
+        assertEquals(requestedPageSize, responseDto.pagingInfo.pageSize)
     }
 
 
     @Test
     fun shouldUpdateNumOfFavoritesForCocktailDetail() {
-        assertNull(cocktailService.getCocktailDetail(999999L))
+        assertNull(cocktailService.findCocktail(999999L))
 
-        val margarita = cocktailService.getCocktailDetail(54)
+        val margarita = cocktailService.findCocktail(54)
 
         assertNotNull(margarita)
         assertNotEquals(0, margarita!!.numOfFavorite.toLong())
