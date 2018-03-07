@@ -5,16 +5,29 @@ import com.cocktailsguru.app.user.domain.registration.UserRegistrationResult
 import com.cocktailsguru.app.user.domain.registration.UserRegistrationResultType
 import com.cocktailsguru.app.user.repository.FbUserRepository
 import com.cocktailsguru.app.user.repository.GoogleUserRepository
+import com.cocktailsguru.app.user.repository.UserTokenRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Clock
 import java.time.LocalDateTime
+import java.util.*
 
 @Service
 class UserServiceImpl @Autowired constructor(
         private val fbUserRepository: FbUserRepository,
-        private val googleUserRepository: GoogleUserRepository
+        private val googleUserRepository: GoogleUserRepository,
+        private val userTokenRepository: UserTokenRepository
 ) : UserService {
+
+
+    override fun verifyUser(verificationRequest: UserTokenToVerify): User? {
+        val userToken = userTokenRepository.findFirstByUserIdAndToken(verificationRequest.userId, verificationRequest.token)
+
+        if (userToken == null || !userToken.valid) {
+            return null
+        }
+        return findUserById(userToken.userId)
+    }
 
     override fun findGoogleUserById(id: Long): GoogleUser? {
         return googleUserRepository.findOne(id)
@@ -37,15 +50,30 @@ class UserServiceImpl @Autowired constructor(
         val existingUser = repository.findFirstByExternalUserId(registrationRequest.externalUserId)
 
         return if (existingUser != null) {
-            UserRegistrationResult(existingUser, UserRegistrationResultType.EXISTING_USER)
-        } else
+            val existingToken = userTokenRepository.findFirstByUserIdAndValidTrue(existingUser.id)
+            val userToken = existingToken ?: createNewUserToken(existingUser)
+            UserRegistrationResult(existingUser, userToken, UserRegistrationResultType.EXISTING_USER)
+        } else {
+            val newUser = when (registrationRequest.registrationType) {
+                UserRegistrationType.FB -> registerFbUser(registrationRequest)
+                UserRegistrationType.GOOGLE -> registerGoogleUser(registrationRequest)
+            }
             UserRegistrationResult(
-                    when (registrationRequest.registrationType) {
-                        UserRegistrationType.FB -> registerFbUser(registrationRequest)
-                        UserRegistrationType.GOOGLE -> registerGoogleUser(registrationRequest)
-                    },
+                    newUser,
+                    createNewUserToken(newUser),
                     UserRegistrationResultType.NEW_REGISTRATION
             )
+        }
+    }
+
+    private fun createNewUserToken(user: User): UserToken {
+        val newToken = UserToken(
+                0,
+                user.id,
+                UUID.randomUUID().toString(),
+                true
+        )
+        return userTokenRepository.save(newToken)
     }
 
     private fun registerFbUser(registrationRequest: UserRegistrationRequest): FbUser {

@@ -11,4 +11,6 @@ import javax.transaction.Transactional
 @Transactional
 interface UserRepository<T : User> : CrudRepository<T, Long> {
     fun findFirstByExternalUserId(externalUserId: String): T?
+
+    fun findFirstByIdAndExternalUserId(id: Long, externalUserId: String): T?
 }
