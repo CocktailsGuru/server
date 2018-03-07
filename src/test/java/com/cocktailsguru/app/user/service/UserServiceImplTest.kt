@@ -4,6 +4,7 @@ import com.cocktailsguru.app.user.domain.FbUser
 import com.cocktailsguru.app.user.domain.GoogleUser
 import com.cocktailsguru.app.user.repository.FbUserRepository
 import com.cocktailsguru.app.user.repository.GoogleUserRepository
+import com.cocktailsguru.app.user.repository.UserTokenRepository
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -16,8 +17,9 @@ import kotlin.test.assertTrue
 class UserServiceImplTest {
     private val anyFbUserRepository = mock<FbUserRepository>()
     private val anyGoogleUserRepository = mock<GoogleUserRepository>()
+    private val userTokeRepository = mock<UserTokenRepository>()
 
-    private val userService: UserService = UserServiceImpl(anyFbUserRepository, anyGoogleUserRepository)
+    private val userService: UserService = UserServiceImpl(anyFbUserRepository, anyGoogleUserRepository, userTokeRepository)
 
     private val anyId = 123L
 

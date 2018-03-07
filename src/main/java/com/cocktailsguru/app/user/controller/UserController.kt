@@ -48,7 +48,7 @@ open class UserController @Autowired constructor(
         }
 
         val registrationResult = userService.registerUser(registrationRequest)
-        return RegisterUserResponseDto(registrationResult.user.id, registrationResult.registrationResultType)
+        return RegisterUserResponseDto(registrationResult)
     }
 
 }

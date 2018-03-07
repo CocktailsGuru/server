@@ -7,6 +7,7 @@ import com.cocktailsguru.app.user.domain.*
 import com.cocktailsguru.app.user.domain.registration.UserRegistrationResultType
 import com.cocktailsguru.app.user.dto.registration.RegisterUserRequestDto
 import com.cocktailsguru.app.user.dto.registration.RegisterUserResponseDto
+import com.cocktailsguru.app.user.repository.UserTokenRepository
 import com.cocktailsguru.app.utils.loggerFor
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.Before
@@ -44,6 +45,9 @@ open class UserIntegrationPlayground {
 
     @Autowired
     private lateinit var userController: UserController
+
+    @Autowired
+    private lateinit var userTokenRepository: UserTokenRepository
 
     private val objectMapper = jacksonObjectMapper()
     private val objectWriter = objectMapper.writer().withDefaultPrettyPrinter()
@@ -93,9 +97,15 @@ open class UserIntegrationPlayground {
 
         val foundUser = userService.findUserById(registrationResult.user.id)
 
+
         assertNotNull(foundUser)
         assertEquals(registrationResult.user, foundUser)
         assertEquals(registrationResult.registrationResultType, UserRegistrationResultType.EXISTING_USER)
+
+        val userToken = userTokenRepository.findFirstByUserIdAndValidTrue(foundUser!!.id)
+        assertNotNull(userToken)
+        assertEquals(userToken, registrationResult.token)
+        assertTrue { userToken!!.valid }
     }
 
     @Test
@@ -121,6 +131,11 @@ open class UserIntegrationPlayground {
         assertNotNull(foundUser)
         assertEquals(registrationResult.user, foundUser)
         assertEquals(registrationResult.registrationResultType, UserRegistrationResultType.NEW_REGISTRATION)
+
+        val userToken = userTokenRepository.findFirstByUserIdAndValidTrue(foundUser!!.id)
+        assertNotNull(userToken)
+        assertEquals(userToken, registrationResult.token)
+        assertTrue { userToken!!.valid }
     }
 
 
@@ -149,6 +164,11 @@ open class UserIntegrationPlayground {
 
         assertNotNull(response)
         assertNotEquals(0, response.id)
+
+        val userToken = userTokenRepository.findFirstByUserIdAndValidTrue(response.id)
+
+        assertNotNull(userToken)
+        assertEquals(response.token, userToken!!.token)
     }
 
 
