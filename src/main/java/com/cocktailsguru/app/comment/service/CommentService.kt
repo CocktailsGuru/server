@@ -19,4 +19,6 @@ interface CommentService {
     fun getCommentListForObject(objectType: CocktailObjectType, id: Long, pagingInfo: PagingInfo): CommentList
 
     fun addNewComment(cocktail: Cocktail?, commentRequest: NewCommentRequest): NewCommentResult
+
+    fun addNewComment(ingredient: Ingredient?, commentRequest: NewCommentRequest): NewCommentResult
 }

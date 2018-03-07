@@ -1,9 +1,13 @@
 package com.cocktailsguru.app.ingredient.controller
 
+import com.cocktailsguru.app.comment.domain.add.NewCommentResultType
 import com.cocktailsguru.app.comment.dto.CommentListResponseDto
+import com.cocktailsguru.app.comment.dto.NewCommentRequestDto
+import com.cocktailsguru.app.comment.dto.NewCommentResponseDto
 import com.cocktailsguru.app.common.domain.ObjectDetailRequest
 import com.cocktailsguru.app.common.domain.PagingInfo
 import com.cocktailsguru.app.common.dto.PagingDto
+import com.cocktailsguru.app.common.dto.UnauthorizedException
 import com.cocktailsguru.app.ingredient.controller.IngredientController.Companion.INGREDIENT_BASE_PATH
 import com.cocktailsguru.app.ingredient.dto.detail.IngredientDetailDto
 import com.cocktailsguru.app.ingredient.dto.detail.IngredientDetailResponseDto
@@ -13,10 +17,7 @@ import com.cocktailsguru.app.ingredient.service.IngredientService
 import com.cocktailsguru.app.utils.loggerFor
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.annotation.Secured
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @Secured(value = ["ROLE_MOBILE"])
@@ -31,6 +32,7 @@ open class IngredientController @Autowired constructor(
         const val INGREDIENT_LIST_PATH = "list"
         const val INGREDIENT_DETAIL_PATH = "detail"
         const val COMMENT_LIST_PATH = "comments"
+        const val ADD_COMMENT_PATH = "addComment"
     }
 
     @RequestMapping(value = [(INGREDIENT_LIST_PATH)], produces = ["application/json"], method = [RequestMethod.GET])
@@ -72,5 +74,18 @@ open class IngredientController @Autowired constructor(
             )
         }
 
+    }
+
+    @RequestMapping(value = [(ADD_COMMENT_PATH)], produces = ["application/json"], method = [RequestMethod.POST])
+    @ResponseBody
+    open fun addComment(@RequestBody commentRequestDto: NewCommentRequestDto): NewCommentResponseDto {
+        val ingredientId = commentRequestDto.objectId
+        logger.info("Requested new comment for ingredient {} author", ingredientId, commentRequestDto.userTokenDto.userId)
+        val newCommentRequest = commentRequestDto.toNewCommentRequest()
+        val result = ingredientService.addNewComment(ingredientId, newCommentRequest)
+        return when (result.resultType) {
+            NewCommentResultType.USER_NOT_FOUND -> throw UnauthorizedException()
+            else -> NewCommentResponseDto(result)
+        }
     }
 }

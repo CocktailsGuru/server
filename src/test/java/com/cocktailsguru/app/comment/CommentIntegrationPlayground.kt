@@ -12,6 +12,8 @@ import com.cocktailsguru.app.comment.dto.NewCommentRequestDto
 import com.cocktailsguru.app.comment.dto.NewCommentResponseDto
 import com.cocktailsguru.app.comment.service.CommentService
 import com.cocktailsguru.app.common.domain.PagingInfo
+import com.cocktailsguru.app.ingredient.controller.IngredientController
+import com.cocktailsguru.app.ingredient.domain.Ingredient
 import com.cocktailsguru.app.user.domain.UserTokenToVerify
 import com.cocktailsguru.app.user.dto.UserTokenDto
 import com.cocktailsguru.app.utils.loggerFor
@@ -117,13 +119,26 @@ open class CommentIntegrationPlayground {
 
     @Test
     fun whenRequestingNewCommentForNonExistingCocktailShouldReturnErrorResponse() {
-        val newCommentRequestMock = NewCommentRequest(
-                getAdminUserTokenDto().toUserTokenToVerify(),
-                "anyContent"
-        )
-        val result = commentService.addNewComment(null, newCommentRequestMock)
-        assertEquals(NewCommentResultType.OBJECT_NOT_FOUND, result.resultType)
-        assertNull(result.comment)
+        val margaritaId = -1L
+        val content = "anyContent"
+        val userTokenDto = getAdminUserTokenDto()
+
+        val requestDto = objectMapper.writer().writeValueAsString(NewCommentRequestDto(
+                userTokenDto,
+                margaritaId,
+                content
+        ))
+
+        val result = mockMvc.perform(
+                MockMvcRequestBuilders.post("/" + CocktailController.COCKTAIL_BASE_PATH + "/" + CocktailController.ADD_COMMENT_PATH)
+                        .content(requestDto)
+                        .contentType(MimeTypeUtils.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk)
+                .andReturn()
+
+        val responseJson = result.response.contentAsString
+        val responseDto = objectMapper.readValue(responseJson, NewCommentResponseDto::class.java)
+        assertEquals(NewCommentResultType.OBJECT_NOT_FOUND, responseDto.resultType)
     }
 
     @Test
@@ -147,7 +162,7 @@ open class CommentIntegrationPlayground {
     }
 
     @Test
-    fun whenRequestingNewCommentForNonExistingUserShouldReturnErrorResponse() {
+    fun whenRequestingNewCommentForCocktailForNonExistingUserShouldReturnErrorResponse() {
         val newCommentRequest = NewCommentRequest(UserTokenToVerify(-1, ""), "anyContent")
         val anyCocktail = mock<Cocktail>()
         val result = commentService.addNewComment(anyCocktail, newCommentRequest)
@@ -185,6 +200,95 @@ open class CommentIntegrationPlayground {
         assertEquals(userTokenDto.userId, newComment.authorUser.id)
         assertEquals(CocktailObjectType.COCKTAIL, newComment.objectType)
         assertEquals(margaritaId, newComment.objectForeignKey)
+        assertEquals(0, newComment.numDislikes)
+        assertEquals(0, newComment.numLikes)
+        assertTrue { newComment.isVisible }
+    }
+
+
+    @Test
+    fun whenRequestingNewCommentForNonExistingIngredientShouldReturnErrorResponse() {
+        val nonExistingIngredient = -1L
+        val content = "anyContent"
+        val userTokenDto = getAdminUserTokenDto()
+
+        val requestDto = objectMapper.writer().writeValueAsString(NewCommentRequestDto(
+                userTokenDto,
+                nonExistingIngredient,
+                content
+        ))
+
+        val result = mockMvc.perform(
+                MockMvcRequestBuilders.post("/" + IngredientController.INGREDIENT_BASE_PATH + "/" + CocktailController.ADD_COMMENT_PATH)
+                        .content(requestDto)
+                        .contentType(MimeTypeUtils.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk)
+                .andReturn()
+
+        val responseJson = result.response.contentAsString
+        val responseDto = objectMapper.readValue(responseJson, NewCommentResponseDto::class.java)
+        assertEquals(NewCommentResultType.OBJECT_NOT_FOUND, responseDto.resultType)
+    }
+
+    @Test
+    fun whenRequestingNewCommentForNonExistingIngredientViaWebShouldReturnUnauthorized() {
+        val ingredientId = 1L
+        val content = "anyContent"
+        val userTokenDto = UserTokenDto(-1, "notAToken")
+
+        val requestDto = objectMapper.writer().writeValueAsString(NewCommentRequestDto(
+                userTokenDto,
+                ingredientId,
+                content
+        ))
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.post("/" + IngredientController.INGREDIENT_BASE_PATH + "/" + CocktailController.ADD_COMMENT_PATH)
+                        .content(requestDto)
+                        .contentType(MimeTypeUtils.APPLICATION_JSON_VALUE))
+                .andExpect(status().isUnauthorized)
+                .andReturn()
+    }
+
+    @Test
+    fun whenRequestingNewCommentForIngredientForNonExistingUserShouldReturnErrorResponse() {
+        val newCommentRequest = NewCommentRequest(UserTokenToVerify(-1, ""), "anyContent")
+        val anyIngredient = mock<Ingredient>()
+        val result = commentService.addNewComment(anyIngredient, newCommentRequest)
+        assertEquals(NewCommentResultType.USER_NOT_FOUND, result.resultType)
+        assertNull(result.comment)
+    }
+
+
+    @Test
+    fun whenRequestingNewCommentForIngredientShouldAddComment() {
+        val ingredientId = 1L
+        val content = "anyContent"
+        val userTokenDto = getAdminUserTokenDto()
+
+        val requestDto = objectMapper.writer().writeValueAsString(NewCommentRequestDto(
+                userTokenDto,
+                ingredientId,
+                content
+        ))
+
+        val result = mockMvc.perform(
+                MockMvcRequestBuilders.post("/" + IngredientController.INGREDIENT_BASE_PATH + "/" + CocktailController.ADD_COMMENT_PATH)
+                        .content(requestDto)
+                        .contentType(MimeTypeUtils.APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk)
+                .andReturn()
+
+        val responseJson = result.response.contentAsString
+        val responseDto = objectMapper.readValue(responseJson, NewCommentResponseDto::class.java)
+        assertEquals(NewCommentResultType.OK, responseDto.resultType)
+
+
+        val commentList = commentService.getCommentListForObject(CocktailObjectType.INGREDIENT, ingredientId, PagingInfo(0, 50))
+        val newComment = commentList.objectList.last()
+        assertEquals(userTokenDto.userId, newComment.authorUser.id)
+        assertEquals(CocktailObjectType.INGREDIENT, newComment.objectType)
+        assertEquals(ingredientId, newComment.objectForeignKey)
         assertEquals(0, newComment.numDislikes)
         assertEquals(0, newComment.numLikes)
         assertTrue { newComment.isVisible }

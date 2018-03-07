@@ -1,6 +1,8 @@
 package com.cocktailsguru.app.ingredient.service
 
 import com.cocktailsguru.app.comment.domain.CommentList
+import com.cocktailsguru.app.comment.domain.add.NewCommentRequest
+import com.cocktailsguru.app.comment.domain.add.NewCommentResult
 import com.cocktailsguru.app.common.domain.ObjectDetailRequest
 import com.cocktailsguru.app.common.domain.PagingInfo
 import com.cocktailsguru.app.ingredient.domain.Ingredient
@@ -15,4 +17,6 @@ interface IngredientService {
     fun findIngredient(id: Long): Ingredient?
 
     fun getCommentList(id: Long, commentRequest: PagingInfo): CommentList
+
+    fun addNewComment(ingredientId: Long, commentRequest: NewCommentRequest): NewCommentResult
 }
