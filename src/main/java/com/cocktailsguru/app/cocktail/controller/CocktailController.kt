@@ -6,17 +6,18 @@ import com.cocktailsguru.app.cocktail.dto.detail.CocktailDetailDto
 import com.cocktailsguru.app.cocktail.dto.detail.CocktailDetailResponseDto
 import com.cocktailsguru.app.cocktail.dto.list.CocktailListResponseDto
 import com.cocktailsguru.app.cocktail.service.CocktailService
+import com.cocktailsguru.app.comment.domain.add.NewCommentResultType
 import com.cocktailsguru.app.comment.dto.CommentListResponseDto
+import com.cocktailsguru.app.comment.dto.NewCommentRequestDto
+import com.cocktailsguru.app.comment.dto.NewCommentResponseDto
 import com.cocktailsguru.app.common.domain.ObjectDetailRequest
 import com.cocktailsguru.app.common.domain.PagingInfo
+import com.cocktailsguru.app.common.dto.UnauthorizedException
 import com.cocktailsguru.app.picture.dto.PictureListResponseDto
 import com.cocktailsguru.app.utils.loggerFor
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.annotation.Secured
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @Secured(value = ["ROLE_MOBILE"])
@@ -32,6 +33,7 @@ open class CocktailController @Autowired constructor(
         const val COCKTAIL_DETAIL_PATH = "detail"
         const val COCKTAIL_LIST_PATH = "list"
         const val COMMENT_LIST_PATH = "comments"
+        const val ADD_COMMENT_PATH = "addComment"
     }
 
     @RequestMapping(value = [COCKTAIL_DETAIL_PATH], produces = ["application/json"], method = [(RequestMethod.GET)])
@@ -74,5 +76,19 @@ open class CocktailController @Autowired constructor(
         logger.info("Requested comment list for cocktail {} pageNumber {} page size {}", id, pageNumber, pageSize)
         val commentList = cocktailService.getCommentList(id, PagingInfo(pageNumber, pageSize))
         return CommentListResponseDto(commentList)
+    }
+
+
+    @RequestMapping(value = [ADD_COMMENT_PATH], produces = ["application/json"], method = [RequestMethod.POST])
+    @ResponseBody
+    open fun getCommentList(@RequestBody commentRequestDto: NewCommentRequestDto): NewCommentResponseDto {
+        val cocktailId = commentRequestDto.objectId
+        logger.info("Requested new comment for cocktail {} author", cocktailId, commentRequestDto.userTokenDto.userId)
+        val newCommentRequest = commentRequestDto.toNewCommentRequest()
+        val result = cocktailService.addNewComment(cocktailId, newCommentRequest)
+        return when (result.resultType) {
+            NewCommentResultType.USER_NOT_FOUND -> throw UnauthorizedException()
+            else -> NewCommentResponseDto(result)
+        }
     }
 }
