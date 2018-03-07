@@ -81,7 +81,7 @@ open class CocktailController @Autowired constructor(
 
     @RequestMapping(value = [ADD_COMMENT_PATH], produces = ["application/json"], method = [RequestMethod.POST])
     @ResponseBody
-    open fun getCommentList(@RequestBody commentRequestDto: NewCommentRequestDto): NewCommentResponseDto {
+    open fun addComment(@RequestBody commentRequestDto: NewCommentRequestDto): NewCommentResponseDto {
         val cocktailId = commentRequestDto.objectId
         logger.info("Requested new comment for cocktail {} author", cocktailId, commentRequestDto.userTokenDto.userId)
         val newCommentRequest = commentRequestDto.toNewCommentRequest()
