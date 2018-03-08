@@ -9,6 +9,7 @@ import com.cocktailsguru.app.common.domain.PagingInfo
 import com.cocktailsguru.app.common.dto.PagingDto
 import com.cocktailsguru.app.common.dto.UnauthorizedException
 import com.cocktailsguru.app.ingredient.controller.IngredientController.Companion.INGREDIENT_BASE_PATH
+import com.cocktailsguru.app.ingredient.domain.IngredientType
 import com.cocktailsguru.app.ingredient.dto.detail.IngredientDetailDto
 import com.cocktailsguru.app.ingredient.dto.detail.IngredientDetailResponseDto
 import com.cocktailsguru.app.ingredient.dto.list.IngredientListItemDto
@@ -37,11 +38,12 @@ open class IngredientController @Autowired constructor(
 
     @RequestMapping(value = [(INGREDIENT_LIST_PATH)], produces = ["application/json"], method = [RequestMethod.GET])
     open fun getIngredientList(
+            @RequestParam("ingredientType", required = false) ingredientType: IngredientType?,
             @RequestParam("pageNumber") pageNumber: Int,
             @RequestParam("pageSize") pageSize: Int
     ): IngredientListResponseDto {
         logger.info("Requested ingredient list pageNumber {} page size {}", pageNumber, pageSize)
-        val ingredientList = ingredientService.getIngredientList(PagingInfo(pageNumber, pageSize))
+        val ingredientList = ingredientService.getIngredientList(ingredientType, PagingInfo(pageNumber, pageSize))
         return IngredientListResponseDto(
                 ingredientList.objectList.map { IngredientListItemDto(it) },
                 PagingDto(ingredientList.pagingInfo)

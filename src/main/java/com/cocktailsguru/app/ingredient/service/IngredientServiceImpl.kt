@@ -10,6 +10,7 @@ import com.cocktailsguru.app.common.domain.PagingInfo
 import com.cocktailsguru.app.ingredient.domain.Ingredient
 import com.cocktailsguru.app.ingredient.domain.IngredientDetail
 import com.cocktailsguru.app.ingredient.domain.IngredientList
+import com.cocktailsguru.app.ingredient.domain.IngredientType
 import com.cocktailsguru.app.ingredient.repository.IngredientRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -35,13 +36,17 @@ class IngredientServiceImpl @Autowired constructor(
     }
 
 
-    override fun getIngredientList(listRequest: PagingInfo): IngredientList {
-        return if (listRequest.pageSize == 0) {
-            IngredientList(listOf(), listRequest)
-        } else {
-            val ingredientList = ingredientRepository.findAll(listRequest.toPageRequest()).content
-            IngredientList(ingredientList, listRequest)
+    override fun getIngredientList(ingredientType: IngredientType?, listRequest: PagingInfo): IngredientList {
+        if (listRequest.pageSize == 0) {
+            return IngredientList(listOf(), listRequest)
         }
+
+        val ingredientList = if (ingredientType != null) {
+            ingredientRepository.findAllByIngredientType(ingredientType, listRequest.toPageRequest()).content
+        } else {
+            ingredientRepository.findAll(listRequest.toPageRequest()).content
+        }
+        return IngredientList(ingredientList, listRequest)
     }
 
 

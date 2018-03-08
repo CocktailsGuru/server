@@ -58,10 +58,31 @@ open class IngredientIntegrationPlayground {
 
     @Test
     fun shouldReturnAnyIngredientList() {
-        val ingredientList = ingredientService.getIngredientList(PagingInfo(0, 10))
+        val ingredientList = ingredientService.getIngredientList(null, PagingInfo(0, 10))
 
         assertNotNull(ingredientList)
         assertFalse(ingredientList.objectList.isEmpty())
+    }
+
+    @Test
+    fun shouldReturnNonAlcoIngredientList() {
+        val ingredientList = ingredientService.getIngredientList(IngredientType.NON_ALCO, PagingInfo(0, 10))
+
+        assertNotNull(ingredientList)
+        assertFalse(ingredientList.objectList.isEmpty())
+        assertEquals(10, ingredientList.objectList.size)
+        ingredientList.objectList.forEach { assertEquals(IngredientType.NON_ALCO, it.ingredientType) }
+    }
+
+
+    @Test
+    fun shouldReturnAlcoIngredientList() {
+        val ingredientList = ingredientService.getIngredientList(IngredientType.ALCO, PagingInfo(0, 10))
+
+        assertNotNull(ingredientList)
+        assertFalse(ingredientList.objectList.isEmpty())
+        assertEquals(10, ingredientList.objectList.size)
+        ingredientList.objectList.forEach { assertEquals(IngredientType.ALCO, it.ingredientType) }
     }
 
     @Test
