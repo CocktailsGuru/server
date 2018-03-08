@@ -39,8 +39,8 @@ class IngredientServiceImpl @Autowired constructor(
         return if (listRequest.pageSize == 0) {
             IngredientList(listOf(), listRequest)
         } else {
-            val ingredientList = ingredientRepository.findAll(listRequest.toPageRequest()).content
-            IngredientList(ingredientList, listRequest)
+            val list = ingredientRepository.findAll(listRequest.toPageRequest()).content
+            IngredientList(list, listRequest)
         }
     }
 
