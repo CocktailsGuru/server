@@ -8,9 +8,10 @@ import com.cocktailsguru.app.common.domain.PagingInfo
 import com.cocktailsguru.app.ingredient.domain.Ingredient
 import com.cocktailsguru.app.ingredient.domain.IngredientDetail
 import com.cocktailsguru.app.ingredient.domain.IngredientList
+import com.cocktailsguru.app.ingredient.domain.IngredientType
 
 interface IngredientService {
-    fun getIngredientList(listRequest: PagingInfo): IngredientList
+    fun getIngredientList(ingredientType: IngredientType?, listRequest: PagingInfo): IngredientList
 
     fun findIngredientDetail(detailRequest: ObjectDetailRequest): IngredientDetail?
 
