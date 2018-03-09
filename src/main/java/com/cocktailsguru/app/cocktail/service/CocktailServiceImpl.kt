@@ -11,6 +11,7 @@ import com.cocktailsguru.app.comment.domain.add.NewCommentRequest
 import com.cocktailsguru.app.comment.domain.add.NewCommentResult
 import com.cocktailsguru.app.comment.service.CommentService
 import com.cocktailsguru.app.common.domain.PagingInfo
+import com.cocktailsguru.app.picture.domain.PictureList
 import com.cocktailsguru.app.picture.service.PictureService
 import com.cocktailsguru.app.user.service.UserFavoriteService
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,6 +25,9 @@ class CocktailServiceImpl @Autowired constructor(
         private val pictureService: PictureService
 ) : CocktailService {
 
+    override fun getPicturesList(id: Long, pictureRequest: PagingInfo): PictureList {
+        return pictureService.getPictureListForObject(CocktailObjectType.COCKTAIL, id, pictureRequest)
+    }
 
     override fun addNewComment(cocktailId: Long, commentRequest: NewCommentRequest): NewCommentResult {
         val cocktail = findCocktail(cocktailId)

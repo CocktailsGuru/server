@@ -33,6 +33,7 @@ open class CocktailController @Autowired constructor(
         const val COCKTAIL_DETAIL_PATH = "detail"
         const val COCKTAIL_LIST_PATH = "list"
         const val COMMENT_LIST_PATH = "comments"
+        const val PICTURE_LIST_PATH = "pictures"
         const val ADD_COMMENT_PATH = "addComment"
     }
 
@@ -76,6 +77,18 @@ open class CocktailController @Autowired constructor(
         logger.info("Requested comment list for cocktail {} pageNumber {} page size {}", id, pageNumber, pageSize)
         val commentList = cocktailService.getCommentList(id, PagingInfo(pageNumber, pageSize))
         return CommentListResponseDto(commentList)
+    }
+
+
+    @RequestMapping(value = [PICTURE_LIST_PATH], produces = ["application/json"], method = [RequestMethod.GET])
+    open fun getPictureList(
+            @RequestParam("id") id: Long,
+            @RequestParam("pageNumber") pageNumber: Int,
+            @RequestParam("pageSize") pageSize: Int
+    ): PictureListResponseDto {
+        logger.info("Requested picture list for cocktail {} pageNumber {} page size {}", id, pageNumber, pageSize)
+        val pictureList = cocktailService.getPicturesList(id, PagingInfo(pageNumber, pageSize))
+        return PictureListResponseDto(pictureList)
     }
 
 
