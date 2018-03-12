@@ -16,7 +16,7 @@ data class CocktailDetailDto(
         val method: CocktailMethodDto,
         val ingredientList: List<Long>,
         val similarCocktailList: List<Long>,
-        val numOfFavorite: Int,
+        val numOfFavorite: Long,
         val calculatedRating: Double,
         val numRating1: Int,
         val numRating2: Int,

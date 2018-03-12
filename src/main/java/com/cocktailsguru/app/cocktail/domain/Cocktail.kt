@@ -29,11 +29,11 @@ data class Cocktail(
         var method: CocktailMethod,
         @OneToMany(fetch = FetchType.LAZY, mappedBy = "cocktail")
         var ingredientList: List<IngredientCocktail>,
-        @ManyToMany(cascade = arrayOf(CascadeType.ALL))
+        @ManyToMany(cascade = [(CascadeType.ALL)])
         @JoinTable(
                 name = "coctail_similar",
-                joinColumns = arrayOf(JoinColumn(name = "cocktail_one", referencedColumnName = "id")),
-                inverseJoinColumns = arrayOf(JoinColumn(name = "cocktail_two", referencedColumnName = "id")))
+                joinColumns = [(JoinColumn(name = "cocktail_one", referencedColumnName = "id"))],
+                inverseJoinColumns = [(JoinColumn(name = "cocktail_two", referencedColumnName = "id"))])
         var similarCocktailList: List<Cocktail>,
         var numRating1: Int,
         var numRating2: Int,
@@ -43,10 +43,10 @@ data class Cocktail(
         var numPictures: Int,
         var numComments: Int,
         var numShowed: Int,
+        @Column(name = "numLikes")
+        var numOfFavorite: Long,
         @Transient
-        var calculatedRating: Double,
-        @Transient
-        var numOfFavorite: Int
+        var calculatedRating: Double
 ) {
     override fun toString(): String {
         return "Cocktail(id=$id, name='$name', totalVolume=$totalVolume, alcoVolume=$alcoVolume, nonAlcoVolume=$nonAlcoVolume, instructions='$instructions', garnish='$garnish', description='$description', imageName='$imageName', glass=$glass, method=$method, ingredientList=$ingredientList, similarCocktailList=${similarCocktailList.map { it -> it.id }})"

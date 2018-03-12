@@ -13,14 +13,12 @@ import com.cocktailsguru.app.comment.service.CommentService
 import com.cocktailsguru.app.common.domain.PagingInfo
 import com.cocktailsguru.app.picture.domain.PictureList
 import com.cocktailsguru.app.picture.service.PictureService
-import com.cocktailsguru.app.user.service.UserFavoriteService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
 class CocktailServiceImpl @Autowired constructor(
         private val cocktailRepository: CocktailRepository,
-        private val userFavoriteService: UserFavoriteService,
         private val commentService: CommentService,
         private val pictureService: PictureService
 ) : CocktailService {
@@ -42,8 +40,6 @@ class CocktailServiceImpl @Autowired constructor(
         val cocktail = cocktailRepository.findOne(id)
                 ?: return null
 
-        updateNumOfFavorite(cocktail)
-
         return cocktail
     }
 
@@ -52,7 +48,6 @@ class CocktailServiceImpl @Autowired constructor(
             CocktailList(listOf(), listRequest)
         } else {
             val cocktailList = cocktailRepository.findAll(listRequest.toPageRequest()).content
-            cocktailList.forEach(this::updateNumOfFavorite)
             CocktailList(cocktailList, listRequest)
         }
     }
@@ -65,10 +60,5 @@ class CocktailServiceImpl @Autowired constructor(
                 commentService.getCommentList(cocktail, PagingInfo(0, request.detailRequest.commentsSize)),
                 pictureService.getPictureList(cocktail, PagingInfo(0, request.picturesSize))
         )
-    }
-
-
-    private fun updateNumOfFavorite(cocktail: Cocktail) {
-        cocktail.numOfFavorite = userFavoriteService.getFavoriteObjects(CocktailObjectType.COCKTAIL, cocktail.id).size
     }
 }

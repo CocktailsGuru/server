@@ -8,7 +8,7 @@ data class CocktailListItemDto(
         val image: String,
         val calculatedRating: Double,
         val alcoVolume: Int,
-        val numOfFavorite: Int
+        val numOfFavorite: Long
 ) {
     constructor(cocktail: Cocktail) : this(
             cocktail.id,
