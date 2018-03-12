@@ -9,6 +9,10 @@ import org.springframework.stereotype.Service
 @Service
 class UserFavoriteServiceImpl @Autowired constructor(private val userFavoriteRepository: UserFavoriteRepository) : UserFavoriteService {
 
+    override fun getCountOfFavoriteObjects(objectType: CocktailObjectType, id: Long): Long {
+        return userFavoriteRepository.countByObjectTypeAndObjectForeignKey(objectType, id)
+    }
+
     override fun getFavoriteObjects(objectType: CocktailObjectType, id: Long): List<UserFavorite> {
         return userFavoriteRepository.findByObjectTypeAndObjectForeignKey(objectType, id)
     }

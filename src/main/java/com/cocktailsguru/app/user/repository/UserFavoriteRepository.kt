@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface UserFavoriteRepository : CrudRepository<UserFavorite, Long> {
     fun findByObjectTypeAndObjectForeignKey(objectType: CocktailObjectType, objectForeignKey: Long): List<UserFavorite>
+
+    fun countByObjectTypeAndObjectForeignKey(objectType: CocktailObjectType, objectForeignKey: Long): Long
 }

@@ -5,4 +5,6 @@ import com.cocktailsguru.app.user.domain.UserFavorite
 
 interface UserFavoriteService {
     fun getFavoriteObjects(objectType: CocktailObjectType, id: Long): List<UserFavorite>
+
+    fun getCountOfFavoriteObjects(objectType: CocktailObjectType, id: Long): Long
 }
