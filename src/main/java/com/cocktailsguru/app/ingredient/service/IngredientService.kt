@@ -9,6 +9,7 @@ import com.cocktailsguru.app.ingredient.domain.Ingredient
 import com.cocktailsguru.app.ingredient.domain.IngredientDetail
 import com.cocktailsguru.app.ingredient.domain.IngredientList
 import com.cocktailsguru.app.ingredient.domain.IngredientType
+import com.cocktailsguru.app.picture.domain.PictureList
 
 interface IngredientService {
     fun getIngredientList(ingredientType: IngredientType?, listRequest: PagingInfo): IngredientList
@@ -18,6 +19,8 @@ interface IngredientService {
     fun findIngredient(id: Long): Ingredient?
 
     fun getCommentList(id: Long, commentRequest: PagingInfo): CommentList
+
+    fun getPicturesList(id: Long, pictureRequest: PagingInfo): PictureList
 
     fun addNewComment(ingredientId: Long, commentRequest: NewCommentRequest): NewCommentResult
 }

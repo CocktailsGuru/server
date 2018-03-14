@@ -12,14 +12,21 @@ import com.cocktailsguru.app.ingredient.domain.IngredientDetail
 import com.cocktailsguru.app.ingredient.domain.IngredientList
 import com.cocktailsguru.app.ingredient.domain.IngredientType
 import com.cocktailsguru.app.ingredient.repository.IngredientRepository
+import com.cocktailsguru.app.picture.domain.PictureList
+import com.cocktailsguru.app.picture.service.PictureService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
 class IngredientServiceImpl @Autowired constructor(
         private val ingredientRepository: IngredientRepository,
-        private val commentService: CommentService
+        private val commentService: CommentService,
+        private val pictureService: PictureService
 ) : IngredientService {
+
+    override fun getPicturesList(id: Long, pictureRequest: PagingInfo): PictureList {
+        return pictureService.getPictureListForObject(CocktailObjectType.INGREDIENT, id, pictureRequest)
+    }
 
     override fun addNewComment(ingredientId: Long, commentRequest: NewCommentRequest): NewCommentResult {
         val ingredient = findIngredient(ingredientId)

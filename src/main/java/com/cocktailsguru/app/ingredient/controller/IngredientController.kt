@@ -15,6 +15,7 @@ import com.cocktailsguru.app.ingredient.dto.detail.IngredientDetailResponseDto
 import com.cocktailsguru.app.ingredient.dto.list.IngredientListItemDto
 import com.cocktailsguru.app.ingredient.dto.list.IngredientListResponseDto
 import com.cocktailsguru.app.ingredient.service.IngredientService
+import com.cocktailsguru.app.picture.dto.PictureListResponseDto
 import com.cocktailsguru.app.utils.loggerFor
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.annotation.Secured
@@ -33,6 +34,7 @@ open class IngredientController @Autowired constructor(
         const val INGREDIENT_LIST_PATH = "list"
         const val INGREDIENT_DETAIL_PATH = "detail"
         const val COMMENT_LIST_PATH = "comments"
+        const val PICTURE_LIST_PATH = "pictures"
         const val ADD_COMMENT_PATH = "addComment"
     }
 
@@ -89,5 +91,16 @@ open class IngredientController @Autowired constructor(
             NewCommentResultType.USER_NOT_FOUND -> throw UnauthorizedException()
             else -> NewCommentResponseDto(result)
         }
+    }
+
+    @RequestMapping(value = [PICTURE_LIST_PATH], produces = ["application/json"], method = [RequestMethod.GET])
+    open fun getPictureList(
+            @RequestParam("id") id: Long,
+            @RequestParam("pageNumber") pageNumber: Int,
+            @RequestParam("pageSize") pageSize: Int
+    ): PictureListResponseDto {
+        logger.info("Requested picture list for ingredient {} pageNumber {} page size {}", id, pageNumber, pageSize)
+        val pictureList = ingredientService.getPicturesList(id, PagingInfo(pageNumber, pageSize))
+        return PictureListResponseDto(pictureList)
     }
 }
