@@ -16,9 +16,10 @@ import com.cocktailsguru.app.picture.domain.PictureList
 import com.cocktailsguru.app.picture.service.PictureService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import javax.transaction.Transactional
 
 @Service
-class IngredientServiceImpl @Autowired constructor(
+open class IngredientServiceImpl @Autowired constructor(
         private val ingredientRepository: IngredientRepository,
         private val commentService: CommentService,
         private val pictureService: PictureService
@@ -57,9 +58,12 @@ class IngredientServiceImpl @Autowired constructor(
     }
 
 
+    @Transactional
     override fun findIngredientDetail(detailRequest: ObjectDetailRequest): IngredientDetail? {
         val ingredient = findIngredient(detailRequest.id)
                 ?: return null
+
+        ingredient.numShowed++
 
         return IngredientDetail(
                 ingredient,

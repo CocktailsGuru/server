@@ -23,7 +23,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE
 import org.springframework.web.context.WebApplicationContext
-import kotlin.test.*
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 
 @RunWith(SpringRunner::class)
@@ -135,16 +137,6 @@ open class CocktailIntegrationPlayground {
         assertEquals(requestedPageSize, responseDto.pagingInfo.pageSize)
     }
 
-
-    @Test
-    fun shouldUpdateNumOfFavoritesForCocktailDetail() {
-        assertNull(cocktailService.findCocktail(999999L))
-
-        val margarita = cocktailService.findCocktail(54)
-
-        assertNotNull(margarita)
-        assertNotEquals(0, margarita!!.numOfFavorite.toLong())
-    }
 
     @Test
     fun shouldReturnCommentListForCocktail() {

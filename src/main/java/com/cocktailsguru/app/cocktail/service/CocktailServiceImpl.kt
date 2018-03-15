@@ -15,9 +15,10 @@ import com.cocktailsguru.app.picture.domain.PictureList
 import com.cocktailsguru.app.picture.service.PictureService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import javax.transaction.Transactional
 
 @Service
-class CocktailServiceImpl @Autowired constructor(
+open class CocktailServiceImpl @Autowired constructor(
         private val cocktailRepository: CocktailRepository,
         private val commentService: CommentService,
         private val pictureService: PictureService
@@ -52,8 +53,11 @@ class CocktailServiceImpl @Autowired constructor(
         }
     }
 
+    @Transactional
     override fun findCocktailDetail(request: CocktailDetailRequest): CocktailDetail? {
         val cocktail = findCocktail(request.detailRequest.id) ?: return null
+
+        cocktail.numShowed++
 
         return CocktailDetail(
                 cocktail,
