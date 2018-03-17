@@ -21,4 +21,6 @@ interface CommentService {
     fun addNewComment(cocktail: Cocktail?, commentRequest: NewCommentRequest): NewCommentResult
 
     fun addNewComment(ingredient: Ingredient?, commentRequest: NewCommentRequest): NewCommentResult
+
+    fun addNewComment(picture: Picture?, commentRequest: NewCommentRequest): NewCommentResult
 }

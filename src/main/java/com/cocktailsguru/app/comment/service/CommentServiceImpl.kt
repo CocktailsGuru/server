@@ -22,6 +22,29 @@ class CommentServiceImpl @Autowired constructor(
         private val userService: UserService
 ) : CommentService {
 
+    override fun addNewComment(picture: Picture?, commentRequest: NewCommentRequest): NewCommentResult {
+        val authorUser = userService.verifyUser(commentRequest.authorToken)
+                ?: return NewCommentResult(NewCommentResultType.USER_NOT_FOUND, null)
+
+        picture ?: return NewCommentResult(NewCommentResultType.OBJECT_NOT_FOUND, null)
+
+        val newComment = Comment(
+                0,
+                CocktailObjectType.USER_PICTURE,
+                picture.id,
+                picture.objectName,
+                authorUser,
+                commentRequest.content,
+                0,
+                0,
+                true,
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        )
+
+        return NewCommentResult(NewCommentResultType.OK, commentRepository.save(newComment))
+    }
+
     override fun addNewComment(ingredient: Ingredient?, commentRequest: NewCommentRequest): NewCommentResult {
         val authorUser = userService.verifyUser(commentRequest.authorToken)
                 ?: return NewCommentResult(NewCommentResultType.USER_NOT_FOUND, null)
