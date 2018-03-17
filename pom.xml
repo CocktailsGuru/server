@@ -28,7 +28,6 @@
         <mysql-connector.version>5.1.44</mysql-connector.version>
         <mockito-core.version>2.13.0</mockito-core.version>
         <juint.verions>4.12</juint.verions>
-        <docker.image.prefix>cocktailsguru</docker.image.prefix>
         <kotlin.version>1.2.30</kotlin.version>
         <mockito-kotlin.version>1.5.0</mockito-kotlin.version>
         <logback-access-spring-boot-starter.version>2.7.1</logback-access-spring-boot-starter.version>
