@@ -30,11 +30,11 @@ class UserServiceImpl @Autowired constructor(
     }
 
     override fun findGoogleUserById(id: Long): GoogleUser? {
-        return googleUserRepository.findOne(id)
+        return googleUserRepository.findById(id).orElse(null)
     }
 
     override fun findFbUserById(id: Long): FbUser? {
-        return fbUserRepository.findOne(id)
+        return fbUserRepository.findById(id).orElse(null)
     }
 
     override fun findUserById(id: Long): User? {

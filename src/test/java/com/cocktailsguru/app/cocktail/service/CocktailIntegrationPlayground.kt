@@ -56,7 +56,7 @@ open class CocktailIntegrationPlayground {
 
     @Test
     fun shouldFindFirstCocktailWithoutException() {
-        assertNotNull(cocktailRepository.findOne(1L))
+        assertTrue(cocktailRepository.findById(1L).isPresent)
     }
 
 
