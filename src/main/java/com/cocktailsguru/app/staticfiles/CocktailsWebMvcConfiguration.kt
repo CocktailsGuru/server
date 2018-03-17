@@ -3,10 +3,10 @@ package com.cocktailsguru.app.staticfiles
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
-open class CocktailsWebMvcConfiguration : WebMvcConfigurerAdapter() {
+open class CocktailsWebMvcConfiguration : WebMvcConfigurer {
 
     companion object {
         const val ASSETS_PATH = "/assets/**"

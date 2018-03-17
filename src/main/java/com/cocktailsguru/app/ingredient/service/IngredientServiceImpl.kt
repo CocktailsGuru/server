@@ -40,7 +40,7 @@ open class IngredientServiceImpl @Autowired constructor(
     }
 
     override fun findIngredient(id: Long): Ingredient? {
-        return ingredientRepository.findOne(id)
+        return ingredientRepository.findById(id).orElse(null)
     }
 
 
@@ -60,8 +60,7 @@ open class IngredientServiceImpl @Autowired constructor(
 
     @Transactional
     override fun findIngredientDetail(detailRequest: ObjectDetailRequest): IngredientDetail? {
-        val ingredient = findIngredient(detailRequest.id)
-                ?: return null
+        val ingredient = findIngredient(detailRequest.id) ?: return null
 
         ingredient.numShowed++
 

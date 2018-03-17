@@ -2,6 +2,7 @@ package com.cocktailsguru.app.security
 
 import com.cocktailsguru.app.utils.loggerFor
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest
 import org.springframework.boot.autoconfigure.security.SecurityProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration
@@ -24,15 +25,16 @@ open class SecurityConfiguration @Autowired constructor(
     private val logger = loggerFor(javaClass)
 
     override fun configure(http: HttpSecurity) {
-        http.headers()
-                .and().csrf().disable().httpBasic()
-                .and().exceptionHandling()
-                .and().authorizeRequests().anyRequest().authenticated()
-
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-        http.authorizeRequests().antMatchers("/v2/api-docs").hasAnyRole(Roles.MODERATOR.name)
-        http.authorizeRequests().antMatchers("/health").hasAnyRole(Roles.MODERATOR.name)
+        http.authorizeRequests()
+                .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole(Roles.MODERATOR.name)
+                .anyRequest().authenticated()
+                .antMatchers("/**").hasRole(Roles.MODERATOR.name)
+                .and().csrf().disable()
+                .httpBasic()
+                .and().exceptionHandling()
+
     }
 
     override fun configure(auth: AuthenticationManagerBuilder) {
@@ -45,7 +47,7 @@ open class SecurityConfiguration @Autowired constructor(
     ) {
         authentication.withUser(user.name)
                 .password(user.password)
-                .roles(*user.role.toTypedArray())
-        logger.info("Created user {} with roles {}", user.name, user.role)
+                .roles(*user.roles.toTypedArray())
+        logger.info("Created user {} with roles {}", user.name, user.roles)
     }
 }
