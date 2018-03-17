@@ -10,7 +10,7 @@ data class Ingredient(
         var name: String,
         var nameGrouped: String,
         var voltage: String,
-        @Column(name = "desc")
+        @Column(name = "`desc`", length = 5000)
         var description: String,
         @Column(name = "imgFileName")
         var imageName: String,
