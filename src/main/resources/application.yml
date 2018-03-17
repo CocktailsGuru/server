@@ -30,14 +30,3 @@ management:
       show-details: when_authorized
   endpoints:
     enabled-by-default: false
-
-
-
-#logging:
-#  file:  /home/spring/logs/${spring.application.name}.log
-#  config: logback-spring.xml
-#  path: /home/spring/logs/
-#logback:
-#  access:
-#    config: logback-access.xml
-#    enabled: true
