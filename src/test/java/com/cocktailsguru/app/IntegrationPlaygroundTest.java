@@ -1,6 +1,5 @@
 package com.cocktailsguru.app;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
@@ -16,7 +15,6 @@ import org.springframework.web.context.WebApplicationContext;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {IntegrationTestApp.class})
 @WebAppConfiguration
-@Slf4j
 @Transactional
 @Ignore
 public class IntegrationPlaygroundTest {
