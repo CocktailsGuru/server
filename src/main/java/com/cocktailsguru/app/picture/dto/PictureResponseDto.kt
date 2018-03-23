@@ -28,7 +28,7 @@ data class PictureResponseDto(
             picture.description,
             picture.numLikes,
             picture.numDisLikes,
-            picture.numFav,
+            picture.numFavorite,
             picture.numComments,
             picture.numShowed,
             picture.updateTime,

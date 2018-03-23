@@ -24,7 +24,8 @@ data class Picture(
         var numLikes: Int,
         @Column(name = "numLikesDis")
         var numDisLikes: Int,
-        var numFav: Int,
+        @Column(name = "numFav")
+        var numFavorite: Int,
         var numComments: Int,
         var numShowed: Int,
         @Column(name = "ut")

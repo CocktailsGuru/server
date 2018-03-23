@@ -2,6 +2,7 @@ package com.cocktailsguru.app.user.service
 
 import com.cocktailsguru.app.cocktail.domain.CocktailObjectType
 import com.cocktailsguru.app.cocktail.service.CocktailService
+import com.cocktailsguru.app.picture.service.PictureService
 import com.cocktailsguru.app.user.domain.favorite.UserFavorite
 import com.cocktailsguru.app.user.repository.UserFavoriteRepository
 import com.nhaarman.mockito_kotlin.mock
@@ -19,8 +20,9 @@ class UserFavoriteServiceImplTest {
     private val anyUserFavoriteRepository = mock<UserFavoriteRepository>()
     private val anyUserService = mock<UserService>()
     private val anyCocktailService = mock<CocktailService>()
+    private val anyPictureService = mock<PictureService>()
 
-    private val userFavoriteService: UserFavoriteService = UserFavoriteServiceImpl(anyUserFavoriteRepository, anyUserService, anyCocktailService)
+    private val userFavoriteService: UserFavoriteService = UserFavoriteServiceImpl(anyUserFavoriteRepository, anyUserService, anyCocktailService, anyPictureService)
 
     @Test
     fun givenUserFavoritePresentWhenRequestingUserFavoriteShouldReturnOneItem() {

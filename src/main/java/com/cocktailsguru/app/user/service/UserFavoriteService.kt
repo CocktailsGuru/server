@@ -11,4 +11,6 @@ interface UserFavoriteService {
     fun getCountOfFavoriteObjects(objectType: CocktailObjectType, id: Long): Long
 
     fun setCocktailAsFavorite(cocktailId: Long, userToken: UserTokenToVerify): SetFavoriteResultType
+
+    fun setPictureAsFavorite(pictureId: Long, userToken: UserTokenToVerify): SetFavoriteResultType
 }

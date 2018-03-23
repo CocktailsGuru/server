@@ -118,4 +118,83 @@ open class UserFavoriteIntegrationPlayground {
 
         assertEquals(SetFavoriteResultType.OK, response.resultType)
     }
+
+
+    @Test
+    fun whenRequestingPictureAsFavoriteWithoutValidUserTokenShouldReturnUnauthorized() {
+        val requestDto = SetFavoriteRequestDto(
+                UserTokenDto(1, "1"),
+                1
+        )
+
+        mockMvc.perform(
+                post("/" + UserFavoriteController.USER_FAVORITE_BASE_PATH + "/" + UserFavoriteController.FAVORITE_PICTURE)
+                        .content(objectWriter.writeValueAsString(requestDto))
+                        .contentType(APPLICATION_JSON_VALUE))
+                .andExpect(status().isUnauthorized)
+                .andReturn()
+    }
+
+
+    @Test
+    fun whenRequestingPictureAsFavoriteForAlreadyFavoriteCocktailShouldReturnNotice() {
+        val requestDto = SetFavoriteRequestDto(
+                UserTokenDto(6, "adminToken"),
+                1
+        )
+
+        val result = mockMvc.perform(
+                post("/" + UserFavoriteController.USER_FAVORITE_BASE_PATH + "/" + UserFavoriteController.FAVORITE_PICTURE)
+                        .content(objectWriter.writeValueAsString(requestDto))
+                        .contentType(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk)
+                .andReturn()
+
+        val responseJson = result.response.contentAsString
+        val response = objectMapper.readValue(responseJson, SetFavoriteResponseDto::class.java)
+
+        assertEquals(SetFavoriteResultType.ALREADY_FAVORITE, response.resultType)
+    }
+
+
+    @Test
+    fun whenRequestingPictureAsFavoriteForNotExistingCocktailShouldReturnNotice() {
+        val requestDto = SetFavoriteRequestDto(
+                UserTokenDto(6, "adminToken"),
+                -1
+        )
+
+        val result = mockMvc.perform(
+                post("/" + UserFavoriteController.USER_FAVORITE_BASE_PATH + "/" + UserFavoriteController.FAVORITE_PICTURE)
+                        .content(objectWriter.writeValueAsString(requestDto))
+                        .contentType(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk)
+                .andReturn()
+
+        val responseJson = result.response.contentAsString
+        val response = objectMapper.readValue(responseJson, SetFavoriteResponseDto::class.java)
+
+        assertEquals(SetFavoriteResultType.OBJECT_NOT_FOUND, response.resultType)
+    }
+
+    @Test
+    fun whenRequestingPictureAsFavoriteShouldSetAsFavorite() {
+        val cocktailId = 2L
+        val requestDto = SetFavoriteRequestDto(
+                UserTokenDto(6, "adminToken"),
+                cocktailId
+        )
+
+        val result = mockMvc.perform(
+                post("/" + UserFavoriteController.USER_FAVORITE_BASE_PATH + "/" + UserFavoriteController.FAVORITE_PICTURE)
+                        .content(objectWriter.writeValueAsString(requestDto))
+                        .contentType(APPLICATION_JSON_VALUE))
+                .andExpect(status().isOk)
+                .andReturn()
+
+        val responseJson = result.response.contentAsString
+        val response = objectMapper.readValue(responseJson, SetFavoriteResponseDto::class.java)
+
+        assertEquals(SetFavoriteResultType.OK, response.resultType)
+    }
 }
