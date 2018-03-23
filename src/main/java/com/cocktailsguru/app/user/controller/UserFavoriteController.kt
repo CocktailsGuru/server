@@ -26,6 +26,7 @@ open class UserFavoriteController @Autowired constructor(
     companion object {
         const val USER_FAVORITE_BASE_PATH = "favorite"
         const val FAVORITE_COCKTAIL = "cocktail"
+        const val FAVORITE_PICTURE = "picture"
     }
 
 
@@ -34,6 +35,18 @@ open class UserFavoriteController @Autowired constructor(
         logger.info("Requested cocktail set as favorite - {}", requestDto)
 
         val setFavoriteResultType = userFavoriteService.setCocktailAsFavorite(requestDto.objectId, requestDto.userTokenDto.toUserTokenToVerify())
+
+        return when (setFavoriteResultType) {
+            SetFavoriteResultType.USER_NOT_FOUND -> throw UnauthorizedException()
+            else -> SetFavoriteResponseDto(setFavoriteResultType)
+        }
+    }
+
+    @RequestMapping(value = [FAVORITE_PICTURE], produces = ["application/json"], method = [RequestMethod.POST])
+    open fun setPictureFavorite(@RequestBody requestDto: SetFavoriteRequestDto): SetFavoriteResponseDto {
+        logger.info("Requested picture set as favorite - {}", requestDto)
+
+        val setFavoriteResultType = userFavoriteService.setPictureAsFavorite(requestDto.objectId, requestDto.userTokenDto.toUserTokenToVerify())
 
         return when (setFavoriteResultType) {
             SetFavoriteResultType.USER_NOT_FOUND -> throw UnauthorizedException()
