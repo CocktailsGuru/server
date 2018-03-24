@@ -18,6 +18,7 @@ open class CocktailsWebMvcConfiguration : WebMvcConfigurer {
     final override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
         registry.addResourceHandler(ASSETS_PATH)
                 .setCachePeriod(864000)
+                .setCacheControl(null)
                 .addResourceLocations(assetsResourceLocation)
     }
 }
