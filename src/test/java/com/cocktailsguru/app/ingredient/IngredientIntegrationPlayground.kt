@@ -139,7 +139,7 @@ open class IngredientIntegrationPlayground {
 
     @Test
     fun shouldFindFirstIngredientTypeWithoutException() {
-        assertTrue(ingredientCategoryTypeRepository.findById(1).isPresent)
+        assertNotNull(ingredientCategoryTypeRepository.findOne(1))
     }
 
     @Test
@@ -179,7 +179,7 @@ open class IngredientIntegrationPlayground {
 
     @Test
     fun shouldFindIngredientWithoutException() {
-        assertTrue(ingredientRepository.findById(1L).isPresent)
+        assertNotNull(ingredientRepository.findOne(1L))
     }
 
 

@@ -11,7 +11,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.0.RELEASE</version>
+        <version>1.5.9.RELEASE</version>
     </parent>
 
     <properties>
@@ -21,15 +21,15 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Dependency version -->
-        <spring-boot.version>2.0.0.RELEASE</spring-boot.version>
-        <spring.version>5.0.4.RELEASE</spring.version>
-        <spring-cloud.version>Finchley.M7</spring-cloud.version>
+        <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
+        <spring-cloud.version>Camden.SR6</spring-cloud.version>
         <mysql-connector.version>5.1.44</mysql-connector.version>
         <mockito-core.version>2.13.0</mockito-core.version>
+        <flyway.version>4.2.0</flyway.version>
         <juint.verions>4.12</juint.verions>
         <kotlin.version>1.2.30</kotlin.version>
         <mockito-kotlin.version>1.5.0</mockito-kotlin.version>
-        <logback-access-spring-boot-starter.version>2.7.1</logback-access-spring-boot-starter.version>
+        <logback-access-spring-boot-starter.version>2.5.0</logback-access-spring-boot-starter.version>
         <jackson.version>2.9.0</jackson.version>
         <swagger.version>2.8.0</swagger.version>
     </properties>
@@ -45,6 +45,11 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-data-jpa</artifactId>
                 <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-core</artifactId>
+                <version>${flyway.version}</version>
             </dependency>
             <dependency>
                 <groupId>mysql</groupId>
