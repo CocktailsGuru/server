@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.context.WebApplicationContext
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = [(IntegrationTestApp::class)])
@@ -30,6 +31,11 @@ open class UserFavoriteIntegrationPlayground {
 
     @Autowired
     private lateinit var wac: WebApplicationContext
+
+    @Autowired
+    private lateinit var userService: UserService
+    @Autowired
+    private lateinit var userFavoriteService: UserFavoriteService
 
 
     private val objectMapper = jacksonObjectMapper()
@@ -196,5 +202,15 @@ open class UserFavoriteIntegrationPlayground {
         val response = objectMapper.readValue(responseJson, SetFavoriteResponseDto::class.java)
 
         assertEquals(SetFavoriteResultType.OK, response.resultType)
+    }
+
+
+    @Test
+    fun givenExistingFavoritesForUserWhenRequestingUserFavoritesForUserShouldReturnNonEmptyList() {
+        val user = userService.findUserById(6)
+
+        val favoritesOfUser = userFavoriteService.getFavoritesOfUser(user!!)
+
+        assertFalse(favoritesOfUser.isEmpty())
     }
 }

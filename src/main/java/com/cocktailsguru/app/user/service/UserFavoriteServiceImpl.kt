@@ -3,6 +3,7 @@ package com.cocktailsguru.app.user.service
 import com.cocktailsguru.app.cocktail.domain.CocktailObjectType
 import com.cocktailsguru.app.cocktail.service.CocktailService
 import com.cocktailsguru.app.picture.service.PictureService
+import com.cocktailsguru.app.user.domain.User
 import com.cocktailsguru.app.user.domain.UserTokenToVerify
 import com.cocktailsguru.app.user.domain.favorite.SetFavoriteResultType
 import com.cocktailsguru.app.user.domain.favorite.UserFavorite
@@ -18,6 +19,9 @@ open class UserFavoriteServiceImpl @Autowired constructor(
         private val cocktailService: CocktailService,
         private val pictureService: PictureService
 ) : UserFavoriteService {
+
+
+    override fun getFavoritesOfUser(user: User): List<UserFavorite> = userFavoriteRepository.findByUser(user)
 
     @Transactional
     override fun setPictureAsFavorite(pictureId: Long, userToken: UserTokenToVerify): SetFavoriteResultType {

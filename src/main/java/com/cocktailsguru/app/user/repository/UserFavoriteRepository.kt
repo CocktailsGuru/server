@@ -13,4 +13,6 @@ interface UserFavoriteRepository : CrudRepository<UserFavorite, Long> {
     fun countByObjectTypeAndObjectForeignKey(objectType: CocktailObjectType, objectForeignKey: Long): Long
 
     fun existsByUserAndObjectTypeAndObjectForeignKey(user: User, objectType: CocktailObjectType, objectForeignKey: Long): Boolean
+
+    fun findByUser(user: User): List<UserFavorite>
 }
