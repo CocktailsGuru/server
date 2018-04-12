@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.context.WebApplicationContext
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = [(IntegrationTestApp::class)])
@@ -31,6 +32,11 @@ open class UserRatingIntegrationPlayground {
 
     @Autowired
     private lateinit var wac: WebApplicationContext
+
+    @Autowired
+    private lateinit var userService: UserService
+    @Autowired
+    private lateinit var userRatingService: UserRatingService
 
 
     private val objectMapper = jacksonObjectMapper()
@@ -122,5 +128,14 @@ open class UserRatingIntegrationPlayground {
         val response = objectMapper.readValue(responseJson, RateObjectResultDto::class.java)
 
         assertEquals(RatingResultType.OK, response.resultType)
+    }
+
+    @Test
+    fun givenExistingUserRatingsWhenRequestingRatingsForUserShouldReturnNonEmptyList() {
+        val user = userService.findUserById(6)
+
+        val ratingsOfUser = userRatingService.getRatingsOfUser(user!!)
+
+        assertFalse(ratingsOfUser.isEmpty())
     }
 }

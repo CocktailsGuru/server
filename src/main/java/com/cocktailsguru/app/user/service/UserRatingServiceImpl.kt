@@ -2,6 +2,7 @@ package com.cocktailsguru.app.user.service
 
 import com.cocktailsguru.app.cocktail.domain.CocktailObjectType
 import com.cocktailsguru.app.cocktail.service.CocktailService
+import com.cocktailsguru.app.user.domain.User
 import com.cocktailsguru.app.user.domain.rating.RateObjectRequest
 import com.cocktailsguru.app.user.domain.rating.RatingResultType
 import com.cocktailsguru.app.user.domain.rating.RatingType
@@ -18,6 +19,8 @@ open class UserRatingServiceImpl @Autowired constructor(
         private val userService: UserService,
         private val ratingRepository: UserRatingRepository
 ) : UserRatingService {
+
+    override fun getRatingsOfUser(user: User): List<UserRating> = ratingRepository.findByUser(user)
 
     @Transactional
     override fun rateCocktail(ratingRequest: RateObjectRequest): RatingResultType {
