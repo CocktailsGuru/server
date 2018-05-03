@@ -40,7 +40,7 @@ open class IngredientServiceImpl @Autowired constructor(
     }
 
     override fun findIngredient(id: Long): Ingredient? {
-        return ingredientRepository.findOne(id)
+        return ingredientRepository.findById(id).orElse(null)
     }
 
 

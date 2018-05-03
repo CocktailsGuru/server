@@ -37,6 +37,6 @@ class PictureServiceImpl @Autowired constructor(
     }
 
     override fun findPicture(id: Long): Picture? {
-        return pictureRepository.findOne(id)
+        return pictureRepository.findById(id).orElse(null)
     }
 }

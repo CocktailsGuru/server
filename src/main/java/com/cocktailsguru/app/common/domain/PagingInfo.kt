@@ -9,5 +9,5 @@ data class PagingInfo(
 ) {
     constructor(pagingDto: PagingDto) : this(pagingDto.pageNumber, pagingDto.pageSize)
 
-    fun toPageRequest(): PageRequest = PageRequest(pageNumber, pageSize)
+    fun toPageRequest(): PageRequest = PageRequest.of(pageNumber, pageSize)
 }
