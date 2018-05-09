@@ -9,6 +9,7 @@ import com.nhaarman.mockito_kotlin.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
+import java.util.*
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -25,26 +26,26 @@ class UserServiceImplTest {
 
     @Test
     fun givenNoUserWhenRequestingUserByIdShouldReturnNull() {
-        whenever(anyFbUserRepository.findOne(any())).thenReturn(null)
-        whenever(anyGoogleUserRepository.findOne(any())).thenReturn(null)
+        whenever(anyFbUserRepository.findById(any())).thenReturn(Optional.empty())
+        whenever(anyGoogleUserRepository.findById(any())).thenReturn(Optional.empty())
 
         assertNull(userService.findUserById(anyId))
 
-        verify(anyFbUserRepository).findOne(anyId)
-        verify(anyGoogleUserRepository).findOne(anyId)
+        verify(anyFbUserRepository).findById(anyId)
+        verify(anyGoogleUserRepository).findById(anyId)
     }
 
     @Test
     fun givenExistingFbUserOnlyWhenRequestingUserByIdShouldReturnFbUser() {
         val anyFbUser = mock<FbUser>()
 
-        whenever(anyFbUserRepository.findOne(anyId)).thenReturn(anyFbUser)
+        whenever(anyFbUserRepository.findById(anyId)).thenReturn(Optional.of(anyFbUser))
 
         val foundUser = userService.findUserById(anyId)
         assertNotNull(foundUser)
         assertTrue { foundUser is FbUser }
 
-        verify(anyFbUserRepository).findOne(anyId)
+        verify(anyFbUserRepository).findById(anyId)
         verifyZeroInteractions(anyGoogleUserRepository)
     }
 
@@ -53,14 +54,14 @@ class UserServiceImplTest {
     fun givenExistingGoogleUserOnlyWhenRequestingUserByIdShouldReturnGoogleUser() {
         val anyGoogleUser = mock<GoogleUser>()
 
-        whenever(anyFbUserRepository.findOne(any())).thenReturn(null)
-        whenever(anyGoogleUserRepository.findOne(anyId)).thenReturn(anyGoogleUser)
+        whenever(anyFbUserRepository.findById(any())).thenReturn(Optional.empty())
+        whenever(anyGoogleUserRepository.findById(anyId)).thenReturn(Optional.of(anyGoogleUser))
 
         val foundUser = userService.findUserById(anyId)
         assertNotNull(foundUser)
         assertTrue { foundUser is GoogleUser }
 
-        verify(anyFbUserRepository).findOne(anyId)
-        verify(anyGoogleUserRepository).findOne(anyId)
+        verify(anyFbUserRepository).findById(anyId)
+        verify(anyGoogleUserRepository).findById(anyId)
     }
 }

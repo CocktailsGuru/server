@@ -2,13 +2,11 @@ package com.cocktailsguru.app.staticfiles
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.CacheControl
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
-import java.util.concurrent.TimeUnit
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
-open class CocktailsWebMvcConfiguration : WebMvcConfigurerAdapter() {
+open class CocktailsWebMvcConfiguration : WebMvcConfigurer {
 
     companion object {
         const val ASSETS_PATH = "/assets/**"
@@ -19,7 +17,8 @@ open class CocktailsWebMvcConfiguration : WebMvcConfigurerAdapter() {
 
     final override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
         registry.addResourceHandler(ASSETS_PATH)
-                .setCacheControl(CacheControl.maxAge(10, TimeUnit.DAYS))
+                .setCachePeriod(864000)
+                .setCacheControl(null)
                 .addResourceLocations(assetsResourceLocation)
     }
 }

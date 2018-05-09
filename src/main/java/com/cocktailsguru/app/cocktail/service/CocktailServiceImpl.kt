@@ -38,7 +38,7 @@ open class CocktailServiceImpl @Autowired constructor(
     }
 
     override fun findCocktail(id: Long): Cocktail? {
-        return cocktailRepository.findOne(id)
+        return cocktailRepository.findById(id).orElse(null)
     }
 
     override fun getCocktailList(listRequest: PagingInfo): CocktailList {
