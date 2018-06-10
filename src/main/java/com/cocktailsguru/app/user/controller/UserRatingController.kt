@@ -3,6 +3,7 @@ package com.cocktailsguru.app.user.controller
 import com.cocktailsguru.app.common.dto.UnauthorizedException
 import com.cocktailsguru.app.user.controller.UserRatingController.Companion.USER_RATING_BASE_PATH
 import com.cocktailsguru.app.user.domain.favorite.SetFavoriteResultType
+import com.cocktailsguru.app.user.domain.rating.RatingResultType
 import com.cocktailsguru.app.user.dto.rating.RateObjectRequestDto
 import com.cocktailsguru.app.user.dto.rating.RateObjectResultDto
 import com.cocktailsguru.app.user.service.UserRatingService
@@ -36,7 +37,7 @@ open class UserRatingController @Autowired constructor(
         val ratingResultType = userRatingService.rateCocktail(requestDto.toRateObjectRequest())
 
         return when (ratingResultType) {
-            SetFavoriteResultType.USER_NOT_FOUND -> throw UnauthorizedException()
+            RatingResultType.USER_NOT_FOUND -> throw UnauthorizedException()
             else -> RateObjectResultDto(ratingResultType)
         }
     }
