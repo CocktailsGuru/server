@@ -18,14 +18,10 @@ import java.time.LocalDateTime
 
 @Service
 class CommentServiceImpl @Autowired constructor(
-        private val commentRepository: CommentRepository,
-        private val userService: UserService
+        private val commentRepository: CommentRepository
 ) : CommentService {
 
     override fun addNewComment(picture: Picture?, commentRequest: NewCommentRequest): NewCommentResult {
-        val authorUser = userService.verifyUser(commentRequest.authorToken)
-                ?: return NewCommentResult(NewCommentResultType.USER_NOT_FOUND, null)
-
         picture ?: return NewCommentResult(NewCommentResultType.OBJECT_NOT_FOUND, null)
 
         val newComment = Comment(
@@ -33,7 +29,7 @@ class CommentServiceImpl @Autowired constructor(
                 CocktailObjectType.USER_PICTURE,
                 picture.id,
                 picture.objectName,
-                authorUser,
+                commentRequest.authorUser,
                 commentRequest.content,
                 0,
                 0,
@@ -46,9 +42,6 @@ class CommentServiceImpl @Autowired constructor(
     }
 
     override fun addNewComment(ingredient: Ingredient?, commentRequest: NewCommentRequest): NewCommentResult {
-        val authorUser = userService.verifyUser(commentRequest.authorToken)
-                ?: return NewCommentResult(NewCommentResultType.USER_NOT_FOUND, null)
-
         ingredient ?: return NewCommentResult(NewCommentResultType.OBJECT_NOT_FOUND, null)
 
         val newComment = Comment(
@@ -56,7 +49,7 @@ class CommentServiceImpl @Autowired constructor(
                 CocktailObjectType.INGREDIENT,
                 ingredient.id,
                 ingredient.name,
-                authorUser,
+                commentRequest.authorUser,
                 commentRequest.content,
                 0,
                 0,
@@ -69,9 +62,6 @@ class CommentServiceImpl @Autowired constructor(
     }
 
     override fun addNewComment(cocktail: Cocktail?, commentRequest: NewCommentRequest): NewCommentResult {
-        val authorUser = userService.verifyUser(commentRequest.authorToken)
-                ?: return NewCommentResult(NewCommentResultType.USER_NOT_FOUND, null)
-
         cocktail ?: return NewCommentResult(NewCommentResultType.OBJECT_NOT_FOUND, null)
 
         val newComment = Comment(
@@ -79,7 +69,7 @@ class CommentServiceImpl @Autowired constructor(
                 CocktailObjectType.COCKTAIL,
                 cocktail.id,
                 cocktail.name,
-                authorUser,
+                commentRequest.authorUser,
                 commentRequest.content,
                 0,
                 0,

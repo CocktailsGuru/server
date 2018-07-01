@@ -6,15 +6,15 @@ import com.cocktailsguru.app.cocktail.dto.detail.CocktailDetailDto
 import com.cocktailsguru.app.cocktail.dto.detail.CocktailDetailResponseDto
 import com.cocktailsguru.app.cocktail.dto.list.CocktailListResponseDto
 import com.cocktailsguru.app.cocktail.service.CocktailService
-import com.cocktailsguru.app.comment.domain.add.NewCommentResultType
+import com.cocktailsguru.app.comment.domain.add.NewCommentRequest
 import com.cocktailsguru.app.comment.dto.CommentListResponseDto
 import com.cocktailsguru.app.comment.dto.NewCommentRequestDto
 import com.cocktailsguru.app.comment.dto.NewCommentResponseDto
 import com.cocktailsguru.app.common.domain.ObjectDetailRequest
 import com.cocktailsguru.app.common.domain.PagingInfo
-import com.cocktailsguru.app.common.dto.UnauthorizedException
 import com.cocktailsguru.app.picture.dto.PictureListResponseDto
 import com.cocktailsguru.app.utils.loggerFor
+import com.cocktailsguru.app.verification.service.UserVerificationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.*
@@ -23,7 +23,8 @@ import org.springframework.web.bind.annotation.*
 @Secured(value = ["ROLE_MOBILE"])
 @RequestMapping(COCKTAIL_BASE_PATH)
 open class CocktailController @Autowired constructor(
-        private val cocktailService: CocktailService
+        private val cocktailService: CocktailService,
+        private val userVerificationService: UserVerificationService
 ) {
 
     private val logger = loggerFor(javaClass)
@@ -96,12 +97,10 @@ open class CocktailController @Autowired constructor(
     @ResponseBody
     open fun addComment(@RequestBody commentRequestDto: NewCommentRequestDto): NewCommentResponseDto {
         val cocktailId = commentRequestDto.objectId
-        logger.info("Requested new comment for cocktail {} author", cocktailId, commentRequestDto.userTokenDto.userId)
-        val newCommentRequest = commentRequestDto.toNewCommentRequest()
+        logger.info("Requested new comment for cocktail {}", cocktailId)
+        val authorUser = userVerificationService.getLoggedUser()
+        val newCommentRequest = NewCommentRequest(commentRequestDto.content, authorUser)
         val result = cocktailService.addNewComment(cocktailId, newCommentRequest)
-        return when (result.resultType) {
-            NewCommentResultType.USER_NOT_FOUND -> throw UnauthorizedException()
-            else -> NewCommentResponseDto(result)
-        }
+        return NewCommentResponseDto(result)
     }
 }
