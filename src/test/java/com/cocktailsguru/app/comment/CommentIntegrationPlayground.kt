@@ -2,10 +2,8 @@ package com.cocktailsguru.app.comment
 
 import com.cocktailsguru.app.IntegrationTestApp
 import com.cocktailsguru.app.cocktail.controller.CocktailController
-import com.cocktailsguru.app.cocktail.domain.Cocktail
 import com.cocktailsguru.app.cocktail.domain.CocktailObjectType
 import com.cocktailsguru.app.comment.controller.CommentController
-import com.cocktailsguru.app.comment.domain.add.NewCommentRequest
 import com.cocktailsguru.app.comment.domain.add.NewCommentResultType
 import com.cocktailsguru.app.comment.dto.CommentListResponseDto
 import com.cocktailsguru.app.comment.dto.NewCommentRequestDto
@@ -13,12 +11,9 @@ import com.cocktailsguru.app.comment.dto.NewCommentResponseDto
 import com.cocktailsguru.app.comment.service.CommentService
 import com.cocktailsguru.app.common.domain.PagingInfo
 import com.cocktailsguru.app.ingredient.controller.IngredientController
-import com.cocktailsguru.app.ingredient.domain.Ingredient
-import com.cocktailsguru.app.user.domain.UserTokenToVerify
 import com.cocktailsguru.app.user.dto.UserTokenDto
 import com.cocktailsguru.app.utils.loggerFor
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.nhaarman.mockito_kotlin.mock
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,7 +29,6 @@ import org.springframework.util.MimeTypeUtils
 import org.springframework.web.context.WebApplicationContext
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 
@@ -121,10 +115,8 @@ open class CommentIntegrationPlayground {
     fun whenRequestingNewCommentForNonExistingCocktailShouldReturnErrorResponse() {
         val margaritaId = -1L
         val content = "anyContent"
-        val userTokenDto = getAdminUserTokenDto()
 
         val requestDto = objectMapper.writer().writeValueAsString(NewCommentRequestDto(
-                userTokenDto,
                 margaritaId,
                 content
         ))
@@ -145,10 +137,8 @@ open class CommentIntegrationPlayground {
     fun whenRequestingNewCommentForNonExistingCocktailViaWebShouldReturnUnauthorized() {
         val margaritaId = 54L
         val content = "anyContent"
-        val userTokenDto = UserTokenDto(-1, "notAToken")
 
         val requestDto = objectMapper.writer().writeValueAsString(NewCommentRequestDto(
-                userTokenDto,
                 margaritaId,
                 content
         ))
@@ -162,23 +152,12 @@ open class CommentIntegrationPlayground {
     }
 
     @Test
-    fun whenRequestingNewCommentForCocktailForNonExistingUserShouldReturnErrorResponse() {
-        val newCommentRequest = NewCommentRequest(UserTokenToVerify(-1, ""), "anyContent")
-        val anyCocktail = mock<Cocktail>()
-        val result = commentService.addNewComment(anyCocktail, newCommentRequest)
-        assertEquals(NewCommentResultType.USER_NOT_FOUND, result.resultType)
-        assertNull(result.comment)
-    }
-
-
-    @Test
     fun whenRequestingNewCommentForCocktailShouldAddComment() {
         val margaritaId = 54L
         val content = "anyContent"
         val userTokenDto = getAdminUserTokenDto()
 
         val requestDto = objectMapper.writer().writeValueAsString(NewCommentRequestDto(
-                userTokenDto,
                 margaritaId,
                 content
         ))
@@ -210,10 +189,8 @@ open class CommentIntegrationPlayground {
     fun whenRequestingNewCommentForNonExistingIngredientShouldReturnErrorResponse() {
         val nonExistingIngredient = -1L
         val content = "anyContent"
-        val userTokenDto = getAdminUserTokenDto()
 
         val requestDto = objectMapper.writer().writeValueAsString(NewCommentRequestDto(
-                userTokenDto,
                 nonExistingIngredient,
                 content
         ))
@@ -234,10 +211,8 @@ open class CommentIntegrationPlayground {
     fun whenRequestingNewCommentForNonExistingIngredientViaWebShouldReturnUnauthorized() {
         val ingredientId = 1L
         val content = "anyContent"
-        val userTokenDto = UserTokenDto(-1, "notAToken")
 
         val requestDto = objectMapper.writer().writeValueAsString(NewCommentRequestDto(
-                userTokenDto,
                 ingredientId,
                 content
         ))
@@ -250,15 +225,6 @@ open class CommentIntegrationPlayground {
                 .andReturn()
     }
 
-    @Test
-    fun whenRequestingNewCommentForIngredientForNonExistingUserShouldReturnErrorResponse() {
-        val newCommentRequest = NewCommentRequest(UserTokenToVerify(-1, ""), "anyContent")
-        val anyIngredient = mock<Ingredient>()
-        val result = commentService.addNewComment(anyIngredient, newCommentRequest)
-        assertEquals(NewCommentResultType.USER_NOT_FOUND, result.resultType)
-        assertNull(result.comment)
-    }
-
 
     @Test
     fun whenRequestingNewCommentForIngredientShouldAddComment() {
@@ -267,7 +233,6 @@ open class CommentIntegrationPlayground {
         val userTokenDto = getAdminUserTokenDto()
 
         val requestDto = objectMapper.writer().writeValueAsString(NewCommentRequestDto(
-                userTokenDto,
                 ingredientId,
                 content
         ))

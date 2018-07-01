@@ -4,7 +4,6 @@ import com.cocktailsguru.app.IntegrationTestApp
 import com.cocktailsguru.app.user.controller.UserRatingController
 import com.cocktailsguru.app.user.domain.rating.RatingResultType
 import com.cocktailsguru.app.user.domain.rating.RatingType
-import com.cocktailsguru.app.user.dto.UserTokenDto
 import com.cocktailsguru.app.user.dto.rating.RateObjectRequestDto
 import com.cocktailsguru.app.user.dto.rating.RateObjectResultDto
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -45,7 +44,6 @@ open class UserRatingIntegrationPlayground {
     @Test
     fun whenRequestingCocktailRatedWithoutValidUserTokenShouldReturnUnauthorized() {
         val requestDto = RateObjectRequestDto(
-                UserTokenDto(1, "1"),
                 1,
                 RatingType.ONE
         )
@@ -62,7 +60,6 @@ open class UserRatingIntegrationPlayground {
     @Test
     fun whenRequestingCocktailRatedForAlreadyRatedCocktailShouldReturnNotice() {
         val requestDto = RateObjectRequestDto(
-                UserTokenDto(6, "adminToken"),
                 1,
                 RatingType.ONE
         )
@@ -84,7 +81,6 @@ open class UserRatingIntegrationPlayground {
     @Test
     fun whenRequestingCocktailRatingForNotExistingCocktailShouldReturnNotice() {
         val requestDto = RateObjectRequestDto(
-                UserTokenDto(6, "adminToken"),
                 -1,
                 RatingType.ONE
         )
@@ -106,7 +102,6 @@ open class UserRatingIntegrationPlayground {
     fun whenRequestingCocktailRatingShouldSetAsFavorite() {
         val cocktailId = 2L
         val requestDto = RateObjectRequestDto(
-                UserTokenDto(6, "adminToken"),
                 cocktailId,
                 RatingType.ONE
         )
