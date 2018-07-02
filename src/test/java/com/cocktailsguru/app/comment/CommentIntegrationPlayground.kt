@@ -1,6 +1,7 @@
 package com.cocktailsguru.app.comment
 
 import com.cocktailsguru.app.IntegrationTestApp
+import com.cocktailsguru.app.MockRequestUtils
 import com.cocktailsguru.app.cocktail.controller.CocktailController
 import com.cocktailsguru.app.cocktail.domain.CocktailObjectType
 import com.cocktailsguru.app.comment.controller.CommentController
@@ -122,7 +123,7 @@ open class CommentIntegrationPlayground {
         ))
 
         val result = mockMvc.perform(
-                MockMvcRequestBuilders.post("/" + CocktailController.COCKTAIL_BASE_PATH + "/" + CocktailController.ADD_COMMENT_PATH)
+                MockRequestUtils.addAdminHeaders(MockMvcRequestBuilders.post("/" + CocktailController.COCKTAIL_BASE_PATH + "/" + CocktailController.ADD_COMMENT_PATH))
                         .content(requestDto)
                         .contentType(MimeTypeUtils.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
@@ -131,24 +132,6 @@ open class CommentIntegrationPlayground {
         val responseJson = result.response.contentAsString
         val responseDto = objectMapper.readValue(responseJson, NewCommentResponseDto::class.java)
         assertEquals(NewCommentResultType.OBJECT_NOT_FOUND, responseDto.resultType)
-    }
-
-    @Test
-    fun whenRequestingNewCommentForNonExistingCocktailViaWebShouldReturnUnauthorized() {
-        val margaritaId = 54L
-        val content = "anyContent"
-
-        val requestDto = objectMapper.writer().writeValueAsString(NewCommentRequestDto(
-                margaritaId,
-                content
-        ))
-
-        mockMvc.perform(
-                MockMvcRequestBuilders.post("/" + CocktailController.COCKTAIL_BASE_PATH + "/" + CocktailController.ADD_COMMENT_PATH)
-                        .content(requestDto)
-                        .contentType(MimeTypeUtils.APPLICATION_JSON_VALUE))
-                .andExpect(status().isUnauthorized)
-                .andReturn()
     }
 
     @Test
@@ -163,7 +146,7 @@ open class CommentIntegrationPlayground {
         ))
 
         val result = mockMvc.perform(
-                MockMvcRequestBuilders.post("/" + CocktailController.COCKTAIL_BASE_PATH + "/" + CocktailController.ADD_COMMENT_PATH)
+                MockRequestUtils.addAdminHeaders(MockMvcRequestBuilders.post("/" + CocktailController.COCKTAIL_BASE_PATH + "/" + CocktailController.ADD_COMMENT_PATH))
                         .content(requestDto)
                         .contentType(MimeTypeUtils.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
@@ -196,7 +179,7 @@ open class CommentIntegrationPlayground {
         ))
 
         val result = mockMvc.perform(
-                MockMvcRequestBuilders.post("/" + IngredientController.INGREDIENT_BASE_PATH + "/" + CocktailController.ADD_COMMENT_PATH)
+                MockRequestUtils.addAdminHeaders(MockMvcRequestBuilders.post("/" + IngredientController.INGREDIENT_BASE_PATH + "/" + CocktailController.ADD_COMMENT_PATH))
                         .content(requestDto)
                         .contentType(MimeTypeUtils.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
@@ -208,8 +191,8 @@ open class CommentIntegrationPlayground {
     }
 
     @Test
-    fun whenRequestingNewCommentForNonExistingIngredientViaWebShouldReturnUnauthorized() {
-        val ingredientId = 1L
+    fun whenRequestingNewCommentForNonExistingIngredientViaWebShouldReturnNotFoundCode() {
+        val ingredientId = -1L
         val content = "anyContent"
 
         val requestDto = objectMapper.writer().writeValueAsString(NewCommentRequestDto(
@@ -217,12 +200,16 @@ open class CommentIntegrationPlayground {
                 content
         ))
 
-        mockMvc.perform(
-                MockMvcRequestBuilders.post("/" + IngredientController.INGREDIENT_BASE_PATH + "/" + CocktailController.ADD_COMMENT_PATH)
+        val result = mockMvc.perform(
+                MockRequestUtils.addAdminHeaders(MockMvcRequestBuilders.post("/" + IngredientController.INGREDIENT_BASE_PATH + "/" + CocktailController.ADD_COMMENT_PATH))
                         .content(requestDto)
                         .contentType(MimeTypeUtils.APPLICATION_JSON_VALUE))
-                .andExpect(status().isUnauthorized)
+                .andExpect(status().isOk)
                 .andReturn()
+
+        val responseJson = result.response.contentAsString
+        val responseDto = objectMapper.readValue(responseJson, NewCommentResponseDto::class.java)
+        assertEquals(NewCommentResultType.OBJECT_NOT_FOUND, responseDto.resultType)
     }
 
 
@@ -238,7 +225,7 @@ open class CommentIntegrationPlayground {
         ))
 
         val result = mockMvc.perform(
-                MockMvcRequestBuilders.post("/" + IngredientController.INGREDIENT_BASE_PATH + "/" + CocktailController.ADD_COMMENT_PATH)
+                MockRequestUtils.addAdminHeaders(MockMvcRequestBuilders.post("/" + IngredientController.INGREDIENT_BASE_PATH + "/" + CocktailController.ADD_COMMENT_PATH))
                         .content(requestDto)
                         .contentType(MimeTypeUtils.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
