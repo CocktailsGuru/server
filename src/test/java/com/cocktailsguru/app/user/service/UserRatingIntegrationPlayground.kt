@@ -1,6 +1,7 @@
 package com.cocktailsguru.app.user.service
 
 import com.cocktailsguru.app.IntegrationTestApp
+import com.cocktailsguru.app.MockRequestUtils
 import com.cocktailsguru.app.user.controller.UserRatingController
 import com.cocktailsguru.app.user.domain.rating.RatingResultType
 import com.cocktailsguru.app.user.domain.rating.RatingType
@@ -65,7 +66,7 @@ open class UserRatingIntegrationPlayground {
         )
 
         val result = mockMvc.perform(
-                post("/" + UserRatingController.USER_RATING_BASE_PATH + "/" + UserRatingController.RATE_COCKTAIL)
+                MockRequestUtils.addAdminHeaders(post("/" + UserRatingController.USER_RATING_BASE_PATH + "/" + UserRatingController.RATE_COCKTAIL))
                         .content(objectWriter.writeValueAsString(requestDto))
                         .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
@@ -86,7 +87,7 @@ open class UserRatingIntegrationPlayground {
         )
 
         val result = mockMvc.perform(
-                post("/" + UserRatingController.USER_RATING_BASE_PATH + "/" + UserRatingController.RATE_COCKTAIL)
+                MockRequestUtils.addAdminHeaders(post("/" + UserRatingController.USER_RATING_BASE_PATH + "/" + UserRatingController.RATE_COCKTAIL))
                         .content(objectWriter.writeValueAsString(requestDto))
                         .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
@@ -107,7 +108,7 @@ open class UserRatingIntegrationPlayground {
         )
 
         val result = mockMvc.perform(
-                post("/" + UserRatingController.USER_RATING_BASE_PATH + "/" + UserRatingController.RATE_COCKTAIL)
+                MockRequestUtils.addAdminHeaders(post("/" + UserRatingController.USER_RATING_BASE_PATH + "/" + UserRatingController.RATE_COCKTAIL))
                         .content(objectWriter.writeValueAsString(requestDto))
                         .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
