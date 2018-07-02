@@ -1,15 +1,15 @@
 package com.cocktailsguru.app.picture.controller
 
 import com.cocktailsguru.app.cocktail.domain.CocktailObjectType
-import com.cocktailsguru.app.comment.domain.add.NewCommentResultType
+import com.cocktailsguru.app.comment.domain.add.NewCommentRequest
 import com.cocktailsguru.app.comment.dto.NewCommentRequestDto
 import com.cocktailsguru.app.comment.dto.NewCommentResponseDto
 import com.cocktailsguru.app.common.domain.PagingInfo
-import com.cocktailsguru.app.common.dto.UnauthorizedException
 import com.cocktailsguru.app.picture.controller.PictureController.Companion.PICTURE_BASE_PATH
 import com.cocktailsguru.app.picture.dto.PictureListResponseDto
 import com.cocktailsguru.app.picture.service.PictureService
 import com.cocktailsguru.app.utils.loggerFor
+import com.cocktailsguru.app.verification.service.UserVerificationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.*
@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.*
 @Secured(value = ["ROLE_MOBILE"])
 @RequestMapping(PICTURE_BASE_PATH)
 open class PictureController @Autowired constructor(
-        private val pictureService: PictureService
+        private val pictureService: PictureService,
+        private val userVerificationService: UserVerificationService
 ) {
 
     private val logger = loggerFor(javaClass)
@@ -49,12 +50,10 @@ open class PictureController @Autowired constructor(
     @ResponseBody
     open fun addComment(@RequestBody commentRequestDto: NewCommentRequestDto): NewCommentResponseDto {
         val pictureId = commentRequestDto.objectId
-        logger.info("Requested new comment for picture {} author", pictureId, commentRequestDto.userTokenDto.userId)
-        val newCommentRequest = commentRequestDto.toNewCommentRequest()
+        logger.info("Requested new comment for picture {}", pictureId)
+        val authorUser = userVerificationService.getLoggedUser()
+        val newCommentRequest = NewCommentRequest(commentRequestDto.content, authorUser)
         val result = pictureService.addNewComment(pictureId, newCommentRequest)
-        return when (result.resultType) {
-            NewCommentResultType.USER_NOT_FOUND -> throw UnauthorizedException()
-            else -> NewCommentResponseDto(result)
-        }
+        return NewCommentResponseDto(result)
     }
 }

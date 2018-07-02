@@ -3,7 +3,7 @@ package com.cocktailsguru.app.user.service
 import com.cocktailsguru.app.cocktail.domain.CocktailObjectType
 import com.cocktailsguru.app.cocktail.service.CocktailService
 import com.cocktailsguru.app.picture.service.PictureService
-import com.cocktailsguru.app.user.domain.UserTokenToVerify
+import com.cocktailsguru.app.user.domain.User
 import com.cocktailsguru.app.user.domain.favorite.SetFavoriteResultType
 import com.cocktailsguru.app.user.domain.favorite.UserFavorite
 import com.cocktailsguru.app.user.repository.UserFavoriteRepository
@@ -14,17 +14,13 @@ import javax.transaction.Transactional
 @Service
 open class UserFavoriteServiceImpl @Autowired constructor(
         private val userFavoriteRepository: UserFavoriteRepository,
-        private val userService: UserService,
         private val cocktailService: CocktailService,
         private val pictureService: PictureService
 ) : UserFavoriteService {
 
     @Transactional
-    override fun setPictureAsFavorite(pictureId: Long, userToken: UserTokenToVerify): SetFavoriteResultType {
+    override fun setPictureAsFavorite(pictureId: Long, user: User): SetFavoriteResultType {
         val picture = pictureService.findPicture(pictureId) ?: return SetFavoriteResultType.OBJECT_NOT_FOUND
-
-        val user = userService.verifyUser(userToken) ?: return SetFavoriteResultType.USER_NOT_FOUND
-
 
         val alreadyFavorite = userFavoriteRepository.existsByUserAndObjectTypeAndObjectForeignKey(user, CocktailObjectType.USER_PICTURE, picture.id)
 
@@ -48,10 +44,8 @@ open class UserFavoriteServiceImpl @Autowired constructor(
 
 
     @Transactional
-    override fun setCocktailAsFavorite(cocktailId: Long, userToken: UserTokenToVerify): SetFavoriteResultType {
+    override fun setCocktailAsFavorite(cocktailId: Long, user: User): SetFavoriteResultType {
         val cocktail = cocktailService.findCocktail(cocktailId) ?: return SetFavoriteResultType.OBJECT_NOT_FOUND
-
-        val user = userService.verifyUser(userToken) ?: return SetFavoriteResultType.USER_NOT_FOUND
 
         val alreadyFavorite = userFavoriteRepository.existsByUserAndObjectTypeAndObjectForeignKey(user, CocktailObjectType.COCKTAIL, cocktail.id)
 

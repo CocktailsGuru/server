@@ -2,6 +2,7 @@ package com.cocktailsguru.app.user.service
 
 import com.cocktailsguru.app.cocktail.domain.CocktailObjectType
 import com.cocktailsguru.app.cocktail.service.CocktailService
+import com.cocktailsguru.app.user.domain.User
 import com.cocktailsguru.app.user.domain.rating.RateObjectRequest
 import com.cocktailsguru.app.user.domain.rating.RatingResultType
 import com.cocktailsguru.app.user.domain.rating.RatingType
@@ -15,15 +16,12 @@ import javax.transaction.Transactional
 @Service
 open class UserRatingServiceImpl @Autowired constructor(
         private val cocktailService: CocktailService,
-        private val userService: UserService,
         private val ratingRepository: UserRatingRepository
 ) : UserRatingService {
 
     @Transactional
-    override fun rateCocktail(ratingRequest: RateObjectRequest): RatingResultType {
+    override fun rateCocktail(ratingRequest: RateObjectRequest, user: User): RatingResultType {
         val cocktail = cocktailService.findCocktail(ratingRequest.objectId) ?: return RatingResultType.OBJECT_NOT_FOUND
-
-        val user = userService.verifyUser(ratingRequest.userToken) ?: return RatingResultType.USER_NOT_FOUND
 
         val alreadyRated = ratingRepository.existsByUserAndObjectTypeAndObjectForeignKey(user, CocktailObjectType.COCKTAIL, cocktail.id)
 
