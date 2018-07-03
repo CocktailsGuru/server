@@ -26,7 +26,7 @@ import kotlin.test.assertEquals
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = [(IntegrationTestApp::class)])
 @Transactional
-open class UserRatingIntegrationPlayground {
+class UserRatingIntegrationPlayground {
     private lateinit var mockMvc: MockMvc
 
     @Autowired

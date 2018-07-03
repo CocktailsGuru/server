@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @Secured(value = ["ROLE_MOBILE"])
 @RequestMapping(INGREDIENT_BASE_PATH)
-open class IngredientController @Autowired constructor(
+class IngredientController @Autowired constructor(
         private val ingredientService: IngredientService,
         private val userVerificationService: UserVerificationService
 ) {
@@ -40,7 +40,7 @@ open class IngredientController @Autowired constructor(
     }
 
     @RequestMapping(value = [(INGREDIENT_LIST_PATH)], produces = ["application/json"], method = [RequestMethod.GET])
-    open fun getIngredientList(
+    fun getIngredientList(
             @RequestParam("ingredientType", required = false) ingredientType: IngredientType?,
             @RequestParam("pageNumber") pageNumber: Int,
             @RequestParam("pageSize") pageSize: Int
@@ -54,7 +54,7 @@ open class IngredientController @Autowired constructor(
     }
 
     @RequestMapping(value = [COMMENT_LIST_PATH], produces = ["application/json"], method = [RequestMethod.GET])
-    open fun getCommentList(
+    fun getCommentList(
             @RequestParam("id") id: Long,
             @RequestParam("pageNumber") pageNumber: Int,
             @RequestParam("pageSize") pageSize: Int
@@ -65,7 +65,7 @@ open class IngredientController @Autowired constructor(
     }
 
     @RequestMapping(value = [(INGREDIENT_DETAIL_PATH)], produces = ["application/json"], method = [(RequestMethod.GET)])
-    open fun findIngredientDetail(
+    fun findIngredientDetail(
             @RequestParam("id") id: Long,
             @RequestParam("commentsSize", required = false, defaultValue = "0") commentsSize: Int
     ): IngredientDetailResponseDto? {
@@ -83,7 +83,7 @@ open class IngredientController @Autowired constructor(
 
     @RequestMapping(value = [(ADD_COMMENT_PATH)], produces = ["application/json"], method = [RequestMethod.POST])
     @ResponseBody
-    open fun addComment(@RequestBody commentRequestDto: NewCommentRequestDto): NewCommentResponseDto {
+    fun addComment(@RequestBody commentRequestDto: NewCommentRequestDto): NewCommentResponseDto {
         val ingredientId = commentRequestDto.objectId
         logger.info("Requested new comment for ingredient {}", ingredientId)
         val authorUser = userVerificationService.getLoggedUser()
@@ -93,7 +93,7 @@ open class IngredientController @Autowired constructor(
     }
 
     @RequestMapping(value = [PICTURE_LIST_PATH], produces = ["application/json"], method = [RequestMethod.GET])
-    open fun getPictureList(
+    fun getPictureList(
             @RequestParam("id") id: Long,
             @RequestParam("pageNumber") pageNumber: Int,
             @RequestParam("pageSize") pageSize: Int

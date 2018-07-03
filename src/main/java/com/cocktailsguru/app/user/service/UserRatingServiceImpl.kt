@@ -14,7 +14,7 @@ import java.time.LocalDateTime
 import javax.transaction.Transactional
 
 @Service
-open class UserRatingServiceImpl @Autowired constructor(
+class UserRatingServiceImpl @Autowired constructor(
         private val cocktailService: CocktailService,
         private val ratingRepository: UserRatingRepository
 ) : UserRatingService {

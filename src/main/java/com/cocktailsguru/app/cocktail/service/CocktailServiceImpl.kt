@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
-open class CocktailServiceImpl @Autowired constructor(
+class CocktailServiceImpl @Autowired constructor(
         private val cocktailRepository: CocktailRepository,
         private val commentService: CommentService,
         private val pictureService: PictureService

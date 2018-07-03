@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
-open class UserFavoriteServiceImpl @Autowired constructor(
+class UserFavoriteServiceImpl @Autowired constructor(
         private val userFavoriteRepository: UserFavoriteRepository,
         private val cocktailService: CocktailService,
         private val pictureService: PictureService

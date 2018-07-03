@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @Secured(value = ["ROLE_MOBILE"])
 @RequestMapping(COCKTAIL_BASE_PATH)
-open class CocktailController @Autowired constructor(
+class CocktailController @Autowired constructor(
         private val cocktailService: CocktailService,
         private val userVerificationService: UserVerificationService
 ) {
@@ -39,7 +39,7 @@ open class CocktailController @Autowired constructor(
     }
 
     @RequestMapping(value = [COCKTAIL_DETAIL_PATH], produces = ["application/json"], method = [(RequestMethod.GET)])
-    open fun getCocktailDetail(
+    fun getCocktailDetail(
             @RequestParam("id") id: Long,
             @RequestParam("commentsSize", required = false, defaultValue = "0") commentsSize: Int,
             @RequestParam("picturesSize", required = false, defaultValue = "0") picturesSize: Int
@@ -58,7 +58,7 @@ open class CocktailController @Autowired constructor(
     }
 
     @RequestMapping(value = [COCKTAIL_LIST_PATH], produces = ["application/json"], method = [RequestMethod.GET])
-    open fun getCocktailList(
+    fun getCocktailList(
             @RequestParam("pageNumber") pageNumber: Int,
             @RequestParam("pageSize") pageSize: Int
     ): CocktailListResponseDto {
@@ -70,7 +70,7 @@ open class CocktailController @Autowired constructor(
 
 
     @RequestMapping(value = [COMMENT_LIST_PATH], produces = ["application/json"], method = [RequestMethod.GET])
-    open fun getCommentList(
+    fun getCommentList(
             @RequestParam("id") id: Long,
             @RequestParam("pageNumber") pageNumber: Int,
             @RequestParam("pageSize") pageSize: Int
@@ -82,7 +82,7 @@ open class CocktailController @Autowired constructor(
 
 
     @RequestMapping(value = [PICTURE_LIST_PATH], produces = ["application/json"], method = [RequestMethod.GET])
-    open fun getPictureList(
+    fun getPictureList(
             @RequestParam("id") id: Long,
             @RequestParam("pageNumber") pageNumber: Int,
             @RequestParam("pageSize") pageSize: Int
@@ -95,7 +95,7 @@ open class CocktailController @Autowired constructor(
 
     @RequestMapping(value = [ADD_COMMENT_PATH], produces = ["application/json"], method = [RequestMethod.POST])
     @ResponseBody
-    open fun addComment(@RequestBody commentRequestDto: NewCommentRequestDto): NewCommentResponseDto {
+    fun addComment(@RequestBody commentRequestDto: NewCommentRequestDto): NewCommentResponseDto {
         val cocktailId = commentRequestDto.objectId
         logger.info("Requested new comment for cocktail {}", cocktailId)
         val authorUser = userVerificationService.getLoggedUser()

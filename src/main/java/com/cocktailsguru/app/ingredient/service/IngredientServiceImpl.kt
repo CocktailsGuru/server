@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
-open class IngredientServiceImpl @Autowired constructor(
+class IngredientServiceImpl @Autowired constructor(
         private val ingredientRepository: IngredientRepository,
         private val commentService: CommentService,
         private val pictureService: PictureService
