@@ -17,14 +17,13 @@ import com.cocktailsguru.app.ingredient.service.IngredientService
 import com.cocktailsguru.app.picture.dto.PictureListResponseDto
 import com.cocktailsguru.app.utils.loggerFor
 import com.cocktailsguru.app.verification.service.UserVerificationService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @Secured(value = ["ROLE_MOBILE"])
 @RequestMapping(INGREDIENT_BASE_PATH)
-class IngredientController @Autowired constructor(
+class IngredientController(
         private val ingredientService: IngredientService,
         private val userVerificationService: UserVerificationService
 ) {

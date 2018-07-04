@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 import javax.servlet.http.HttpServletRequest
 
 @Service
-class UserVerificationServiceImpl @Autowired constructor(
+class UserVerificationServiceImpl(
         private val userTokenRepository: UserTokenRepository,
         private val userService: UserService
 ) : UserVerificationService {

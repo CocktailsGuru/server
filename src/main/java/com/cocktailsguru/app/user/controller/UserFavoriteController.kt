@@ -6,7 +6,6 @@ import com.cocktailsguru.app.user.dto.favorite.SetFavoriteResponseDto
 import com.cocktailsguru.app.user.service.UserFavoriteService
 import com.cocktailsguru.app.utils.loggerFor
 import com.cocktailsguru.app.verification.service.UserVerificationService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Secured(value = ["ROLE_MOBILE"])
 @RequestMapping(USER_FAVORITE_BASE_PATH)
-class UserFavoriteController @Autowired constructor(
+open class UserFavoriteController(
         private val userFavoriteService: UserFavoriteService,
         private val userVerificationService: UserVerificationService
 ) {
@@ -31,7 +30,7 @@ class UserFavoriteController @Autowired constructor(
 
 
     @RequestMapping(value = [FAVORITE_COCKTAIL], produces = ["application/json"], method = [RequestMethod.POST])
-    fun setCocktailFavorite(@RequestBody requestDto: SetFavoriteRequestDto): SetFavoriteResponseDto {
+    open fun setCocktailFavorite(@RequestBody requestDto: SetFavoriteRequestDto): SetFavoriteResponseDto {
         logger.info("Requested cocktail set as favorite - {}", requestDto)
 
         val loggedUser = userVerificationService.getLoggedUser()
@@ -42,7 +41,7 @@ class UserFavoriteController @Autowired constructor(
     }
 
     @RequestMapping(value = [FAVORITE_PICTURE], produces = ["application/json"], method = [RequestMethod.POST])
-    fun setPictureFavorite(@RequestBody requestDto: SetFavoriteRequestDto): SetFavoriteResponseDto {
+    open fun setPictureFavorite(@RequestBody requestDto: SetFavoriteRequestDto): SetFavoriteResponseDto {
         logger.info("Requested picture set as favorite - {}", requestDto)
 
         val loggedUser = userVerificationService.getLoggedUser()
