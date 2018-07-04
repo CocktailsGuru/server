@@ -11,13 +11,11 @@ import com.cocktailsguru.app.comment.repository.CommentRepository
 import com.cocktailsguru.app.common.domain.PagingInfo
 import com.cocktailsguru.app.ingredient.domain.Ingredient
 import com.cocktailsguru.app.picture.domain.Picture
-import com.cocktailsguru.app.user.service.UserService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
-class CommentServiceImpl @Autowired constructor(
+class CommentServiceImpl(
         private val commentRepository: CommentRepository
 ) : CommentService {
 

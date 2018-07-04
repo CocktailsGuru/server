@@ -8,13 +8,12 @@ import com.cocktailsguru.app.user.domain.rating.RatingResultType
 import com.cocktailsguru.app.user.domain.rating.RatingType
 import com.cocktailsguru.app.user.domain.rating.UserRating
 import com.cocktailsguru.app.user.repository.UserRatingRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import javax.transaction.Transactional
 
 @Service
-open class UserRatingServiceImpl @Autowired constructor(
+open class UserRatingServiceImpl(
         private val cocktailService: CocktailService,
         private val ratingRepository: UserRatingRepository
 ) : UserRatingService {

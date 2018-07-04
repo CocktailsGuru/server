@@ -15,14 +15,13 @@ import com.cocktailsguru.app.common.domain.PagingInfo
 import com.cocktailsguru.app.picture.dto.PictureListResponseDto
 import com.cocktailsguru.app.utils.loggerFor
 import com.cocktailsguru.app.verification.service.UserVerificationService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @Secured(value = ["ROLE_MOBILE"])
 @RequestMapping(COCKTAIL_BASE_PATH)
-open class CocktailController @Autowired constructor(
+open class CocktailController(
         private val cocktailService: CocktailService,
         private val userVerificationService: UserVerificationService
 ) {

@@ -7,12 +7,11 @@ import com.cocktailsguru.app.user.domain.User
 import com.cocktailsguru.app.user.domain.favorite.SetFavoriteResultType
 import com.cocktailsguru.app.user.domain.favorite.UserFavorite
 import com.cocktailsguru.app.user.repository.UserFavoriteRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
-open class UserFavoriteServiceImpl @Autowired constructor(
+open class UserFavoriteServiceImpl(
         private val userFavoriteRepository: UserFavoriteRepository,
         private val cocktailService: CocktailService,
         private val pictureService: PictureService

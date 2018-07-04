@@ -6,7 +6,6 @@ import com.cocktailsguru.app.comment.dto.CommentListResponseDto
 import com.cocktailsguru.app.comment.service.CommentService
 import com.cocktailsguru.app.common.domain.PagingInfo
 import com.cocktailsguru.app.utils.loggerFor
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Secured(value = ["ROLE_MOBILE"])
 @RequestMapping(COMMENT_BASE_PATH)
-open class CommentController @Autowired constructor(
+open class CommentController(
         private val commentService: CommentService
 ) {
 

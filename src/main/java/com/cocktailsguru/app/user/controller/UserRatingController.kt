@@ -6,7 +6,6 @@ import com.cocktailsguru.app.user.dto.rating.RateObjectResultDto
 import com.cocktailsguru.app.user.service.UserRatingService
 import com.cocktailsguru.app.utils.loggerFor
 import com.cocktailsguru.app.verification.service.UserVerificationService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Secured(value = ["ROLE_MOBILE"])
 @RequestMapping(USER_RATING_BASE_PATH)
-open class UserRatingController @Autowired constructor(
+open class UserRatingController(
         private val userRatingService: UserRatingService,
         private val userVerificationService: UserVerificationService
 ) {

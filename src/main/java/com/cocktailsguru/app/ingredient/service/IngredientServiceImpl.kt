@@ -14,12 +14,11 @@ import com.cocktailsguru.app.ingredient.domain.IngredientType
 import com.cocktailsguru.app.ingredient.repository.IngredientRepository
 import com.cocktailsguru.app.picture.domain.PictureList
 import com.cocktailsguru.app.picture.service.PictureService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
-open class IngredientServiceImpl @Autowired constructor(
+open class IngredientServiceImpl(
         private val ingredientRepository: IngredientRepository,
         private val commentService: CommentService,
         private val pictureService: PictureService

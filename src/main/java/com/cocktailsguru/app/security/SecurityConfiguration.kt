@@ -1,7 +1,6 @@
 package com.cocktailsguru.app.security
 
 import com.cocktailsguru.app.utils.loggerFor
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest
 import org.springframework.boot.autoconfigure.security.SecurityProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
@@ -17,12 +16,10 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.password.NoOpPasswordEncoder
 
 
-
-
 @Configuration
 @EnableWebSecurity
 @EnableConfigurationProperties(ServerSecurityProperties::class)
-open class SecurityConfiguration @Autowired constructor(
+open class SecurityConfiguration(
         private val securityProperties: ServerSecurityProperties
 ) : WebSecurityConfigurerAdapter() {
 
