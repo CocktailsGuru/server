@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Secured(value = ["ROLE_MOBILE"])
 @RequestMapping(USER_FAVORITE_BASE_PATH)
-open class UserFavoriteController(
+class UserFavoriteController(
         private val userFavoriteService: UserFavoriteService,
         private val userVerificationService: UserVerificationService
 ) {
@@ -30,7 +30,7 @@ open class UserFavoriteController(
 
 
     @RequestMapping(value = [FAVORITE_COCKTAIL], produces = ["application/json"], method = [RequestMethod.POST])
-    open fun setCocktailFavorite(@RequestBody requestDto: SetFavoriteRequestDto): SetFavoriteResponseDto {
+    fun setCocktailFavorite(@RequestBody requestDto: SetFavoriteRequestDto): SetFavoriteResponseDto {
         logger.info("Requested cocktail set as favorite - {}", requestDto)
 
         val loggedUser = userVerificationService.getLoggedUser()
@@ -41,7 +41,7 @@ open class UserFavoriteController(
     }
 
     @RequestMapping(value = [FAVORITE_PICTURE], produces = ["application/json"], method = [RequestMethod.POST])
-    open fun setPictureFavorite(@RequestBody requestDto: SetFavoriteRequestDto): SetFavoriteResponseDto {
+    fun setPictureFavorite(@RequestBody requestDto: SetFavoriteRequestDto): SetFavoriteResponseDto {
         logger.info("Requested picture set as favorite - {}", requestDto)
 
         val loggedUser = userVerificationService.getLoggedUser()
