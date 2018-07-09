@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/cocktail_dev
+    username: root
+    password: root
+
+
+cocktails:
+  resource:
+    assets: file:///C:/Workspace/cocktails/files/images/
