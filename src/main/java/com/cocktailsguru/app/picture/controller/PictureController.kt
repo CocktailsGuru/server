@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @Secured(value = ["ROLE_MOBILE"])
 @RequestMapping(PICTURE_BASE_PATH)
-open class PictureController(
+class PictureController(
         private val pictureService: PictureService,
         private val userVerificationService: UserVerificationService
 ) {
@@ -30,7 +30,7 @@ open class PictureController(
     }
 
     @RequestMapping(value = [PICTURE_LIST_PATH], produces = ["application/json"], method = [(RequestMethod.GET)])
-    open fun getPictureList(
+    fun getPictureList(
             @RequestParam("objectId") id: Long,
             @RequestParam("objectType") objectTypeOrdinal: Int,
             @RequestParam("pageNumber") pageNumber: Int,
@@ -47,7 +47,7 @@ open class PictureController(
 
     @RequestMapping(value = [ADD_COMMENT_PATH], produces = ["application/json"], method = [RequestMethod.POST])
     @ResponseBody
-    open fun addComment(@RequestBody commentRequestDto: NewCommentRequestDto): NewCommentResponseDto {
+    fun addComment(@RequestBody commentRequestDto: NewCommentRequestDto): NewCommentResponseDto {
         val pictureId = commentRequestDto.objectId
         logger.info("Requested new comment for picture {}", pictureId)
         val authorUser = userVerificationService.getLoggedUser()

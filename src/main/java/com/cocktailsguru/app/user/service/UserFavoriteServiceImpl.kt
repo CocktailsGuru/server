@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
-open class UserFavoriteServiceImpl(
+class UserFavoriteServiceImpl(
         private val userFavoriteRepository: UserFavoriteRepository,
         private val cocktailService: CocktailService,
         private val pictureService: PictureService

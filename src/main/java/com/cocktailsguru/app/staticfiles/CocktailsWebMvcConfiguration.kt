@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Configuration
-open class CocktailsWebMvcConfiguration : WebMvcConfigurer {
+class CocktailsWebMvcConfiguration : WebMvcConfigurer {
 
     companion object {
         const val ASSETS_PATH = "/assets/**"

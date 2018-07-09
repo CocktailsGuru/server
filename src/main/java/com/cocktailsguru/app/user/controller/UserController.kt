@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Secured(value = ["ROLE_MOBILE"])
 @RequestMapping(USER_BASE_PATH)
-open class UserController(
+class UserController(
         private val userService: UserService
 ) {
 
@@ -30,7 +30,7 @@ open class UserController(
 
 
     @RequestMapping(value = [REGISTER_USER_PATH], produces = ["application/json"], method = [RequestMethod.POST])
-    open fun registerUser(@RequestBody requestDto: RegisterUserRequestDto): RegisterUserResponseDto {
+    fun registerUser(@RequestBody requestDto: RegisterUserRequestDto): RegisterUserResponseDto {
         logger.info("Requested user registration - {}", requestDto)
         val registrationRequest = UserRegistrationRequest(
                 requestDto.externalUserId,

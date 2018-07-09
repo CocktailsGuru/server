@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Secured(value = ["ROLE_MOBILE"])
 @RequestMapping(COMMENT_BASE_PATH)
-open class CommentController(
+class CommentController(
         private val commentService: CommentService
 ) {
 
@@ -27,7 +27,7 @@ open class CommentController(
     }
 
     @RequestMapping(value = [COMMENT_LIST_PATH], produces = ["application/json"], method = [(RequestMethod.GET)])
-    open fun getCommentList(
+    fun getCommentList(
             @RequestParam("objectId") id: Long,
             @RequestParam("objectType") objectTypeOrdinal: Int,
             @RequestParam("pageNumber") pageNumber: Int,

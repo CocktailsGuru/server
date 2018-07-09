@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Secured(value = ["ROLE_MOBILE"])
 @RequestMapping(USER_RATING_BASE_PATH)
-open class UserRatingController(
+class UserRatingController(
         private val userRatingService: UserRatingService,
         private val userVerificationService: UserVerificationService
 ) {
@@ -29,7 +29,7 @@ open class UserRatingController(
 
 
     @RequestMapping(value = [RATE_COCKTAIL], produces = ["application/json"], method = [RequestMethod.POST])
-    open fun rateCocktail(@RequestBody requestDto: RateObjectRequestDto): RateObjectResultDto {
+    fun rateCocktail(@RequestBody requestDto: RateObjectRequestDto): RateObjectResultDto {
         logger.info("Requested cocktail rating - {}", requestDto)
 
         val loggedUser = userVerificationService.getLoggedUser()

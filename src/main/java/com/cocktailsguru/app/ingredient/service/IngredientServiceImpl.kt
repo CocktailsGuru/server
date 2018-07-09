@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
-open class IngredientServiceImpl(
+class IngredientServiceImpl(
         private val ingredientRepository: IngredientRepository,
         private val commentService: CommentService,
         private val pictureService: PictureService

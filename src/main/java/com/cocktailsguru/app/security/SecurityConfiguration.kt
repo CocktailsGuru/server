@@ -19,13 +19,13 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder
 @Configuration
 @EnableWebSecurity
 @EnableConfigurationProperties(ServerSecurityProperties::class)
-open class SecurityConfiguration(
+class SecurityConfiguration(
         private val securityProperties: ServerSecurityProperties
 ) : WebSecurityConfigurerAdapter() {
 
     @Suppress("DEPRECATION")
     @Bean
-    open fun passwordEncoder(): NoOpPasswordEncoder {
+    fun passwordEncoder(): NoOpPasswordEncoder {
         return NoOpPasswordEncoder.getInstance() as NoOpPasswordEncoder
     }
 
