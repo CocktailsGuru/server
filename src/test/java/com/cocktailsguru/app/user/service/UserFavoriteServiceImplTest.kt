@@ -18,11 +18,10 @@ import kotlin.test.assertTrue
 @RunWith(MockitoJUnitRunner::class)
 class UserFavoriteServiceImplTest {
     private val anyUserFavoriteRepository = mock<UserFavoriteRepository>()
-    private val anyUserService = mock<UserService>()
     private val anyCocktailService = mock<CocktailService>()
     private val anyPictureService = mock<PictureService>()
 
-    private val userFavoriteService: UserFavoriteService = UserFavoriteServiceImpl(anyUserFavoriteRepository, anyUserService, anyCocktailService, anyPictureService)
+    private val userFavoriteService: UserFavoriteService = UserFavoriteServiceImpl(anyUserFavoriteRepository, anyCocktailService, anyPictureService)
 
     @Test
     fun givenUserFavoritePresentWhenRequestingUserFavoriteShouldReturnOneItem() {

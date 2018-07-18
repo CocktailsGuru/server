@@ -1,8 +1,8 @@
 package com.cocktailsguru.app.comment.domain.add
 
-import com.cocktailsguru.app.user.domain.UserTokenToVerify
+import com.cocktailsguru.app.user.domain.User
 
 data class NewCommentRequest(
-        val authorToken: UserTokenToVerify,
-        val content: String
+        val content: String,
+        val authorUser: User
 )

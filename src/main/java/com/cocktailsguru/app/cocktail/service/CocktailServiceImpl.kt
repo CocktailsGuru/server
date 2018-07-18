@@ -13,12 +13,11 @@ import com.cocktailsguru.app.comment.service.CommentService
 import com.cocktailsguru.app.common.domain.PagingInfo
 import com.cocktailsguru.app.picture.domain.PictureList
 import com.cocktailsguru.app.picture.service.PictureService
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
-open class CocktailServiceImpl @Autowired constructor(
+class CocktailServiceImpl(
         private val cocktailRepository: CocktailRepository,
         private val commentService: CommentService,
         private val pictureService: PictureService

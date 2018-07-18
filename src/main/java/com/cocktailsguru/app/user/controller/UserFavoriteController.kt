@@ -1,13 +1,11 @@
 package com.cocktailsguru.app.user.controller
 
-import com.cocktailsguru.app.common.dto.UnauthorizedException
 import com.cocktailsguru.app.user.controller.UserFavoriteController.Companion.USER_FAVORITE_BASE_PATH
-import com.cocktailsguru.app.user.domain.favorite.SetFavoriteResultType
 import com.cocktailsguru.app.user.dto.favorite.SetFavoriteRequestDto
 import com.cocktailsguru.app.user.dto.favorite.SetFavoriteResponseDto
 import com.cocktailsguru.app.user.service.UserFavoriteService
 import com.cocktailsguru.app.utils.loggerFor
-import org.springframework.beans.factory.annotation.Autowired
+import com.cocktailsguru.app.verification.service.UserVerificationService
 import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -17,8 +15,9 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Secured(value = ["ROLE_MOBILE"])
 @RequestMapping(USER_FAVORITE_BASE_PATH)
-open class UserFavoriteController @Autowired constructor(
-        private val userFavoriteService: UserFavoriteService
+class UserFavoriteController(
+        private val userFavoriteService: UserFavoriteService,
+        private val userVerificationService: UserVerificationService
 ) {
 
     private val logger = loggerFor(javaClass)
@@ -31,26 +30,24 @@ open class UserFavoriteController @Autowired constructor(
 
 
     @RequestMapping(value = [FAVORITE_COCKTAIL], produces = ["application/json"], method = [RequestMethod.POST])
-    open fun setCocktailFavorite(@RequestBody requestDto: SetFavoriteRequestDto): SetFavoriteResponseDto {
+    fun setCocktailFavorite(@RequestBody requestDto: SetFavoriteRequestDto): SetFavoriteResponseDto {
         logger.info("Requested cocktail set as favorite - {}", requestDto)
 
-        val setFavoriteResultType = userFavoriteService.setCocktailAsFavorite(requestDto.objectId, requestDto.userTokenDto.toUserTokenToVerify())
+        val loggedUser = userVerificationService.getLoggedUser()
 
-        return when (setFavoriteResultType) {
-            SetFavoriteResultType.USER_NOT_FOUND -> throw UnauthorizedException()
-            else -> SetFavoriteResponseDto(setFavoriteResultType)
-        }
+        val setFavoriteResultType = userFavoriteService.setCocktailAsFavorite(requestDto.objectId, loggedUser)
+
+        return SetFavoriteResponseDto(setFavoriteResultType)
     }
 
     @RequestMapping(value = [FAVORITE_PICTURE], produces = ["application/json"], method = [RequestMethod.POST])
-    open fun setPictureFavorite(@RequestBody requestDto: SetFavoriteRequestDto): SetFavoriteResponseDto {
+    fun setPictureFavorite(@RequestBody requestDto: SetFavoriteRequestDto): SetFavoriteResponseDto {
         logger.info("Requested picture set as favorite - {}", requestDto)
 
-        val setFavoriteResultType = userFavoriteService.setPictureAsFavorite(requestDto.objectId, requestDto.userTokenDto.toUserTokenToVerify())
+        val loggedUser = userVerificationService.getLoggedUser()
 
-        return when (setFavoriteResultType) {
-            SetFavoriteResultType.USER_NOT_FOUND -> throw UnauthorizedException()
-            else -> SetFavoriteResponseDto(setFavoriteResultType)
-        }
+        val setFavoriteResultType = userFavoriteService.setPictureAsFavorite(requestDto.objectId, loggedUser)
+
+        return SetFavoriteResponseDto(setFavoriteResultType)
     }
 }

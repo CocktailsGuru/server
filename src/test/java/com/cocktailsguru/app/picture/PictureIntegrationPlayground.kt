@@ -9,6 +9,7 @@ import com.cocktailsguru.app.picture.service.PictureService
 import com.cocktailsguru.app.utils.loggerFor
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,7 +30,7 @@ import kotlin.test.assertTrue
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = [(IntegrationTestApp::class)])
 @Transactional
-open class PictureIntegrationPlayground {
+class PictureIntegrationPlayground {
     private val logger = loggerFor(javaClass)
 
     private lateinit var mockMvc: MockMvc
@@ -49,6 +50,7 @@ open class PictureIntegrationPlayground {
     }
 
     @Test
+    @Ignore
     fun shouldFindPicturesForIba() {
         val ibaPictureList = pictureService.getPictureListForObject(CocktailObjectType.COCKTAIL, 16000, PagingInfo(0, 10))
         ibaPictureList.objectList.forEach {
@@ -59,6 +61,7 @@ open class PictureIntegrationPlayground {
 
 
     @Test
+    @Ignore
     fun shouldReturnNonEmptyPictureListForIba() {
         val requestedPageSize = 10
         val requestedPageNumber = 0

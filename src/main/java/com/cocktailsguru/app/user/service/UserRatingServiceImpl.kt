@@ -8,25 +8,21 @@ import com.cocktailsguru.app.user.domain.rating.RatingResultType
 import com.cocktailsguru.app.user.domain.rating.RatingType
 import com.cocktailsguru.app.user.domain.rating.UserRating
 import com.cocktailsguru.app.user.repository.UserRatingRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import javax.transaction.Transactional
 
 @Service
-open class UserRatingServiceImpl @Autowired constructor(
+class UserRatingServiceImpl(
         private val cocktailService: CocktailService,
-        private val userService: UserService,
         private val ratingRepository: UserRatingRepository
 ) : UserRatingService {
 
     override fun getRatingsOfUser(user: User): List<UserRating> = ratingRepository.findByUser(user)
 
     @Transactional
-    override fun rateCocktail(ratingRequest: RateObjectRequest): RatingResultType {
+    override fun rateCocktail(ratingRequest: RateObjectRequest, user: User): RatingResultType {
         val cocktail = cocktailService.findCocktail(ratingRequest.objectId) ?: return RatingResultType.OBJECT_NOT_FOUND
-
-        val user = userService.verifyUser(ratingRequest.userToken) ?: return RatingResultType.USER_NOT_FOUND
 
         val alreadyRated = ratingRepository.existsByUserAndObjectTypeAndObjectForeignKey(user, CocktailObjectType.COCKTAIL, cocktail.id)
 

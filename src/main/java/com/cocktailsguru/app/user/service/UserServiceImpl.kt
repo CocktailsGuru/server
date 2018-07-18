@@ -6,14 +6,13 @@ import com.cocktailsguru.app.user.domain.registration.UserRegistrationResultType
 import com.cocktailsguru.app.user.repository.FbUserRepository
 import com.cocktailsguru.app.user.repository.GoogleUserRepository
 import com.cocktailsguru.app.user.repository.UserTokenRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.Clock
 import java.time.LocalDateTime
 import java.util.*
 
 @Service
-class UserServiceImpl @Autowired constructor(
+class UserServiceImpl(
         private val fbUserRepository: FbUserRepository,
         private val googleUserRepository: GoogleUserRepository,
         private val userTokenRepository: UserTokenRepository

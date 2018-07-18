@@ -9,11 +9,10 @@ import com.cocktailsguru.app.common.domain.PagingInfo
 import com.cocktailsguru.app.picture.domain.Picture
 import com.cocktailsguru.app.picture.domain.PictureList
 import com.cocktailsguru.app.picture.repository.PictureRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class PictureServiceImpl @Autowired constructor(
+class PictureServiceImpl(
         private val pictureRepository: PictureRepository,
         private val commentService: CommentService
 ) : PictureService {

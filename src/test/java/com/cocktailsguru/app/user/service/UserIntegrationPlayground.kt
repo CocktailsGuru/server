@@ -11,6 +11,7 @@ import com.cocktailsguru.app.user.repository.UserTokenRepository
 import com.cocktailsguru.app.utils.loggerFor
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,7 +29,7 @@ import kotlin.test.*
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = [(IntegrationTestApp::class)])
 @Transactional
-open class UserIntegrationPlayground {
+class UserIntegrationPlayground {
 
     private val log = loggerFor(javaClass)
 
@@ -59,6 +60,7 @@ open class UserIntegrationPlayground {
 
 
     @Test
+    @Ignore
     fun shouldFindUserById() {
         assertNull(userService.findUserById(1))
 
@@ -72,6 +74,7 @@ open class UserIntegrationPlayground {
     }
 
     @Test
+    @Ignore
     fun shouldReturnNotNullListOfFavorite() {
         val favoriteObjects = userFavoriteService.getFavoriteObjects(CocktailObjectType.COCKTAIL, 54L)
         assertFalse(favoriteObjects.isEmpty())
@@ -100,12 +103,30 @@ open class UserIntegrationPlayground {
 
         assertNotNull(foundUser)
         assertEquals(registrationResult.user, foundUser)
-        assertEquals(registrationResult.registrationResultType, UserRegistrationResultType.EXISTING_USER)
+        assertEquals(registrationResult.registrationResultType, UserRegistrationResultType.NEW_REGISTRATION)
 
         val userToken = userTokenRepository.findFirstByUserIdAndValidTrue(foundUser!!.id)
         assertNotNull(userToken)
         assertEquals(userToken, registrationResult.token)
         assertTrue { userToken!!.valid }
+
+
+        val secondRegistrationResult = userService.registerUser(userRegistrationRequest)
+
+        assertNotNull(secondRegistrationResult)
+        assertTrue { secondRegistrationResult.user is FbUser }
+        assertNotEquals(0L, secondRegistrationResult.user.id)
+
+        val newFoundUser = userService.findUserById(registrationResult.user.id)
+
+        assertNotNull(newFoundUser)
+        assertEquals(secondRegistrationResult.user, newFoundUser)
+        assertEquals(secondRegistrationResult.registrationResultType, UserRegistrationResultType.EXISTING_USER)
+
+        val newUserToken = userTokenRepository.findFirstByUserIdAndValidTrue(foundUser.id)
+        assertNotNull(newUserToken)
+        assertEquals(newUserToken, registrationResult.token)
+        assertTrue { newUserToken!!.valid }
     }
 
     @Test

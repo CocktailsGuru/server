@@ -11,7 +11,6 @@ import com.cocktailsguru.app.user.dto.registration.RegisterUserResponseDto
 import com.cocktailsguru.app.user.service.UserDetailService
 import com.cocktailsguru.app.user.service.UserService
 import com.cocktailsguru.app.utils.loggerFor
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -21,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @Secured(value = ["ROLE_MOBILE"])
 @RequestMapping(USER_BASE_PATH)
-open class UserController @Autowired constructor(
+class UserController(
         private val userService: UserService,
         private val userDetailService: UserDetailService
 ) {
@@ -36,7 +35,7 @@ open class UserController @Autowired constructor(
 
 
     @RequestMapping(value = [REGISTER_USER_PATH], produces = ["application/json"], method = [RequestMethod.POST])
-    open fun registerUser(@RequestBody requestDto: RegisterUserRequestDto): RegisterUserResponseDto {
+    fun registerUser(@RequestBody requestDto: RegisterUserRequestDto): RegisterUserResponseDto {
         logger.info("Requested user registration - {}", requestDto)
         val registrationRequest = UserRegistrationRequest(
                 requestDto.externalUserId,
