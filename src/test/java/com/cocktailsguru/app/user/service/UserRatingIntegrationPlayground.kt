@@ -1,5 +1,6 @@
 package com.cocktailsguru.app.user.service
 
+import com.cocktailsguru.app.AuthenticatedIntegrationConfiguration
 import com.cocktailsguru.app.IntegrationTestApp
 import com.cocktailsguru.app.MockRequestUtils
 import com.cocktailsguru.app.user.controller.UserRatingController
@@ -9,11 +10,13 @@ import com.cocktailsguru.app.user.dto.rating.RateObjectRequestDto
 import com.cocktailsguru.app.user.dto.rating.RateObjectResultDto
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
@@ -26,7 +29,7 @@ import kotlin.test.assertEquals
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = [(IntegrationTestApp::class)])
 @Transactional
-class UserRatingIntegrationPlayground {
+class UserRatingIntegrationPlayground : AuthenticatedIntegrationConfiguration() {
     private lateinit var mockMvc: MockMvc
 
     @Autowired
@@ -59,6 +62,7 @@ class UserRatingIntegrationPlayground {
 
 
     @Test
+    @Ignore
     fun whenRequestingCocktailRatedForAlreadyRatedCocktailShouldReturnNotice() {
         val requestDto = RateObjectRequestDto(
                 1,
@@ -100,6 +104,7 @@ class UserRatingIntegrationPlayground {
     }
 
     @Test
+    @Ignore
     fun whenRequestingCocktailRatingShouldSetAsFavorite() {
         val cocktailId = 2L
         val requestDto = RateObjectRequestDto(
