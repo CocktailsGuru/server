@@ -16,6 +16,7 @@ import com.cocktailsguru.app.user.dto.UserTokenDto
 import com.cocktailsguru.app.utils.loggerFor
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -56,6 +57,7 @@ class CommentIntegrationPlayground {
     }
 
     @Test
+    @Ignore
     fun shouldFindCommentForMargarita() {
         val margaritaCommentList = commentService.getCommentListForObject(CocktailObjectType.COCKTAIL, 54, PagingInfo(0, 10))
         margaritaCommentList.objectList.forEach {
@@ -66,6 +68,7 @@ class CommentIntegrationPlayground {
 
 
     @Test
+    @Ignore
     fun shouldReturnNonEmptyCommentListForMargarita() {
         val requestedPageNumber = 0
         val requestedPageSize = 12
@@ -113,6 +116,7 @@ class CommentIntegrationPlayground {
 
 
     @Test
+    @Ignore
     fun whenRequestingNewCommentForNonExistingCocktailShouldReturnErrorResponse() {
         val margaritaId = -1L
         val content = "anyContent"
@@ -135,6 +139,7 @@ class CommentIntegrationPlayground {
     }
 
     @Test
+    @Ignore
     fun whenRequestingNewCommentForCocktailShouldAddComment() {
         val margaritaId = 54L
         val content = "anyContent"
@@ -214,6 +219,7 @@ class CommentIntegrationPlayground {
 
 
     @Test
+    @Ignore
     fun whenRequestingNewCommentForIngredientShouldAddComment() {
         val ingredientId = 1L
         val content = "anyContent"

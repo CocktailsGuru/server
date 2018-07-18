@@ -8,6 +8,7 @@ import com.cocktailsguru.app.user.dto.favorite.SetFavoriteRequestDto
 import com.cocktailsguru.app.user.dto.favorite.SetFavoriteResponseDto
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -57,6 +58,7 @@ class UserFavoriteIntegrationPlayground {
 
 
     @Test
+    @Ignore
     fun whenRequestingCocktailAsFavoriteForAlreadyFavoriteCocktailShouldReturnNotice() {
         val requestDto = SetFavoriteRequestDto(
                 1
@@ -96,6 +98,7 @@ class UserFavoriteIntegrationPlayground {
     }
 
     @Test
+    @Ignore
     fun whenRequestingCocktailAsFavoriteShouldSetAsFavorite() {
         val cocktailId = 100L
         val requestDto = SetFavoriteRequestDto(
@@ -132,6 +135,7 @@ class UserFavoriteIntegrationPlayground {
 
 
     @Test
+    @Ignore
     fun whenRequestingPictureAsFavoriteForAlreadyFavoriteCocktailShouldReturnNotice() {
         val requestDto = SetFavoriteRequestDto(
                 1
@@ -171,6 +175,7 @@ class UserFavoriteIntegrationPlayground {
     }
 
     @Test
+    @Ignore
     fun whenRequestingPictureAsFavoriteShouldSetAsFavorite() {
         val cocktailId = 2L
         val requestDto = SetFavoriteRequestDto(
