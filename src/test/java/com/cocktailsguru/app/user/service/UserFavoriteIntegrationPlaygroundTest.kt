@@ -27,7 +27,7 @@ import kotlin.test.assertFalse
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = [(IntegrationTestApp::class)])
 @Transactional
-class UserFavoriteIntegrationPlayground {
+class UserFavoriteIntegrationPlaygroundTest {
     private lateinit var mockMvc: MockMvc
 
     @Autowired

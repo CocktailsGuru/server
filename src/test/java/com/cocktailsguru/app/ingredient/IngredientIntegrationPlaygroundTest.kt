@@ -34,7 +34,7 @@ import kotlin.test.assertTrue
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = [(IntegrationTestApp::class)])
 @Transactional
-class IngredientIntegrationPlayground {
+class IngredientIntegrationPlaygroundTest {
     private lateinit var mockMvc: MockMvc
 
     @Autowired

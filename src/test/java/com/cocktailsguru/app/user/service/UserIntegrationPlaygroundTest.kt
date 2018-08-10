@@ -29,7 +29,7 @@ import kotlin.test.*
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = [(IntegrationTestApp::class)])
 @Transactional
-class UserIntegrationPlayground {
+class UserIntegrationPlaygroundTest {
 
     private val log = loggerFor(javaClass)
 

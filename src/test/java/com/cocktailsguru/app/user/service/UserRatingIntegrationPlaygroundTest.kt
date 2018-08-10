@@ -30,7 +30,7 @@ import kotlin.test.assertFalse
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = [(IntegrationTestApp::class)])
 @Transactional
-class UserRatingIntegrationPlayground : AuthenticatedIntegrationConfiguration() {
+class UserRatingIntegrationPlaygroundTest : AuthenticatedIntegrationConfiguration() {
     private lateinit var mockMvc: MockMvc
 
     @Autowired
