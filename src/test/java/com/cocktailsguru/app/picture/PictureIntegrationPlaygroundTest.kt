@@ -30,7 +30,7 @@ import kotlin.test.assertTrue
 @RunWith(SpringRunner::class)
 @SpringBootTest(classes = [(IntegrationTestApp::class)])
 @Transactional
-class PictureIntegrationPlayground {
+class PictureIntegrationPlaygroundTest {
     private val logger = loggerFor(javaClass)
 
     private lateinit var mockMvc: MockMvc
