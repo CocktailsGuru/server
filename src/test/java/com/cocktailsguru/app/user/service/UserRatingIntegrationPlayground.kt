@@ -132,6 +132,7 @@ class UserRatingIntegrationPlayground : AuthenticatedIntegrationConfiguration() 
     }
 
     @Test
+    @Ignore
     fun givenExistingUserRatingsWhenRequestingRatingsForUserShouldReturnNonEmptyList() {
         val user = userService.findUserById(6)
 

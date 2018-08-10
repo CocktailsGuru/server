@@ -203,6 +203,7 @@ class UserFavoriteIntegrationPlayground {
 
 
     @Test
+    @Ignore
     fun givenExistingFavoritesForUserWhenRequestingUserFavoritesForUserShouldReturnNonEmptyList() {
         val user = userService.findUserById(6)
 
