@@ -56,12 +56,11 @@ class UserController(
     }
 
     @RequestMapping(value = [USER_DETAIL_PATH], produces = ["application/json"], method = [RequestMethod.POST])
-    open fun getUserDetail(@RequestBody requestDto: UserTokenDto) {
+    fun getUserDetail(@RequestBody requestDto: UserTokenDto) {
         logger.info("Requested info for user - {}", requestDto.userId)
 
         val verifiedUser = userService.verifyUser(requestDto.toUserTokenToVerify())
-
-
+        //TODO convert domain object to DTO
         return verifiedUser?.let {
             val userDetail = userDetailService.getUserDetail(it)
         } ?: run {
