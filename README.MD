@@ -1,3 +1,8 @@
+[![Build Status](https://travis-ci.org/CocktailsGuru/server.svg?branch=develop)](https://travis-ci.org/CocktailsGuru/server)
+<br />
+
+## CocktailsGuru backend
+
 **Local installation guide**
 
 First setup database. Name of the database should be "cocktail_dev".
