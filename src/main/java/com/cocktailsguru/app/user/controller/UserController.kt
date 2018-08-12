@@ -1,16 +1,16 @@
 package com.cocktailsguru.app.user.controller
 
-import com.cocktailsguru.app.common.dto.UnauthorizedException
 import com.cocktailsguru.app.user.controller.UserController.Companion.USER_BASE_PATH
 import com.cocktailsguru.app.user.domain.Gender
 import com.cocktailsguru.app.user.domain.UserRegistrationRequest
 import com.cocktailsguru.app.user.domain.UserRegistrationType
-import com.cocktailsguru.app.user.dto.UserTokenDto
+import com.cocktailsguru.app.user.dto.detail.UserDetailResponseDto
 import com.cocktailsguru.app.user.dto.registration.RegisterUserRequestDto
 import com.cocktailsguru.app.user.dto.registration.RegisterUserResponseDto
 import com.cocktailsguru.app.user.service.UserDetailService
 import com.cocktailsguru.app.user.service.UserService
 import com.cocktailsguru.app.utils.loggerFor
+import com.cocktailsguru.app.verification.service.UserVerificationService
 import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -22,7 +22,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping(USER_BASE_PATH)
 class UserController(
         private val userService: UserService,
-        private val userDetailService: UserDetailService
+        private val userDetailService: UserDetailService,
+        private val userVerificationService: UserVerificationService
 ) {
 
     private val logger = loggerFor(javaClass)
@@ -30,7 +31,7 @@ class UserController(
     companion object {
         const val USER_BASE_PATH = "user"
         const val REGISTER_USER_PATH = "register"
-        const val USER_DETAIL_PATH = "detail"
+        const val LOGGED_USER_DETAIL_PATH = "loggedUserDetail"
     }
 
 
@@ -55,16 +56,12 @@ class UserController(
         return RegisterUserResponseDto(registrationResult)
     }
 
-    @RequestMapping(value = [USER_DETAIL_PATH], produces = ["application/json"], method = [RequestMethod.POST])
-    fun getUserDetail(@RequestBody requestDto: UserTokenDto) {
-        logger.info("Requested info for user - {}", requestDto.userId)
+    @RequestMapping(value = [LOGGED_USER_DETAIL_PATH], produces = ["application/json"], method = [RequestMethod.POST])
+    fun getUserDetail(): UserDetailResponseDto {
+        logger.info("Requested detail of logged user")
 
-        val verifiedUser = userService.verifyUser(requestDto.toUserTokenToVerify())
-        //TODO convert domain object to DTO
-        return verifiedUser?.let {
-            val userDetail = userDetailService.getUserDetail(it)
-        } ?: run {
-            throw UnauthorizedException()
-        }
+        val loggedUser = userVerificationService.getLoggedUser()
+        val userDetail = userDetailService.getUserDetail(loggedUser)
+        return UserDetailResponseDto(userDetail)
     }
 }
