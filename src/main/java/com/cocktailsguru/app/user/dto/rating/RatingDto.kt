@@ -9,7 +9,7 @@ data class RatingDto(
         val id: Long,
         val objectType: CocktailObjectType,
         val objectForeignKey: Long,
-        val ratingAuthoriId: Long,
+        val authorUserId: Long,
         val rating: RatingType,
         val createdTime: LocalDateTime
 ) {
