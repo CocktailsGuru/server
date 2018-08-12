@@ -18,6 +18,8 @@ class UserRatingServiceImpl(
         private val ratingRepository: UserRatingRepository
 ) : UserRatingService {
 
+    override fun getRatingsOfUser(user: User): List<UserRating> = ratingRepository.findByUser(user)
+
     @Transactional
     override fun rateCocktail(ratingRequest: RateObjectRequest, user: User): RatingResultType {
         val cocktail = cocktailService.findCocktail(ratingRequest.objectId) ?: return RatingResultType.OBJECT_NOT_FOUND

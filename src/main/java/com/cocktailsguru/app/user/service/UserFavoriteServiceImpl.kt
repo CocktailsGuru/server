@@ -17,6 +17,9 @@ class UserFavoriteServiceImpl(
         private val pictureService: PictureService
 ) : UserFavoriteService {
 
+
+    override fun getFavoritesOfUser(user: User): List<UserFavorite> = userFavoriteRepository.findByUser(user)
+
     @Transactional
     override fun setPictureAsFavorite(pictureId: Long, user: User): SetFavoriteResultType {
         val picture = pictureService.findPicture(pictureId) ?: return SetFavoriteResultType.OBJECT_NOT_FOUND

@@ -13,4 +13,6 @@ interface UserFavoriteService {
     fun setCocktailAsFavorite(cocktailId: Long, user: User): SetFavoriteResultType
 
     fun setPictureAsFavorite(pictureId: Long, user: User): SetFavoriteResultType
+
+    fun getFavoritesOfUser(user: User): List<UserFavorite>
 }

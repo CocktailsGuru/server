@@ -4,10 +4,13 @@ import com.cocktailsguru.app.user.controller.UserController.Companion.USER_BASE_
 import com.cocktailsguru.app.user.domain.Gender
 import com.cocktailsguru.app.user.domain.UserRegistrationRequest
 import com.cocktailsguru.app.user.domain.UserRegistrationType
+import com.cocktailsguru.app.user.dto.detail.UserDetailResponseDto
 import com.cocktailsguru.app.user.dto.registration.RegisterUserRequestDto
 import com.cocktailsguru.app.user.dto.registration.RegisterUserResponseDto
+import com.cocktailsguru.app.user.service.UserDetailService
 import com.cocktailsguru.app.user.service.UserService
 import com.cocktailsguru.app.utils.loggerFor
+import com.cocktailsguru.app.verification.service.UserVerificationService
 import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -18,7 +21,9 @@ import org.springframework.web.bind.annotation.RestController
 @Secured(value = ["ROLE_MOBILE"])
 @RequestMapping(USER_BASE_PATH)
 class UserController(
-        private val userService: UserService
+        private val userService: UserService,
+        private val userDetailService: UserDetailService,
+        private val userVerificationService: UserVerificationService
 ) {
 
     private val logger = loggerFor(javaClass)
@@ -26,6 +31,7 @@ class UserController(
     companion object {
         const val USER_BASE_PATH = "user"
         const val REGISTER_USER_PATH = "register"
+        const val LOGGED_USER_DETAIL_PATH = "loggedUserDetail"
     }
 
 
@@ -50,4 +56,12 @@ class UserController(
         return RegisterUserResponseDto(registrationResult)
     }
 
+    @RequestMapping(value = [LOGGED_USER_DETAIL_PATH], produces = ["application/json"], method = [RequestMethod.POST])
+    fun getUserDetail(): UserDetailResponseDto {
+        logger.info("Requested detail of logged user")
+
+        val loggedUser = userVerificationService.getLoggedUser()
+        val userDetail = userDetailService.getUserDetail(loggedUser)
+        return UserDetailResponseDto(userDetail)
+    }
 }
