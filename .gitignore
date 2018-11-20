@@ -275,3 +275,4 @@ Temporary Items
 
 db/V1__*.sql
 application-test.yml
+init.sql
