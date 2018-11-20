@@ -1,0 +1,16 @@
+version: '2'
+services:
+  mysql:
+    container_name: cocktails_db
+    restart: always
+    image: mysql:5.7
+    ports:
+    - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_DATABASE: 'cocktail_dev'
+      MYSQL_USER: 'root'
+      MYSQL_PASS: 'root'
+    command: ['mysqld', '--character-set-server=utf8', '--collation-server=utf8_general_ci']
+    volumes:
+    - ./init.sql:/docker-entrypoint-initdb.d/init.sql
