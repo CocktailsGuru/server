@@ -1,12 +1,13 @@
 package com.cocktailsguru.app.user.service
 
-import com.cocktailsguru.app.IntegrationTestApp
 import com.cocktailsguru.app.MockRequestUtils
 import com.cocktailsguru.app.user.controller.UserFavoriteController
 import com.cocktailsguru.app.user.domain.favorite.SetFavoriteResultType
 import com.cocktailsguru.app.user.dto.favorite.SetFavoriteRequestDto
 import com.cocktailsguru.app.user.dto.favorite.SetFavoriteResponseDto
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertFalse
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
@@ -21,11 +22,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.context.WebApplicationContext
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 
 @RunWith(SpringRunner::class)
-@SpringBootTest(classes = [(IntegrationTestApp::class)])
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 class UserFavoriteIntegrationPlaygroundTest {
     private lateinit var mockMvc: MockMvc

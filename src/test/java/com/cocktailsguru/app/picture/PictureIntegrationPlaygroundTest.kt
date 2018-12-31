@@ -1,6 +1,5 @@
 package com.cocktailsguru.app.picture
 
-import com.cocktailsguru.app.IntegrationTestApp
 import com.cocktailsguru.app.cocktail.domain.CocktailObjectType
 import com.cocktailsguru.app.common.domain.PagingInfo
 import com.cocktailsguru.app.picture.controller.PictureController
@@ -8,6 +7,7 @@ import com.cocktailsguru.app.picture.dto.PictureListResponseDto
 import com.cocktailsguru.app.picture.service.PictureService
 import com.cocktailsguru.app.utils.loggerFor
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import junit.framework.TestCase.*
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
@@ -22,13 +22,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.MimeTypeUtils
 import org.springframework.web.context.WebApplicationContext
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 
 @RunWith(SpringRunner::class)
-@SpringBootTest(classes = [(IntegrationTestApp::class)])
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 class PictureIntegrationPlaygroundTest {
     private val logger = loggerFor(javaClass)
@@ -77,8 +74,8 @@ class PictureIntegrationPlaygroundTest {
         val responseJson = result.response.contentAsString
         val responseDto = objectMapper.readValue(responseJson, PictureListResponseDto::class.java)
         logger.debug(responseDto.toString())
-        assertFalse { responseDto.list.isEmpty() }
-        assertTrue { requestedPageSize >= responseDto.list.size }
+        assertFalse(responseDto.list.isEmpty())
+        assertTrue(requestedPageSize >= responseDto.list.size)
         assertEquals(requestedPageNumber, responseDto.pagingInfo.pageNumber)
         assertEquals(requestedPageSize, responseDto.pagingInfo.pageSize)
     }
@@ -100,7 +97,7 @@ class PictureIntegrationPlaygroundTest {
         val responseJson = result.response.contentAsString
         val responseDto = objectMapper.readValue(responseJson, PictureListResponseDto::class.java)
         logger.debug(responseDto.toString())
-        assertTrue { responseDto.list.isEmpty() }
+        assertTrue(responseDto.list.isEmpty())
         assertEquals(requestedPageNumber, responseDto.pagingInfo.pageNumber)
         assertEquals(requestedPageSize, responseDto.pagingInfo.pageSize)
     }

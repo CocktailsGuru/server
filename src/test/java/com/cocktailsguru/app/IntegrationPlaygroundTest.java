@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {IntegrationTestApp.class})
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @WebAppConfiguration
 @Transactional
 @Ignore

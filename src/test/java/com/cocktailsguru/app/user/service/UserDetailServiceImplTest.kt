@@ -6,12 +6,12 @@ import com.cocktailsguru.app.user.domain.rating.UserRating
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import junit.framework.TestCase.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
-import kotlin.test.assertEquals
 
 @RunWith(MockitoJUnitRunner::class)
 class UserDetailServiceImplTest {

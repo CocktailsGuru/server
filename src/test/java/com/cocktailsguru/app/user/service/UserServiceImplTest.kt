@@ -6,13 +6,11 @@ import com.cocktailsguru.app.user.repository.FbUserRepository
 import com.cocktailsguru.app.user.repository.GoogleUserRepository
 import com.cocktailsguru.app.user.repository.UserTokenRepository
 import com.nhaarman.mockito_kotlin.*
+import junit.framework.TestCase.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 import java.util.*
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 @RunWith(MockitoJUnitRunner::class)
 class UserServiceImplTest {
@@ -43,7 +41,7 @@ class UserServiceImplTest {
 
         val foundUser = userService.findUserById(anyId)
         assertNotNull(foundUser)
-        assertTrue { foundUser is FbUser }
+        assertTrue(foundUser is FbUser)
 
         verify(anyFbUserRepository).findById(anyId)
         verifyZeroInteractions(anyGoogleUserRepository)
@@ -59,7 +57,7 @@ class UserServiceImplTest {
 
         val foundUser = userService.findUserById(anyId)
         assertNotNull(foundUser)
-        assertTrue { foundUser is GoogleUser }
+        assertTrue(foundUser is GoogleUser)
 
         verify(anyFbUserRepository).findById(anyId)
         verify(anyGoogleUserRepository).findById(anyId)
