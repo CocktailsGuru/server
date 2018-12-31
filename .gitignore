@@ -71,6 +71,7 @@ buildNumber.properties
 # Gradle:
 .idea/**/gradle.xml
 .idea/**/libraries
+!gradle/wrapper/*
 
 # Mongo Explorer plugin:
 .idea/**/mongoSettings.xml
