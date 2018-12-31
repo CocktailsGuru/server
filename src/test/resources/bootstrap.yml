@@ -1,6 +1,0 @@
-spring:
-  profiles:
-    active: dev, AuthenticatedIntegrationTest
-  cloud:
-    config:
-      enabled: false

@@ -11,3 +11,7 @@ spring:
 cocktails:
   resource:
     assets:
+
+logging:
+  level:
+    root: debug

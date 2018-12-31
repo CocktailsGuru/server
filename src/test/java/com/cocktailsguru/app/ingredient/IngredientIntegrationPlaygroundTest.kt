@@ -1,6 +1,5 @@
 package com.cocktailsguru.app.ingredient
 
-import com.cocktailsguru.app.IntegrationTestApp
 import com.cocktailsguru.app.comment.dto.CommentListResponseDto
 import com.cocktailsguru.app.common.domain.PagingInfo
 import com.cocktailsguru.app.ingredient.controller.IngredientController
@@ -11,6 +10,7 @@ import com.cocktailsguru.app.ingredient.repository.IngredientCategoryTypeReposit
 import com.cocktailsguru.app.ingredient.repository.IngredientRepository
 import com.cocktailsguru.app.ingredient.service.IngredientService
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import junit.framework.TestCase.*
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Ignore
@@ -26,13 +26,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE
 import org.springframework.web.context.WebApplicationContext
-import kotlin.test.assertFalse
-import kotlin.test.assertNotNull
-import kotlin.test.assertTrue
 
 
 @RunWith(SpringRunner::class)
-@SpringBootTest(classes = [(IntegrationTestApp::class)])
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 class IngredientIntegrationPlaygroundTest {
     private lateinit var mockMvc: MockMvc
@@ -122,7 +119,7 @@ class IngredientIntegrationPlaygroundTest {
                 .andReturn()
         val responseJson = result.response.contentAsString
         val responseDto = objectMapper.readValue(responseJson, IngredientListResponseDto::class.java)
-        assertTrue { responseDto.list.isEmpty() }
+        assertTrue(responseDto.list.isEmpty())
         assertEquals(requestedPageSize, responseDto.pagingInfo.pageSize)
         assertEquals(requestedPageNumber, responseDto.pagingInfo.pageNumber)
     }
@@ -161,7 +158,7 @@ class IngredientIntegrationPlaygroundTest {
         val contentAsString = result.response.contentAsString
         assertNotNull(contentAsString)
         val responseDto = objectMapper.readValue(contentAsString, IngredientDetailResponseDto::class.java)
-        assertTrue { responseDto.commentsDtoList.list.isEmpty() }
+        assertTrue(responseDto.commentsDtoList.list.isEmpty())
         assertEquals(0, responseDto.commentsDtoList.pagingInfo.pageSize)
         assertEquals(0, responseDto.commentsDtoList.pagingInfo.pageNumber)
     }
@@ -180,7 +177,7 @@ class IngredientIntegrationPlaygroundTest {
         val contentAsString = result.response.contentAsString
         assertNotNull(contentAsString)
         val responseDto = objectMapper.readValue(contentAsString, IngredientDetailResponseDto::class.java)
-        assertFalse { responseDto.commentsDtoList.list.isEmpty() }
+        assertFalse(responseDto.commentsDtoList.list.isEmpty())
         assertEquals(requestedCommentsSize, responseDto.commentsDtoList.list.size)
         assertEquals(requestedCommentsSize, responseDto.commentsDtoList.pagingInfo.pageSize)
         assertEquals(0, responseDto.commentsDtoList.pagingInfo.pageNumber)
@@ -208,7 +205,7 @@ class IngredientIntegrationPlaygroundTest {
                 .andReturn()
         val responseJson = result.response.contentAsString
         val responseDto = objectMapper.readValue(responseJson, CommentListResponseDto::class.java)
-        assertFalse { responseDto.list.isEmpty() }
+        assertFalse(responseDto.list.isEmpty())
         assertEquals(requestedPageSize, responseDto.pagingInfo.pageSize)
         assertEquals(requestedPageNumber, responseDto.pagingInfo.pageNumber)
     }
@@ -229,7 +226,7 @@ class IngredientIntegrationPlaygroundTest {
                 .andReturn()
         val responseJson = result.response.contentAsString
         val responseDto = objectMapper.readValue(responseJson, CommentListResponseDto::class.java)
-        assertTrue { responseDto.list.isEmpty() }
+        assertTrue(responseDto.list.isEmpty())
         assertEquals(requestedPageSize, responseDto.pagingInfo.pageSize)
         assertEquals(requestedPageNumber, responseDto.pagingInfo.pageNumber)
     }

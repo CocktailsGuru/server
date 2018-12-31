@@ -1,6 +1,5 @@
 package com.cocktailsguru.app.comment
 
-import com.cocktailsguru.app.IntegrationTestApp
 import com.cocktailsguru.app.MockRequestUtils
 import com.cocktailsguru.app.cocktail.controller.CocktailController
 import com.cocktailsguru.app.cocktail.domain.CocktailObjectType
@@ -15,6 +14,7 @@ import com.cocktailsguru.app.ingredient.controller.IngredientController
 import com.cocktailsguru.app.user.dto.UserTokenDto
 import com.cocktailsguru.app.utils.loggerFor
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import junit.framework.TestCase.*
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
@@ -29,13 +29,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.util.MimeTypeUtils
 import org.springframework.web.context.WebApplicationContext
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 
 @RunWith(SpringRunner::class)
-@SpringBootTest(classes = [(IntegrationTestApp::class)])
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 class CommentIntegrationPlaygroundTest {
     private val logger = loggerFor(javaClass)
@@ -85,8 +82,8 @@ class CommentIntegrationPlaygroundTest {
         val responseJson = result.response.contentAsString
         val responseDto = objectMapper.readValue(responseJson, CommentListResponseDto::class.java)
         logger.debug(responseDto.toString())
-        assertFalse { responseDto.list.isEmpty() }
-        assertTrue { requestedPageSize >= responseDto.list.size }
+        assertFalse(responseDto.list.isEmpty())
+        assertTrue(requestedPageSize >= responseDto.list.size)
         assertEquals(requestedPageNumber, responseDto.pagingInfo.pageNumber)
         assertEquals(requestedPageSize, responseDto.pagingInfo.pageSize)
     }
@@ -109,7 +106,7 @@ class CommentIntegrationPlaygroundTest {
         val responseJson = result.response.contentAsString
         val responseDto = objectMapper.readValue(responseJson, CommentListResponseDto::class.java)
         logger.debug(responseDto.toString())
-        assertTrue { responseDto.list.isEmpty() }
+        assertTrue(responseDto.list.isEmpty())
         assertEquals(requestedPageNumber, responseDto.pagingInfo.pageNumber)
         assertEquals(requestedPageSize, responseDto.pagingInfo.pageSize)
     }
@@ -169,7 +166,7 @@ class CommentIntegrationPlaygroundTest {
         assertEquals(margaritaId, newComment.objectForeignKey)
         assertEquals(0, newComment.numDislikes)
         assertEquals(0, newComment.numLikes)
-        assertTrue { newComment.isVisible }
+        assertTrue(newComment.isVisible)
     }
 
 
@@ -249,7 +246,7 @@ class CommentIntegrationPlaygroundTest {
         assertEquals(ingredientId, newComment.objectForeignKey)
         assertEquals(0, newComment.numDislikes)
         assertEquals(0, newComment.numLikes)
-        assertTrue { newComment.isVisible }
+        assertTrue(newComment.isVisible)
     }
 
     private fun getAdminUserTokenDto() = UserTokenDto(6L, "adminToken")

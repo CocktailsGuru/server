@@ -1,6 +1,5 @@
 package com.cocktailsguru.app.user.service
 
-import com.cocktailsguru.app.IntegrationTestApp
 import com.cocktailsguru.app.cocktail.domain.CocktailObjectType
 import com.cocktailsguru.app.user.controller.UserController
 import com.cocktailsguru.app.user.domain.*
@@ -10,6 +9,7 @@ import com.cocktailsguru.app.user.dto.registration.RegisterUserResponseDto
 import com.cocktailsguru.app.user.repository.UserTokenRepository
 import com.cocktailsguru.app.utils.loggerFor
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import junit.framework.TestCase.*
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
@@ -24,10 +24,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.context.WebApplicationContext
-import kotlin.test.*
 
 @RunWith(SpringRunner::class)
-@SpringBootTest(classes = [(IntegrationTestApp::class)])
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 class UserIntegrationPlaygroundTest {
 
@@ -66,11 +65,11 @@ class UserIntegrationPlaygroundTest {
 
         val googleUser = userService.findUserById(7651)
         assertNotNull(googleUser)
-        assertTrue { googleUser is GoogleUser }
+        assertTrue(googleUser is GoogleUser)
 
         val fbUser = userService.findUserById(7169)
         assertNotNull(fbUser)
-        assertTrue { fbUser is FbUser }
+        assertTrue(fbUser is FbUser)
     }
 
     @Test
@@ -95,8 +94,8 @@ class UserIntegrationPlaygroundTest {
         val registrationResult = userService.registerUser(userRegistrationRequest)
 
         assertNotNull(registrationResult)
-        assertTrue { registrationResult.user is FbUser }
-        assertNotEquals(0L, registrationResult.user.id)
+        assertTrue(registrationResult.user is FbUser)
+        assertFalse(0L == registrationResult.user.id)
 
         val foundUser = userService.findUserById(registrationResult.user.id)
 
@@ -108,14 +107,14 @@ class UserIntegrationPlaygroundTest {
         val userToken = userTokenRepository.findFirstByUserIdAndValidTrue(foundUser!!.id)
         assertNotNull(userToken)
         assertEquals(userToken, registrationResult.token)
-        assertTrue { userToken!!.valid }
+        assertTrue(userToken!!.valid)
 
 
         val secondRegistrationResult = userService.registerUser(userRegistrationRequest)
 
         assertNotNull(secondRegistrationResult)
-        assertTrue { secondRegistrationResult.user is FbUser }
-        assertNotEquals(0L, secondRegistrationResult.user.id)
+        assertTrue(secondRegistrationResult.user is FbUser)
+        assertFalse(0L == secondRegistrationResult.user.id)
 
         val newFoundUser = userService.findUserById(registrationResult.user.id)
 
@@ -126,7 +125,7 @@ class UserIntegrationPlaygroundTest {
         val newUserToken = userTokenRepository.findFirstByUserIdAndValidTrue(foundUser.id)
         assertNotNull(newUserToken)
         assertEquals(newUserToken, registrationResult.token)
-        assertTrue { newUserToken!!.valid }
+        assertTrue(newUserToken!!.valid)
     }
 
     @Test
@@ -144,8 +143,8 @@ class UserIntegrationPlaygroundTest {
         val registrationResult = userService.registerUser(userRegistrationRequest)
 
         assertNotNull(registrationResult)
-        assertTrue { registrationResult.user is GoogleUser }
-        assertNotEquals(0L, registrationResult.user.id)
+        assertTrue(registrationResult.user is GoogleUser)
+        assertFalse(0L == registrationResult.user.id)
 
         val foundUser = userService.findUserById(registrationResult.user.id)
 
@@ -156,7 +155,7 @@ class UserIntegrationPlaygroundTest {
         val userToken = userTokenRepository.findFirstByUserIdAndValidTrue(foundUser!!.id)
         assertNotNull(userToken)
         assertEquals(userToken, registrationResult.token)
-        assertTrue { userToken!!.valid }
+        assertTrue(userToken!!.valid)
     }
 
 
@@ -184,7 +183,7 @@ class UserIntegrationPlaygroundTest {
         val response = objectMapper.readValue(responseJson, RegisterUserResponseDto::class.java)
 
         assertNotNull(response)
-        assertNotEquals(0, response.id)
+        assertFalse(0L == response.id)
 
         val userToken = userTokenRepository.findFirstByUserIdAndValidTrue(response.id)
 
@@ -217,7 +216,7 @@ class UserIntegrationPlaygroundTest {
         val response = objectMapper.readValue(responseJson, RegisterUserResponseDto::class.java)
 
         assertNotNull(response)
-        assertNotEquals(0, response.id)
+        assertFalse(0L == response.id)
     }
 
     @Test(expected = IllegalStateException::class)

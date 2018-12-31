@@ -1,7 +1,6 @@
 package com.cocktailsguru.app.user.service
 
 import com.cocktailsguru.app.AuthenticatedIntegrationConfiguration
-import com.cocktailsguru.app.IntegrationTestApp
 import com.cocktailsguru.app.MockRequestUtils
 import com.cocktailsguru.app.user.controller.UserRatingController
 import com.cocktailsguru.app.user.domain.rating.RatingResultType
@@ -9,6 +8,8 @@ import com.cocktailsguru.app.user.domain.rating.RatingType
 import com.cocktailsguru.app.user.dto.rating.RateObjectRequestDto
 import com.cocktailsguru.app.user.dto.rating.RateObjectResultDto
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertFalse
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
@@ -16,7 +17,6 @@ import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
-import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
@@ -24,11 +24,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.context.WebApplicationContext
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 
 @RunWith(SpringRunner::class)
-@SpringBootTest(classes = [(IntegrationTestApp::class)])
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 class UserRatingIntegrationPlaygroundTest : AuthenticatedIntegrationConfiguration() {
     private lateinit var mockMvc: MockMvc
