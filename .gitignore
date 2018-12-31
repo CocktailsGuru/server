@@ -71,6 +71,7 @@ buildNumber.properties
 # Gradle:
 .idea/**/gradle.xml
 .idea/**/libraries
+.gradle
 
 # Mongo Explorer plugin:
 .idea/**/mongoSettings.xml
@@ -274,5 +275,4 @@ Temporary Items
 ####################################################################################
 
 db/V1__*.sql
-application-test.yml
 init.sql
