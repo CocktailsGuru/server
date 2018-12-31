@@ -31,3 +31,14 @@ management:
       show-details: when_authorized
   endpoints:
     enabled-by-default: false
+
+security:
+  users:
+    - name: master
+      roles:
+        - MODERATOR
+      password: "heslo"
+    - name: android
+      roles:
+        - MOBILE
+      password: "androidHeslo"
